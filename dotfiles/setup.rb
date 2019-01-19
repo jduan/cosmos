@@ -5,7 +5,7 @@
 
 require "fileutils"
 
-EXCLUDE_LIST = [ ".", "..", ".git", ".vim", ".vimrc" ]
+EXCLUDE_LIST = [ ".", "..", ".git"]
 
 HOME = ENV['HOME']
 target_dir = File.expand_path(File.dirname(__FILE__))

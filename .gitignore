@@ -34,6 +34,7 @@ dotfiles/.config/hub
 dotfiles/.config/airbnb/
 dotfiles/.config/gcloud/logs/
 dotfiles/.config/configstore/update-notifier-npm.json
+dotfiles/.vim/plugged/
 
 # rubocop
 rubocop_cache/
