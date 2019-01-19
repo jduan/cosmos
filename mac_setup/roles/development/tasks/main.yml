@@ -1,0 +1,56 @@
+- name: Hello Ansible
+  shell: echo "Hello Ansible" >> /tmp/log
+
+- name: Install cask packages
+  homebrew_cask: name={{ item }} state=present
+  with_items:
+    - java
+#     - spectacle
+#     - 1password
+#     - google-chrome
+#     - dropbox
+
+
+# You can run "brew leaves" to find out installed tools.
+- name: Install packages with homebrew
+  homebrew:
+    update_homebrew: yes
+    name:
+      - cloc
+      - bat
+      - colordiff
+      - ctags
+      - fasd
+      - fd
+      - fish
+      - fzf
+      - git
+      - grip
+      - haskell-stack
+      - htop
+      - hub
+      - holgerbrandl/tap/kscript
+      - kubernetes-cli
+      - maven
+      - mycli
+      - neovim
+      - par
+      - pgcli
+      - pstree
+      - ranger
+      - rbenv
+      - reattach-to-user-namespace
+      - redis
+      - ripgrep
+      - rlwrap
+      - shellcheck
+      - tig
+      - tldr
+      - tmux
+      - tree
+      - unrar
+      - vim
+      - watch
+      - wget
+      - yamllint
+
