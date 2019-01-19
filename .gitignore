@@ -10,9 +10,6 @@
 __Tagbar__
 NERD_tree_1
 
-# git
-.gitignore
-
 # eclipse
 .classpath
 .project
@@ -23,37 +20,23 @@ eclipse-build/
 # TestNG
 test-output/
 
-# p4 and apollo
-.p4config
-apollo-overrides
-backup/
-
 # ctags
 tags
 cscope.out
 
-# every branch has a README that should be ingored
-# README
-
-# Coral
-coral-generated-src/
-
 # mac
 .DS_Store
 
-.log
-
-# fish shell
-.config/fish/fishd*
-.config/fish/fish_history
-.config/hub
-.config/airbnb/
+# fish shell and other stuff
+dotfiles/.config/fish/fishd*
+dotfiles/.config/fish/fish_history
+dotfiles/.config/hub
+dotfiles/.config/airbnb/
+dotfiles/.config/gcloud/logs/
+dotfiles/.config/configstore/update-notifier-npm.json
 
 # rubocop
 rubocop_cache/
-
-# npm
-.config/configstore/update-notifier-npm.json
 
 #########################################
 # advent_of_code

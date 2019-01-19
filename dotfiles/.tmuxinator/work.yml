@@ -1,0 +1,41 @@
+# ~/.tmuxinator/work.yml
+
+name: "work "
+root: ~/
+
+# Optional tmux socket
+# socket_name: foo
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+windows:
+  - tmp:
+      layout: even-vertical
+      panes:
+        - cd ~/
+  - DB:
+      layout: even-vertical
+      panes:
+        - cd ~/repos/deployboard
+  - apps:
+      layout: even-vertical
+      panes:
+        - cd ~/repos2/deployboard-apps
+  - titanic:
+      layout: even-vertical
+      panes:
+        - cd ~/repos/titanic
+  - airlab:
+      layout: even-vertical
+      panes:
+        - lab sync
+        - lab ssh
+  - chef:
+      layout: even-vertical
+      panes:
+        - cd ~/repos2/chef
+  - pry:
+      layout: even-vertical
+      panes:
+        - pry

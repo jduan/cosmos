@@ -1,0 +1,165 @@
+[user]
+	name = Jingjing Duan
+	useConfigOnly = true
+[alias]
+    a   = add
+    # add existing files and new files (root is the root of the repo)
+    aa  = "!f(){ root=$(git rev-parse --show-toplevel); git add $root; }; f"
+    ap  = add -p
+    au  = add -u
+    cm  = commit -m
+    cma = commit --amend --no-edit
+    c   = commit
+    co  = checkout
+    # checkout all files starting from the root of the repo
+    coa = "!f(){ root=$(git rev-parse --show-toplevel); git checkout $root; }; f"
+    com = checkout origin/master
+    cos = checkout origin/stable
+    cp  = cherry-pick
+    b   = branch
+    # list branches ordered by most recent commit
+    bd  = for-each-ref --sort=-committerdate refs/heads/ --format="%(authordate:short)%09%(objectname:short)%09%1B[0;33m%(refname:short)%1B[m%09"
+    d   = diff
+    di  = diff --ignore-all-space
+    d1  = diff HEAD~1
+    d2  = diff HEAD~2
+    d3  = diff HEAD~3
+    d4  = diff HEAD~4
+    d5  = diff HEAD~5
+    d6  = diff HEAD~6
+    d1i = diff HEAD~1 --ignore-all-space
+    d2i = diff HEAD~2 --ignore-all-space
+    d3i = diff HEAD~3 --ignore-all-space
+    d4i = diff HEAD~4 --ignore-all-space
+    d5i = diff HEAD~5 --ignore-all-space
+    d6i = diff HEAD~6 --ignore-all-space
+    dn  = diff --name-only
+    d1n = diff HEAD~1 --name-only
+    d2n = diff HEAD~2 --name-only
+    d3n = diff HEAD~3 --name-only
+    d4n = diff HEAD~4 --name-only
+    d5n = diff HEAD~5 --name-only
+    d6n = diff HEAD~6 --name-only
+    # diff remote branch
+    dr  = "!f(){ remote_branch=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)); git diff $remote_branch; }; f"
+    dm  = "!f(){ mb=$(git merge-base HEAD origin/master); git diff $mb; }; f"
+    dmn = "!f(){ mb=$(git merge-base HEAD origin/master); git diff $mb --name-only; }; f"
+    dmw = "!f(){ mb=$(git merge-base HEAD origin/master); git diff $mb -w; }; f"
+    # diff origin/master from user branch without changing out the user branch
+    dmu = !sh -c 'git diff origin/master...$1' -
+    # from a user branch, diff the merge base from a non-master branch
+    dmb = !sh -c 'git diff origin/$1...HEAD' -
+    ds  = diff --staged
+    empty-commit = "commit --allow-empty -m 'Empty commit'"
+    f   = fetch
+    fa  = fetch --all
+    fo  = fetch origin
+    fom = fetch origin master
+    m   = merge
+    mf  = merge --ff-only
+    mnf = merge --no-ff
+    mb  = merge-base
+    mom = merge origin/master
+    mos = merge origin/stable
+    p   = pull
+    # push branch to origin and track it
+    po  = "!f(){ branch=$(git rev-parse --abbrev-ref HEAD); git push --set-upstream origin $branch; }; f"
+    # create a new PR from origin/master
+    pr  = !sh -c 'git checkout -b jduan--$1 $(git rev-parse origin/master)' -
+    pu  = push --set-upstream
+    r   = rebase
+    ri  = rebase -i
+    rc  = rebase --continue
+    # Reset origin hard
+    ro  = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git reset --hard $remote_branch; }; f"
+    rr  = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git rebase $remote_branch; }; f"
+    rv  = remote -v
+    rh  = reset HEAD^
+    rhh = reset HEAD^ --hard
+    sl  = stash list
+    sp  = stash pop
+    s0  = stash show -p stash@{0}
+    s1  = stash show -p stash@{1}
+    s2  = stash show -p stash@{2}
+    s3  = stash show -p stash@{3}
+    s4  = stash show -p stash@{4}
+    s5  = stash show -p stash@{5}
+    sd0 = stash drop stash@{0}
+    sd1 = stash drop stash@{1}
+    sd2 = stash drop stash@{2}
+    sd3 = stash drop stash@{3}
+    sd4 = stash drop stash@{4}
+    sd5 = stash drop stash@{5}
+    s   = status
+    ss  = status -uno
+    tags = "log --tags --simplify-by-decoration --pretty='format:%ai %d'"
+    unstage = reset HEAD --
+    parents = log --pretty=%P -n 1
+    up = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git pull origin $branch\"; echo $cmd; $cmd; }; f"
+    lp = log -p
+    ln = log --name-only
+    lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+    lga = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all"
+    # git track [remote] [branch]
+    # eg: make the current branch track upstream/master
+    # $ git track upstream master
+    track = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git branch --set-upstream-to ${1:-origin}/${2:-$branch}\"; echo $cmd; $cmd;  }; f"
+    untrack = branch --unset-upstream
+	switch = !legit switch \"$@\"
+	branches = !legit branches
+	sprout = !legit sprout \"$@\"
+	unpublish = !legit unpublish \"$@\"
+	harvest = !legit harvest \"$@\"
+	sync = !legit sync \"$@\"
+	publish = !legit publish \"$@\"
+	graft = !legit graft \"$@\"
+    edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+    add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+    unmerged = diff --name-only --diff-filter=U
+[core]
+    editor = vim
+	excludesfile = /Users/jingjing_duan/.gitignore_global
+    usewatchman = true
+	precomposeunicode = true
+	sparseCheckout = true
+[color]
+    ui = auto
+[color "diff"]
+    meta = yellow
+[github]
+    user = jduan
+    token = 1c29ea8a13206dc84afeb23312fb2daa
+[push]
+	default = current
+[merge]
+    conflictstyle = diff3
+    tool = vimdiff
+    # ff = no
+[mergetool]
+    keepBackup = false
+[mergetool "vimdiff"]
+    trustExitCode = true
+# [init]
+#   templatedir = ~/.git_template
+[diff]
+    compactionHeuristic = true
+    renames = true
+    renameLimit = 17924
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[http]
+    postBuffer = 524288000
+[gc]
+    auto = 0
+[pager]
+    log = diff-highlight | less
+    show = diff-highlight | less
+    diff = diff-highlight | less
+[interactive]
+    diffFilter = diff-highlight
+[rerere]
+	enabled = true

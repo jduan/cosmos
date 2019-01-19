@@ -1,0 +1,41 @@
+" Don't source ~/.vimrc! It will mess things up.
+" map b <Nop>
+" map <Space> <Nop>
+
+let mapleader = ","
+
+" Integrate with system clipboard
+set clipboard=unnamedplus,unnamed
+" set clipboard+=unnamed
+
+" no ignore case when pattern has uppercase
+set smartcase
+set ignorecase
+set number
+set relativenumber
+" highlight matches with last search pattern
+set hlsearch
+" show where search pattern typed so far matches
+set incsearch
+" hit space to turn off highlighted words
+nnoremap <Space> :nohlsearch<cr>
+" Press ii to exit insert mode
+:inoremap ii <Esc>
+:inoremap <leader>a ->
+:inoremap <C-h> <Left>
+:inoremap <C-l> <Right>
+
+" Emulated Vim Plugins
+set vim-surround
+
+
+" Try them!
+" nmap <leader>g :action GotoDeclaration<cr>
+" nmap <leader>b :action Back<cr>
+" nmap <leader>f :action Forward<cr>
+"
+" nmap <leader>t :action GotoFile<cr>
+" nmap <leader>c :action GotoClass<cr>
+" nmap <leader>ns :action GotoSymbol<cr>
+" nmap <leader>nm :action FileStructurePopup<cr>
+" nmap <leader>d :action ShowErrorDescription<cr>
