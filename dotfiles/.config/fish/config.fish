@@ -15,7 +15,7 @@ if [ -f '/usr/libexec/java_home' ];
 end
 set paths \
     $JAVA_HOME \
-    $HOME/github/jduan/misc_scripts \
+    $HOME/github/jduan/cosmos/misc_scripts \
     $HOME/repos2/sysops/optica_tools \
     $HOME/airlab/runtime_gems/tools/bin \
     # haskell stack
