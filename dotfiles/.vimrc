@@ -8,6 +8,7 @@ call plug#begin('~/.vim/plugged')
 " Plug 'eagletmt/ghcmod-vim'
 " Plug 'eagletmt/neco-ghc'
 " Plug 'idris-hackers/idris-vim'
+" Plug 'mrk21/yaml-vim'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'Shougo/vimproc.vim'
@@ -28,7 +29,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'jpo/vim-railscasts-theme'
 Plug 'junegunn/fzf.vim'
-Plug 'mrk21/yaml-vim'
+Plug 'mileszs/ack.vim'
 Plug 'mtth/scratch.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 'scrooloose/nerdtree'
@@ -48,9 +49,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'troydm/pb.vim'
 Plug 'vim-scripts/PreserveNoEOL'
-Plug 'xolox/vim-session'
-" Required by vim-session
 Plug 'xolox/vim-misc'
+" Required by vim-session
+Plug 'xolox/vim-session'
 
 " Initialize plugin system
 call plug#end()
