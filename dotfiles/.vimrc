@@ -426,10 +426,8 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
 " syntastic python
 :let g:syntastic_python_checkers = ['flake8']
-
 " syntastic coffeelint
 let g:syntastic_coffee_coffeelint_args="--csv -f /Users/jingjing.duan/.coffeelint.json"
 let g:syntastic_javascript_checkers = ['jshint']
