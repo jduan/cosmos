@@ -59,6 +59,11 @@ call plug#end()
 " disable 'highlighting the matching paren'
 let loaded_matchparen=1
 
+" swap files
+" Use // at the end of the filename makes vim use absolute file paths for the
+" swap file names so you don't get name collisions.
+set directory^=$HOME/.vim/swap//
+
 
 """"""""""""""""""" leader maps """""""""""""""""""
 let mapleader = ","
@@ -142,8 +147,6 @@ set com+=s1:/*,mb:*,ex:*/  " ...and also C-style comments
 set comments=b://,b:#    " by default allow C++ (JS) and generic unixy comments
 set copyindent           " make autoindent use the same characters to indent
 set cursorline            " turn on cursor line
-set directory-=.         " . . .and don't store temp files in cwd
-set directory=/tmp       " store temp files someplace out of the way
 set encoding=utf-8       " unicode
 set expandtab            " spaces, not tabs!
 set fileignorecase       " ignore file/directory cases when using file names and directories.

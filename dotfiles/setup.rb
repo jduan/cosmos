@@ -21,3 +21,7 @@ Dir.glob('.*').each do |file|
     `ln -s #{target_path} #{src_path}`
   end
 end
+
+# Create ~/.vim/swap/ directory to store swamp files. This directory has to
+# exist for vim to use it.
+Dir.mkdir(File.join(Dir.home, ".vim", "swap"))
