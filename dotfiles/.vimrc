@@ -27,13 +27,20 @@ Plug 'dag/vim-fish'
 Plug 'dag/vim2hs'
 " Vim motions on speed!
 Plug 'easymotion/vim-easymotion'
+" Elixir support for vim
 Plug 'elixir-editors/vim-elixir'
+" Perform all your vim insert mode completions with Tab
 Plug 'ervandew/supertab'
+" implements some of TextMate's snippets features in Vim
 Plug 'garbas/vim-snipmate'
+" Like 'f', but press 's' and two characters
 Plug 'goldfeld/vim-seek'
+" basic vim/terraform integration
 Plug 'hashivim/vim-terraform'
+" A nicer Python indentation style for vim
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'itchyny/vim-haskell-indent'
+" insert or delete brackets, parens, quotes in pair
 Plug 'jiangmiao/auto-pairs'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'jpo/vim-railscasts-theme'
@@ -41,8 +48,11 @@ Plug 'jpo/vim-railscasts-theme'
 " Also this assumes 'fzf' is installed via homebrew.
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+" Run your favorite search tool from Vim, with an enhanced results list.
 Plug 'mileszs/ack.vim'
+" Unobtrusive scratch window.
 Plug 'mtth/scratch.vim'
+" Extended f, F, t and T key mappings for Vim.
 Plug 'rhysd/clever-f.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
@@ -61,8 +71,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'troydm/pb.vim'
 Plug 'vim-scripts/PreserveNoEOL'
-Plug 'xolox/vim-misc'
 " Required by vim-session
+Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 
 " Initialize plugin system
