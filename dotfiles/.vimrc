@@ -9,8 +9,12 @@ call plug#begin('~/.vim/plugged')
 " Plug 'eagletmt/neco-ghc'
 " Plug 'idris-hackers/idris-vim'
 " Plug 'mrk21/yaml-vim'
+
+" A lib that's used by other plugins
 Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'Shougo/vimproc.vim'
+" a great asynchronous execution library for Vim
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+" display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
 Plug 'adelarsq/vim-matchit'
 Plug 'alx741/vim-hindent'
@@ -28,6 +32,9 @@ Plug 'itchyny/vim-haskell-indent'
 Plug 'jiangmiao/auto-pairs'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'jpo/vim-railscasts-theme'
+" You need the following 2 plugins together.
+" Also this assumes 'fzf' is installed via homebrew.
+Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'mileszs/ack.vim'
 Plug 'mtth/scratch.vim'
