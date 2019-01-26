@@ -16,10 +16,16 @@ Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 " display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
+" Integrates with hindent so every time you save a Haskell source file it gets
+" automatically prettified.
 Plug 'alx741/vim-hindent'
+" Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plug 'ctrlpvim/ctrlp.vim'
+" Vim support for editing fish scripts
 Plug 'dag/vim-fish'
+" 'Vim to Haskell': A collection of vimscripts for Haskell development
 Plug 'dag/vim2hs'
+" Vim motions on speed!
 Plug 'easymotion/vim-easymotion'
 Plug 'elixir-editors/vim-elixir'
 Plug 'ervandew/supertab'
