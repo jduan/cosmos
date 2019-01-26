@@ -16,7 +16,6 @@ Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 " display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
-Plug 'adelarsq/vim-matchit'
 Plug 'alx741/vim-hindent'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dag/vim-fish'
@@ -62,6 +61,10 @@ Plug 'xolox/vim-session'
 
 " Initialize plugin system
 call plug#end()
+
+"""""""""""""""" vim's built-in package manager """"""""""""""""
+packadd! matchit
+"""""""""""""""" end """"""""""""""""
 
 " disable 'highlighting the matching paren'
 let loaded_matchparen=1
