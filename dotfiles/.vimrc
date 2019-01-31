@@ -49,6 +49,7 @@ Plug 'jpo/vim-railscasts-theme'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 " Run your favorite search tool from Vim, with an enhanced results list.
+" You can configure a different search tool other than 'ack'.
 Plug 'mileszs/ack.vim'
 " Unobtrusive scratch window.
 Plug 'mtth/scratch.vim'
@@ -90,19 +91,20 @@ let loaded_matchparen=1
 " swap file names so you don't get name collisions.
 set directory^=$HOME/.vim/swap//
 
-
-""""""""""""""""""" leader maps """""""""""""""""""
-let mapleader = ","
 " Ack the word under cursor
 " Use "rg" as ack
 let g:ackprg = 'rg --vimgrep --no-heading'
-" nnoremap <leader>a :Ack! --ignore-dir coverage --ignore-dir node_modules --ignore-dir build --ignore-dir deps --ignore-dir _build --ignore-file=is:tags <cword><CR>
-"   \ 'dir':  'build$\|node_modules$\|coverage$\|deps$\|_build$\|\.pyc$\|\.swp$\|\.git$\|\.hg$\|\.svn$',
+" If you want to ignore certain files/dirs, edit '~/.ripgreprc' instead.
 nnoremap <leader>a :Ack! <cword><CR>
+
 " bufferexplorer: use relative path
 nnoremap <leader>be :BufExplorer<CR>
 let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSortBy='fullpath'
+
+
+""""""""""""""""""" leader maps """""""""""""""""""
+let mapleader = ","
 
 " Insert the current git branch name. The branch naming convention is:
 " jduan/IPD-26383-blah-blah

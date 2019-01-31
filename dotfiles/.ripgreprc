@@ -4,6 +4,13 @@
 # Using glob patterns to include/exclude files or folders
 # Uses the same rules used by gitignore.
 # https://git-scm.com/docs/gitignore#_pattern_format
+--glob=!_build/
+--glob=!build/
+--glob=!coverage/
+--glob=!deps/
+--glob=!node_modules/
+--glob=!spec/
+--glob=!tags
 --glob=!test/
 
 # Because who cares about case!?
