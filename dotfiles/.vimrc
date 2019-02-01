@@ -91,17 +91,6 @@ let loaded_matchparen=1
 " swap file names so you don't get name collisions.
 set directory^=$HOME/.vim/swap//
 
-" Ack the word under cursor
-" Use "rg" as ack
-let g:ackprg = 'rg --vimgrep --no-heading'
-" If you want to ignore certain files/dirs, edit '~/.ripgreprc' instead.
-nnoremap <leader>a :Ack! <cword><CR>
-
-" bufferexplorer: use relative path
-nnoremap <leader>be :BufExplorer<CR>
-let g:bufExplorerShowRelativePath=1
-let g:bufExplorerSortBy='fullpath'
-
 
 """"""""""""""""""" leader maps """""""""""""""""""
 let mapleader = ","
@@ -227,6 +216,17 @@ endfunction"
 call MapCR()
 
 colorscheme railscasts   " use railscasts color scheme
+
+" Ack the word under cursor
+" Use "rg" as ack
+let g:ackprg = 'rg --vimgrep --no-heading'
+" If you want to ignore certain files/dirs, edit '~/.ripgreprc' instead.
+nnoremap <leader>a :Ack! <cword><CR>
+
+" bufferexplorer: use relative path
+nnoremap <leader>be :BufExplorer<CR>
+let g:bufExplorerShowRelativePath=1
+let g:bufExplorerSortBy='fullpath'
 
 
 """"""""""""""" filetype association """""""""""""""
