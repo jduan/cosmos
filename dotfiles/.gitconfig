@@ -163,3 +163,5 @@
     diffFilter = diff-highlight
 [rerere]
 	enabled = true
+[status]
+    submodulesummary = 1
