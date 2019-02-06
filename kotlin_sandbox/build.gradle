@@ -32,6 +32,7 @@ dependencies {
     compile 'org.jetbrains.kotlin:kotlin-script-runtime:1.2.71'
     compile 'org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version'
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.1'
+    compile 'org.kohsuke:github-api:1.95'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7'
     compile 'io.reactivex.rxjava2:rxjava:2.2.0'
     compile 'org.eclipse.jgit:org.eclipse.jgit:5.2.1.201812262042-r'

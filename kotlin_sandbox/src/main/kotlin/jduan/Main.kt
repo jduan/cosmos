@@ -1,8 +1,7 @@
 package jduan
 
-import jduan.coroutines.testLaunch
-import jduan.extensions.lastChar as last
+import jduan.github.createPullRequest
 
 fun main(args: Array<String>) {
-  testLaunch()
+    createPullRequest()
 }
