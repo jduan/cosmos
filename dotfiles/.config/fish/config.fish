@@ -35,10 +35,10 @@ case Linux
     end
 end
 
-source ~/.fish_aliases
+source $HOME/.fish_aliases
 
 fish_vi_key_bindings
-source ~/.config/fish/functions/fish_user_key_bindings.fish
+source $HOME/.config/fish/functions/fish_user_key_bindings.fish
 # set -g fish_user_paths "/usr/local/opt/node@6/bin" $fish_user_paths
 
 set up rbenv
@@ -54,10 +54,9 @@ if [ -f '/Users/jingjing_duan/google-cloud-sdk/path.fish.inc' ];
 end
 
 # Nix
-# if [ -f '/nix/var/nix/profiles/default/etc/profile.d/nix-profile.fish' ];
-#   source '/nix/var/nix/profiles/default/etc/profile.d/nix-profile.fish';
-# end
-# End Nix
+if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ];
+  bass source "$HOME/.nix-profile/etc/profile.d/nix.sh";
+end
 
 # Nix workaround
 # set paths $HOME/.nix-profile/bin
