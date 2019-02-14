@@ -1,9 +1,7 @@
 package jduan.generics
 
-import kotlin.test.assertEquals
 import org.junit.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import junit.framework.TestCase.*;
 
 class GenericsTest {
   @Test fun test0() {
