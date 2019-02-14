@@ -9,9 +9,9 @@
 --glob=!coverage/
 --glob=!deps/
 --glob=!node_modules/
---glob=!spec/
+# --glob=!spec/
 --glob=!tags
---glob=!test/
+# --glob=!test/
 
 # Because who cares about case!?
 --smart-case
