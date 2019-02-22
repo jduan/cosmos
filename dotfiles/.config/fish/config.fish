@@ -19,7 +19,9 @@ set paths \
     $HOME/repos2/sysops/optica_tools \
     $HOME/airlab/runtime_gems/tools/bin \
     # haskell stack
-    $HOME/.local/bin
+    $HOME/.local/bin \
+    # pip installed binaries
+    $HOME/Library/Python/3.7/bin/
 for path in $paths
     if test -d "$path"
         if not contains "$path" $PATH
