@@ -527,7 +527,7 @@ au BufEnter *.sh setl shiftwidth=2
 :let g:PreserveNoEOL = 1
 
 " Pbyank in visual mode
-vnoremap p :Pbyank<cr>
+vnoremap Y :Pbyank<cr>
 
 " Haskell
 "
