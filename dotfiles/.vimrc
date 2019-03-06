@@ -578,3 +578,9 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 " fzf
 nnoremap <leader>f :Files<CR>
+
+" Quit vim if quickfix is the only window visible and only tab.
+aug QFClose
+  au!
+  au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&buftype") == "quickfix"|q|endif
+aug END
