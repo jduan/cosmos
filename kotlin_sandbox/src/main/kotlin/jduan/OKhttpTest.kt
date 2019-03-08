@@ -41,14 +41,12 @@ fun testGet() {
 //        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
         .build()
     val eventSourceFactory: EventSource.Factory = EventSources.createFactory(client)
-    val url = "https://gradle.d.musta.ch/build-export/v1/build/67k2k5dsxqsmq/events?eventTypes=UserTag,UserNamedValue,ProjectStructure"
+    val url = "https://gradle.synapse:4848/build-export/v1/build/67k2k5dsxqsmq/events?eventTypes=UserTag"
     val request = Request.Builder().url(url).build()
     val eventFilter = "Build"
     val listener = object : EventSourceListener() {
         override fun onEvent(eventSource: EventSource, id: String?, type: String?, data: String) {
-//            if (type == eventFilter) {
-//                onEvent.invoke(data)
-//            }
+            println("onEvent: $data")
         }
 
         override fun onOpen(eventSource: EventSource, response: Response) {

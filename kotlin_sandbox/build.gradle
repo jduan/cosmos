@@ -11,6 +11,7 @@ buildscript {
 plugins {
     // run "./gradlew dokka" to generate HTML docs
     id "org.jetbrains.dokka" version "0.9.17"
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
 }
 
 apply plugin: 'kotlin'
@@ -44,9 +45,11 @@ dependencies {
     testImplementation 'junit:junit:4.11'
 }
 
-jar {
-    manifest { attributes 'Main-Class': 'jduan.main.MainKt' }
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+// Output to build/libs/shadow.jar
+shadowJar {
+    baseName = 'shadow'
+    classifier = null
+    version = null
 }
 
 //task wrapper(type: Wrapper) {
