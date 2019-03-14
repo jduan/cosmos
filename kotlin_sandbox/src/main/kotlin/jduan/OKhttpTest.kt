@@ -41,9 +41,10 @@ fun testGet() {
 //        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
         .build()
     val eventSourceFactory: EventSource.Factory = EventSources.createFactory(client)
-    val url = "https://gradle.synapse:4848/build-export/v1/build/67k2k5dsxqsmq/events?eventTypes=UserTag"
+//    val url = "https://gradle.d.musta.ch/build-export/v1/build/qm2brr5xm62ya/events?eventTypes=UserTag,UserNamedValue,ProjectStructure"
+//    val url = "https://gradle.synapse:4848/build-export/v1/build/qm2brr5xm62ya/events?eventTypes=UserTag,UserNamedValue,ProjectStructure"
+    val url = "https://gradle.synapse:4848/build-export/v1/builds/sinceBuild/pfppin22e5zso?stream"
     val request = Request.Builder().url(url).build()
-    val eventFilter = "Build"
     val listener = object : EventSourceListener() {
         override fun onEvent(eventSource: EventSource, id: String?, type: String?, data: String) {
             println("onEvent: $data")
@@ -58,6 +59,7 @@ fun testGet() {
         }
 
         override fun onFailure(eventSource: EventSource?, t: Throwable?, response: Response?) {
+            println("onFailure, url=${eventSource!!.request().url()}, response: $response")
             t!!.printStackTrace()
         }
     }
