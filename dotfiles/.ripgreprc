@@ -1,5 +1,5 @@
 # Don't let ripgrep vomit really long lines to my terminal.
---max-columns=250
+--max-columns=2500
 
 # Using glob patterns to include/exclude files or folders
 # Uses the same rules used by gitignore.
