@@ -55,6 +55,8 @@
     fa  = fetch --all
     fo  = fetch origin
     fom = fetch origin master
+    # fetch a single branch
+    fetch-branch  = "!f(){ git fetch origin $1:refs/remotes/origin/$1; }; f"
     m   = merge
     mf  = merge --ff-only
     mnf = merge --no-ff
