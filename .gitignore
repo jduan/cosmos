@@ -36,6 +36,7 @@ dotfiles/.config/gcloud/logs/
 dotfiles/.config/configstore/update-notifier-npm.json
 dotfiles/.vim/plugged/
 dotfiles/.vim/sessions/
+dotfiles/.config/wireshark/
 
 # rubocop
 rubocop_cache/
