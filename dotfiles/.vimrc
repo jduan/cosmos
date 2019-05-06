@@ -66,6 +66,8 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-fugitive'
+" GitHub extension for fugitive.vim
+Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-surround'
@@ -584,3 +586,6 @@ aug QFClose
   au!
   au WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&buftype") == "quickfix"|q|endif
 aug END
+
+" Fugitive
+let g:github_enterprise_urls = ['https://git.musta.ch']
