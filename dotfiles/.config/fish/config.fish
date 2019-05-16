@@ -53,9 +53,9 @@ if [ -f '/Users/jingjing_duan/google-cloud-sdk/path.fish.inc' ];
 end
 
 # Nix
-if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ];
-  bass source "$HOME/.nix-profile/etc/profile.d/nix.sh";
-end
+# if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ];
+#   bass source "$HOME/.nix-profile/etc/profile.d/nix.sh";
+# end
 
 # Nix workaround
 # set paths $HOME/.nix-profile/bin
