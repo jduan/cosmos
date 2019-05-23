@@ -1,9 +1,11 @@
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+export PATH=$PATH:/Users/jingjing_duan/airlab/runtime_gems/tools/bin
+
 # added by Nix installer
-if [ -e /Users/jingjing_duan/.nix-profile/etc/profile.d/nix.sh ]; then
-	. /Users/jingjing_duan/.nix-profile/etc/profile.d/nix.sh;
-fi
+# if [ -e /Users/jingjing_duan/.nix-profile/etc/profile.d/nix.sh ]; then
+# 	. /Users/jingjing_duan/.nix-profile/etc/profile.d/nix.sh;
+# fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/jingjing_duan/.sdkman"
