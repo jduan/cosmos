@@ -314,7 +314,7 @@ let g:ctrlp_max_files = 0
 let g:ctrlp_cmd = 'CtrlPCurWD'
 " let g:ctrlp_mruf_exclude = '/tmp/.*\|*build*'
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  'build$\|_build$\|node_modules$\|deps$\|coverage$\|\.git$\|\.hg$\|\.svn$',
+  \ 'dir':  'build$\|_build$\|node_modules$\|deps$\|coverage$\|\.git$\|\.hg$\|\.svn$|generated-apps$',
   \ 'file': '\.class$\|\.exe$\|\.swp$\|\.pyc$\|\.so$\|\.dll$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
@@ -364,7 +364,18 @@ cscope add cscope.out
 " close vim when the only window left is NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " ignore node_modules/ directory
-let NERDTreeIgnore=['node_modules$[[dir]]', '\.pyc$', '\.beam$', 'coverage$[[dir]]', 'doc$[[dir]]', 'build$[[dir]]', '_build$[[dir]]', 'deps$[[dir]]']
+let NERDTreeIgnore=[
+      \'\.beam$',
+      \'\.pyc$',
+      \'_build$[[dir]]',
+      \'build$[[dir]]',
+      \'coverage$[[dir]]',
+      \'deps$[[dir]]',
+      \'doc$[[dir]]',
+      \'generated-apps$[[dir]]',
+      \'node_modules$[[dir]]',
+      \'out$[[dir]]',
+      \]
 
 " Press ii to exit insert mode
 :imap ii <Esc>
