@@ -24,3 +24,23 @@ class Rectangle(val height: Int, val width: Int) {
       return height == width
     }
 }
+
+// This shows that "property get" isn't cached!
+class Config {
+  var flag: Boolean
+  get() {
+    println("calling get")
+    return true
+  }
+  set(value: Boolean) {
+    println("calling set")
+  }
+}
+
+fun main() {
+  println("hello")
+  val config = Config()
+  repeat(5) {
+    config.flag
+  }
+}
