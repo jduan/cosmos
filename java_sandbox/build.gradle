@@ -37,6 +37,9 @@ dependencies {
     // RxJava
     compile 'io.reactivex.rxjava2:rxjava:2.2.0'
 
+    implementation 'com.google.inject:guice:4.2.2'
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
 }
