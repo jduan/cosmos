@@ -77,6 +77,8 @@ Plug 'vim-scripts/PreserveNoEOL'
 " Required by vim-session
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
+" shows how many times does a search pattern occur in the current buffer
+Plug 'google/vim-searchindex'
 
 " Initialize plugin system
 call plug#end()
