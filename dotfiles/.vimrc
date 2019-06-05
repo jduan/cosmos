@@ -316,7 +316,7 @@ let g:ctrlp_max_files = 0
 let g:ctrlp_cmd = 'CtrlPCurWD'
 " let g:ctrlp_mruf_exclude = '/tmp/.*\|*build*'
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  'build$\|_build$\|node_modules$\|deps$\|coverage$\|\.git$\|\.hg$\|\.svn$|generated-apps$',
+  \ 'dir':  'build$\|_build$\|node_modules$\|deps$\|coverage$\|\.git$\|\.hg$\|\.svn$\|generated-apps$',
   \ 'file': '\.class$\|\.exe$\|\.swp$\|\.pyc$\|\.so$\|\.dll$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
