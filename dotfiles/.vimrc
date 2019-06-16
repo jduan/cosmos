@@ -10,6 +10,7 @@ call plug#begin('~/.vim/plugged')
 " Plug 'idris-hackers/idris-vim'
 " Plug 'mrk21/yaml-vim'
 
+Plug 'Clavelito/indent-awk.vim'
 " A lib that's used by other plugins
 Plug 'MarcWeber/vim-addon-mw-utils'
 " a great asynchronous execution library for Vim
