@@ -57,6 +57,7 @@
     fom = fetch origin master
     # fetch a single branch
     fetch-branch  = "!f(){ git fetch origin --force $1:refs/remotes/origin/$1; }; f"
+    lom = log origin/master
     m   = merge
     mf  = merge --ff-only
     mnf = merge --no-ff
