@@ -75,6 +75,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'troydm/pb.vim'
 Plug 'vim-scripts/PreserveNoEOL'
+" Make a column of increasing or decreasing numbers, dates, or daynames.
+Plug 'vim-scripts/VisIncr'
 " Required by vim-session
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
