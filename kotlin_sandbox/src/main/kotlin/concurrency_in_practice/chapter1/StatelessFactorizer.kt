@@ -5,9 +5,11 @@ import java.util.concurrent.atomic.AtomicLong
 import javax.annotation.concurrent.NotThreadSafe
 import javax.annotation.concurrent.ThreadSafe
 
+/**
+ * This class is thread safe because it's stateless. The getFactors function
+ * only takes some input and returns some output.
+ */
 @ThreadSafe
-// This class is thread safe because it's stateless. The getFactors function
-// only takes some input and returns some output.
 class StatelessFactorizer {
   fun getFactors(i: BigInteger): List<BigInteger> {
     // mimic long computation by sleeping
@@ -16,6 +18,9 @@ class StatelessFactorizer {
   }
 }
 
+/**
+ * This class isn't thread safe because "count++" isn't atomic
+ */
 @NotThreadSafe
 class UnsafeCountingFactorizer {
   private var count: Long = 0
@@ -31,8 +36,10 @@ class UnsafeCountingFactorizer {
   }
 }
 
+/**
+ * This class is thread safe thanks to AtomicLong
+ */
 @ThreadSafe
-// Use an AtomicLong to make it thread safe.
 class SafeCountingFactorizer {
   private var count = AtomicLong(0)
 

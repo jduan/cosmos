@@ -4,6 +4,9 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.sqrt
 
 /**
+ * The morale of the story is: to preserve state consistency, update related state
+ * variables in a single atomic operation.
+ *
  * Here's what happens:
 
 (22:42:10.164) Thread Thread-0: getting factors for 100

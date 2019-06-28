@@ -25,6 +25,7 @@ class LazyInitRace {
 class LazyInitRace2 {
   companion object {
     private var instance: MyString? = null
+    // @Synchronized is the counterpart of Java's synchronized keyword
     @Synchronized fun getInstance(): MyString {
       if (instance == null) {
         // This simulates it takes a long time to create an object!
