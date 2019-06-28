@@ -1,6 +1,8 @@
 package concurrency_in_practice.chapter1
 
 import java.util.concurrent.atomic.AtomicReference
+import javax.annotation.concurrent.NotThreadSafe
+import javax.annotation.concurrent.ThreadSafe
 import kotlin.math.sqrt
 
 /**
@@ -38,6 +40,7 @@ fun main() {
   }
 }
 
+@NotThreadSafe
 class UnsafeCachingFactorizer {
   private val lastNumber = AtomicReference<Int>()
   private val lastFactors = AtomicReference<List<Int>>()
@@ -56,6 +59,32 @@ class UnsafeCachingFactorizer {
       }
       Utils.println("set last factors to $factors")
       lastFactors.set(factors)
+      factors
+    }
+  }
+}
+
+@ThreadSafe
+class SafeCachingFactorizer {
+  private val lastNumber = AtomicReference<Int>()
+  private val lastFactors = AtomicReference<List<Int>>()
+
+  fun getFactors(n: Int): List<Int> {
+    Utils.println("getting factors for $n")
+    return if (n == lastNumber.get()) {
+      Utils.println("last number is $n, return early")
+      lastFactors.get()
+    } else {
+      val factors = GFG.primeFactors(n)
+      synchronized(this) {
+        Utils.println("set last number to $n")
+        lastNumber.set(n)
+        if (n == 100) {
+          Thread.sleep(1000)
+        }
+        Utils.println("set last factors to $factors")
+        lastFactors.set(factors)
+      }
       factors
     }
   }
