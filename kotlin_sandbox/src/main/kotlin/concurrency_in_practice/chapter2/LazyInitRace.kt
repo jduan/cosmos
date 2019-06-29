@@ -1,4 +1,4 @@
-package concurrency_in_practice.chapter1
+package concurrency_in_practice.chapter2
 
 import javax.annotation.concurrent.NotThreadSafe
 import javax.annotation.concurrent.ThreadSafe

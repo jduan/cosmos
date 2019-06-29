@@ -1,4 +1,4 @@
-package concurrency_in_practice.chapter1
+package concurrency_in_practice.chapter2
 
 import java.math.BigInteger
 import java.util.concurrent.atomic.AtomicLong
