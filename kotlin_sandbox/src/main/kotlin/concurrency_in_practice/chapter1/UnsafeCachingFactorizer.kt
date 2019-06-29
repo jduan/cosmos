@@ -75,6 +75,8 @@ class SafeCachingFactorizer {
             Utils.println("last number is $n, return early")
             lastFactors.get()
         } else {
+            // This CPU intensive operation can take a long time and it should
+            // be put outside the "critical section"
             val factors = GFG.primeFactors(n)
             synchronized(this) {
                 Utils.println("set last number to $n")
