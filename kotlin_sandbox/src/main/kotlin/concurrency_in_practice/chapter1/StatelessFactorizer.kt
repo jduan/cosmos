@@ -11,11 +11,11 @@ import javax.annotation.concurrent.ThreadSafe
  */
 @ThreadSafe
 class StatelessFactorizer {
-  fun getFactors(i: BigInteger): List<BigInteger> {
-    // mimic long computation by sleeping
-    Thread.sleep(1000)
-    return listOf(BigInteger.ONE)
-  }
+    fun getFactors(i: BigInteger): List<BigInteger> {
+        // mimic long computation by sleeping
+        Thread.sleep(1000)
+        return listOf(BigInteger.ONE)
+    }
 }
 
 /**
@@ -23,17 +23,17 @@ class StatelessFactorizer {
  */
 @NotThreadSafe
 class UnsafeCountingFactorizer {
-  private var count: Long = 0
+    private var count: Long = 0
 
-  fun getCount() = count
+    fun getCount() = count
 
-  fun service() {
-    // sleep a bit to simulate "long computation"
-    Thread.sleep(1000)
-    // ++ is why this class isn't thread safe because ++ is 3 operations
-    // read, modify, and update
-    count++
-  }
+    fun service() {
+        // sleep a bit to simulate "long computation"
+        Thread.sleep(1000)
+        // ++ is why this class isn't thread safe because ++ is 3 operations
+        // read, modify, and update
+        count++
+    }
 }
 
 /**
@@ -41,46 +41,46 @@ class UnsafeCountingFactorizer {
  */
 @ThreadSafe
 class SafeCountingFactorizer {
-  private var count = AtomicLong(0)
+    private var count = AtomicLong(0)
 
-  fun getCount() = count
+    fun getCount() = count
 
-  fun service() {
-    // sleep a bit to simulate "long computation"
-    Thread.sleep(1000)
-    // ++ is why this class isn't thread safe because ++ is 3 operations
-    // read, modify, and update
-    count.incrementAndGet()
-  }
+    fun service() {
+        // sleep a bit to simulate "long computation"
+        Thread.sleep(1000)
+        // ++ is why this class isn't thread safe because ++ is 3 operations
+        // read, modify, and update
+        count.incrementAndGet()
+    }
 }
 
 fun test1() {
-  val ucf = UnsafeCountingFactorizer()
-  val threads = (1..10).map {
-    Thread(Runnable {
-      ucf.service()
-    })
-  }
-  threads.forEach { it.start() }
-  threads.forEach { it.join() }
-  // The final count should be 10 if the class is thread safe
-  // You will most likely get a number smaller than 10!
-  println("final count: ${ucf.getCount()}")
+    val ucf = UnsafeCountingFactorizer()
+    val threads = (1..10).map {
+        Thread(Runnable {
+            ucf.service()
+        })
+    }
+    threads.forEach { it.start() }
+    threads.forEach { it.join() }
+    // The final count should be 10 if the class is thread safe
+    // You will most likely get a number smaller than 10!
+    println("final count: ${ucf.getCount()}")
 }
 
 fun test2() {
-  val scf = SafeCountingFactorizer()
-  val threads = (1..10).map {
-    Thread(Runnable {
-      scf.service()
-    })
-  }
-  threads.forEach { it.start() }
-  threads.forEach { it.join() }
-  // The final count should always be 10 because the class is thread safe.
-  println("final count: ${scf.getCount()}")
+    val scf = SafeCountingFactorizer()
+    val threads = (1..10).map {
+        Thread(Runnable {
+            scf.service()
+        })
+    }
+    threads.forEach { it.start() }
+    threads.forEach { it.join() }
+    // The final count should always be 10 because the class is thread safe.
+    println("final count: ${scf.getCount()}")
 }
 
 fun main() {
-  test2()
+    test2()
 }

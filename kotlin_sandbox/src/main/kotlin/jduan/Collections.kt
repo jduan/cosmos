@@ -1,9 +1,9 @@
 package jduan.collections
 
 fun <T> Collection<T>.joinToString(
-        separator: String = ", ",
-        prefix: String = "(",
-        suffix: String = ")"
+    separator: String = ", ",
+    prefix: String = "(",
+    suffix: String = ")"
 ): String {
     val result = StringBuilder(prefix)
     for ((index, element) in this.withIndex()) {
@@ -18,7 +18,7 @@ fun <T> Collection<T>.joinToString(
 // extension property
 
 var StringBuilder.lastChar: Char
-        get() = get(length - 1)
-        set(value: Char) {
-            this.setCharAt(length - 1, value)
-        }
+    get() = get(length - 1)
+    set(value: Char) {
+        this.setCharAt(length - 1, value)
+    }

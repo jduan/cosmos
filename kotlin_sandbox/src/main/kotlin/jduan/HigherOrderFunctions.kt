@@ -1,33 +1,33 @@
 package jduan.hof
 
 fun runHOF() {
-  twoAndThree {a, b -> a + b}
-  twoAndThree {a, b -> a * b}
-  println("abc".filter { it in 'a'..'z' })
+    twoAndThree { a, b -> a + b }
+    twoAndThree { a, b -> a * b }
+    println("abc".filter { it in 'a'..'z' })
 
-  val letters = listOf("Alpha", "Beta")
-  println(letters.joinToString())
-  println(letters.joinToString { it.toLowerCase() })
-  println(letters.joinToString(separator = "! ") { it.toLowerCase() })
+    val letters = listOf("Alpha", "Beta")
+    println(letters.joinToString())
+    println(letters.joinToString { it.toLowerCase() })
+    println(letters.joinToString(separator = "! ") { it.toLowerCase() })
 
-  val calculator = getShippingCostCalculator(Delivery.EXPEDITED)
-  println("Shipping costs ${calculator(Order(3))}")
-  val calculator2 = getShippingCostCalculator(Delivery.STANDARD)
-  println("Shipping costs ${calculator2(Order(3))}")
+    val calculator = getShippingCostCalculator(Delivery.EXPEDITED)
+    println("Shipping costs ${calculator(Order(3))}")
+    val calculator2 = getShippingCostCalculator(Delivery.STANDARD)
+    println("Shipping costs ${calculator2(Order(3))}")
 
-  val contacts = listOf(
-      Person("Dmitry", "Jemerov", "123-4567"),
-      Person("Svetlana", "Isakova", null))
+    val contacts = listOf(
+        Person("Dmitry", "Jemerov", "123-4567"),
+        Person("Svetlana", "Isakova", null))
 
-  val contactListFilters = ContactListFilters()
-  with (contactListFilters) {
-    prefix = "Dm"
-    onlyWithPhoneNumber = true
-  }
-  println(contacts.filter(contactListFilters.getPredicate()))
+    val contactListFilters = ContactListFilters()
+    with(contactListFilters) {
+        prefix = "Dm"
+        onlyWithPhoneNumber = true
+    }
+    println(contacts.filter(contactListFilters.getPredicate()))
 
-  println(log.averageDurationFor { it.os in setOf(OS.ANDROID, OS.IOS) })
-  println(log.averageDurationFor { it.os == OS.IOS && it.path == "/signup"} )
+    println(log.averageDurationFor { it.os in setOf(OS.ANDROID, OS.IOS) })
+    println(log.averageDurationFor { it.os == OS.IOS && it.path == "/signup" })
 }
 
 val sum: (Int, Int) -> Int = { x: Int, y: Int -> x + y }
@@ -38,7 +38,7 @@ fun performRequest(
     url: String,
     callback: (code: Int, content: String) -> Unit
 ) {
-  // TODO
+    // TODO
 }
 
 // You can call it like this:
@@ -46,18 +46,18 @@ fun performRequest(
 // performRequest(url) { code, content -> ... }
 
 fun twoAndThree(operation: (Int, Int) -> Int) {
-  val result = operation(2, 3)
-  println("The result is $result")
+    val result = operation(2, 3)
+    println("The result is $result")
 }
 
 fun String.filter(predicate: (Char) -> Boolean): String {
-  val sb = StringBuffer()
-  for (index in 0 until length) {
-    val element = get(index)
-    if (predicate(element)) sb.append(element)
-  }
+    val sb = StringBuffer()
+    for (index in 0 until length) {
+        val element = get(index)
+        if (predicate(element)) sb.append(element)
+    }
 
-  return sb.toString()
+    return sb.toString()
 }
 
 fun <T> Collection<T>.joinToString(
@@ -66,19 +66,19 @@ fun <T> Collection<T>.joinToString(
     suffix: String = ")",
     transform: (T) -> String = { it.toString() }
 ): String {
-  val result = StringBuilder(prefix)
-  for ((index, element) in this.withIndex()) {
-    if (index > 0) result.append(separator)
-    result.append(transform(element))
-  }
+    val result = StringBuilder(prefix)
+    for ((index, element) in this.withIndex()) {
+        if (index > 0) result.append(separator)
+        result.append(transform(element))
+    }
 
-  result.append(suffix)
-  return result.toString()
+    result.append(suffix)
+    return result.toString()
 }
 
 enum class Delivery {
-  STANDARD,
-  EXPEDITED
+    STANDARD,
+    EXPEDITED
 }
 
 class Order(val itemCount: Int)
@@ -86,11 +86,11 @@ class Order(val itemCount: Int)
 // This function takes a "delivery" and returns another function, which takes an Order
 // and returns a Double (shipping cost).
 fun getShippingCostCalculator(delivery: Delivery): (Order) -> Double {
-  if (delivery == Delivery.EXPEDITED) {
-    return { order -> 6 + 2.1 * order.itemCount }
-  }
+    if (delivery == Delivery.EXPEDITED) {
+        return { order -> 6 + 2.1 * order.itemCount }
+    }
 
-  return { order -> 1.2 * order.itemCount }
+    return { order -> 1.2 * order.itemCount }
 }
 
 data class Person(
@@ -100,22 +100,22 @@ data class Person(
 )
 
 class ContactListFilters {
-  var prefix = ""
-  var onlyWithPhoneNumber = false
+    var prefix = ""
+    var onlyWithPhoneNumber = false
 
-  fun getPredicate(): (Person) -> Boolean {
-    val startsWithPrefix = { p: Person ->
-      p.firstName.startsWith(prefix) || p.lastName.startsWith(prefix)
+    fun getPredicate(): (Person) -> Boolean {
+        val startsWithPrefix = { p: Person ->
+            p.firstName.startsWith(prefix) || p.lastName.startsWith(prefix)
+        }
+
+        if (!onlyWithPhoneNumber) {
+            // return a variable of a function type
+            return startsWithPrefix
+        }
+
+        // return a lambda from this function
+        return { startsWithPrefix(it) && it.phoneNumber != null }
     }
-
-    if (!onlyWithPhoneNumber) {
-      // return a variable of a function type
-      return startsWithPrefix
-    }
-
-    // return a lambda from this function
-    return { startsWithPrefix(it) && it.phoneNumber != null }
-  }
 }
 
 data class SiteVisit(

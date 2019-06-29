@@ -2,7 +2,7 @@ package jduan.delgations
 
 // Delegate most of the methods to "innerSet"
 class CoutingSet<T>(
-        val innerSet: MutableCollection<T> = HashSet<T>()
+    val innerSet: MutableCollection<T> = HashSet<T>()
 ) : MutableCollection<T> by innerSet {
     var objectsAdded = 0
 

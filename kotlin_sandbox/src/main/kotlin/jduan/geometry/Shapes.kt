@@ -1,6 +1,6 @@
 package jduan.geometry.shapes
 
-import java.util.Random
+import java.util.*
 
 class Rectangle(val height: Int, val width: Int) {
     val isSquare: Boolean

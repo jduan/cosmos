@@ -12,7 +12,7 @@ fun findOldestPerson(): Person? {
 
 fun lambdaExamples() {
     // bind a lambda to a variable
-    val sum = {x: Int, y: Int -> x + y}
+    val sum = { x: Int, y: Int -> x + y }
     println(sum(1, 2))
 
     // define a lambda and call it immediately
@@ -22,12 +22,12 @@ fun lambdaExamples() {
     run { println(42) }
 
     val people = listOf(Person("Alice", 29), Person("Bob", 33))
-    val names = people.joinToString(separator = " ", transform = {p: Person -> p.name})
+    val names = people.joinToString(separator = " ", transform = { p: Person -> p.name })
     // or
-    val names2 = people.joinToString(separator = " ") {p: Person -> p.name}
+    val names2 = people.joinToString(separator = " ") { p: Person -> p.name }
     // the type of 'p' can be inferred
-    val names3 = people.joinToString(separator = " ") {p -> p.name}
-    val names4 = people.joinToString(separator = " ") {it.name}
+    val names3 = people.joinToString(separator = " ") { p -> p.name }
+    val names4 = people.joinToString(separator = " ") { it.name }
     println(names)
     println(names2)
     println(names3)
@@ -77,7 +77,7 @@ fun collectionExamples() {
     // other functions: filterKeys, filterValues, mapKeys, mapValues
     println(table.mapValues { it.value.toUpperCase() })
 
-    val canBeInClub27 = {p: Person -> p.age <= 27 }
+    val canBeInClub27 = { p: Person -> p.age <= 27 }
 
     // all
     println(people.all(canBeInClub27))
@@ -104,9 +104,9 @@ fun collectionExamples() {
     println(listOf("a", "ab", "b").groupBy(String::first))
 
     val books = listOf(
-            Book("Thursday Next", listOf("Jasper Fforde")),
-            Book("Mort", listOf("Terry Pratchett")),
-            Book("Good Omens", listOf("Terry Pratchett", "Neil Gaiman"))
+        Book("Thursday Next", listOf("Jasper Fforde")),
+        Book("Mort", listOf("Terry Pratchett")),
+        Book("Good Omens", listOf("Terry Pratchett", "Neil Gaiman"))
     )
 
     // flatMap
@@ -118,16 +118,16 @@ fun sequenceExamples() {
     val people = listOf(Person("Alice", 29), Person("Bob", 31), Person("Carol", 35))
 
     val names = people.asSequence()
-            .map(Person::name)
-            .filter { it.startsWith("A") }
-            .toList()
+        .map(Person::name)
+        .filter { it.startsWith("A") }
+        .toList()
     println(names)
 
     val numbers = listOf(1, 2, 3, 4).asSequence()
-            .map { print("map($it) "); it * it }
-            .filter { print("filter($it) "); it % 2 == 0 }
-            .map { print("map($it) "); it + 1 }
-            .toList()
+        .map { print("map($it) "); it * it }
+        .filter { print("filter($it) "); it % 2 == 0 }
+        .map { print("map($it) "); it + 1 }
+        .toList()
     // it prints: all the functions are applied to one element before moving on the next element!
     // map(1) filter(1)
     // map(2) filter(4) map(4)
@@ -142,7 +142,7 @@ fun sequenceExamples() {
     println(numbersTo100.sum())
 
     fun File.isInsideHiddenDirectory() =
-            kotlin.sequences.generateSequence(this) { it.parentFile }.any { it.isHidden }
+        kotlin.sequences.generateSequence(this) { it.parentFile }.any { it.isHidden }
 
     val file = File("/Users/jingjing_duan/.vim/autoload/pathogen.vim")
     println(file.isInsideHiddenDirectory())
@@ -160,7 +160,7 @@ fun alphabet(): String {
 fun lambdaWithReceivers(): String {
     val result = StringBuilder()
     return with(result) {
-        for (letter in 'A' .. 'Z') {
+        for (letter in 'A'..'Z') {
             // you can also omit "this"
             this.append(letter)
         }
@@ -170,7 +170,7 @@ fun lambdaWithReceivers(): String {
 }
 
 fun lambdaWithReceivers2() = StringBuilder().apply {
-    for (letter in 'A' .. 'Z') {
+    for (letter in 'A'..'Z') {
         append(letter)
     }
     append("\nNow I know the alphabet!")
@@ -179,7 +179,7 @@ fun lambdaWithReceivers2() = StringBuilder().apply {
 // buildString does the following:
 // StringBuilder().apply(builderAction).toString()
 fun alphabet2() = buildString {
-    for (letter in 'A' .. 'Z') {
+    for (letter in 'A'..'Z') {
         append(letter)
     }
     append("\nNow I know the alphabet!")

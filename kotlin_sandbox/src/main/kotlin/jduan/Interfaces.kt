@@ -9,7 +9,8 @@ interface Clickable {
 
 interface Focusable {
     fun setFocus(b: Boolean) =
-            println("I ${if (b) "got" else "lost"} focus.")
+        println("I ${if (b) "got" else "lost"} focus.")
+
     fun showOff() = println("I'm focusable too!")
 }
 
@@ -63,14 +64,12 @@ internal open class TalkativeButton : Focusable {
 //}
 
 open class User(val nickname: String,
-           val isSubscribed: Boolean = true)
+                val isSubscribed: Boolean = true)
 
 class TwitterUser(nickname: String) : User(nickname) {
     // secondary constructor
-    constructor(firstname: String, lastname: String) : this(firstname + lastname) {
-
-    }
+    constructor(firstname: String, lastname: String) : this(firstname + lastname)
 }
 
 // This means Secretive can't be instantiated!
-class Secretive private constructor() {}
+class Secretive private constructor()

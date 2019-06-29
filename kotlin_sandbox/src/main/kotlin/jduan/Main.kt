@@ -1,11 +1,11 @@
 package jduan.main
 
 fun main() {
-  val tests = listOf(
-    "hello",
-    "world"
-  )
-  val str = """
+    val tests = listOf(
+        "hello",
+        "world"
+    )
+    val str = """
         You're being notified because it seems like you are the owner of one or more tests
         that have been disabled. They aren't being run on CI because of that.
         You can see more info at http://arborist-web.d.musta.ch/find_tests.
@@ -14,5 +14,5 @@ fun main() {
         feel free to reach out to #build-infra on Slack. Here's the list of tests:
         $tests
         """.trimIndent()
-  println(str)
+    println(str)
 }

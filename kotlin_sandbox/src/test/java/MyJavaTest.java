@@ -1,6 +1,6 @@
-import static junit.framework.TestCase.assertEquals;
-
 import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
 
 public class MyJavaTest {
   @Test

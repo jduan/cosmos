@@ -1,12 +1,13 @@
 package jduan
 
-import org.junit.Test
-import com.jcraft.jsch.SftpException
-import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.JSch
+import com.jcraft.jsch.JSchException
+import com.jcraft.jsch.SftpException
+import org.junit.Test
 
 class JgitTest {
-    @Test fun f() {
+    @Test
+    fun f() {
         val jsch = JSch()
 
         try {

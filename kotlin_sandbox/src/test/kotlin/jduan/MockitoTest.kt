@@ -9,37 +9,36 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.atLeast
 import org.mockito.Mockito.atLeastOnce
-import org.mockito.Mockito.never
 import org.mockito.Mockito.atMost
+import org.mockito.Mockito.never
 import org.mockito.Mockito.times
-import java.lang.RuntimeException
 
 interface BookService {
-  fun inStock(bookId: Int): Boolean
-  fun lend(bookId: Int, memberId: Int)
+    fun inStock(bookId: Int): Boolean
+    fun lend(bookId: Int, memberId: Int)
 }
 
 class LendBookManager(private val bookService: BookService) {
-  fun checkout(bookId: Int, memberId: Int) {
-    if(bookService.inStock(bookId)) {
-      bookService.lend(bookId, memberId)
-    } else {
-      throw IllegalStateException("Book is not available")
+    fun checkout(bookId: Int, memberId: Int) {
+        if (bookService.inStock(bookId)) {
+            bookService.lend(bookId, memberId)
+        } else {
+            throw IllegalStateException("Book is not available")
+        }
     }
-  }
 }
 
 class MockitoTest {
-  @Test
-  fun `demo how to use mockito-kotlin`() {
-    val mockBookService: BookService = mock()
-    whenever(mockBookService.inStock(100)).thenReturn(true)
+    @Test
+    fun `demo how to use mockito-kotlin`() {
+        val mockBookService: BookService = mock()
+        whenever(mockBookService.inStock(100)).thenReturn(true)
 
-    val manager = LendBookManager(mockBookService)
-    manager.checkout(100, 1)
+        val manager = LendBookManager(mockBookService)
+        manager.checkout(100, 1)
 
-    verify(mockBookService).lend(100, 1)
-  }
+        verify(mockBookService).lend(100, 1)
+    }
 
     @Test
     fun `show how to stub method calls`() {
