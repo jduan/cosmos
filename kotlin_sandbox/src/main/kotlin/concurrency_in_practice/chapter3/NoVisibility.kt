@@ -2,7 +2,7 @@ package concurrency_in_practice.chapter3
 
 import org.slf4j.LoggerFactory
 
-val logger = LoggerFactory.getLogger("main")
+private val logger = LoggerFactory.getLogger("main")
 
 fun main() {
     logger.info("Entering main")
