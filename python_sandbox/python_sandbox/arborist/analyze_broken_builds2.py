@@ -5,8 +5,25 @@ import redis
 import time
 from itertools import (groupby, chain)
 
+NUM_OF_DAYS = 1
 
-def get_builds_from_redis(num_of_days):
+
+def analyze():
+    builds = get_builds_from_redis()
+    print("Got %s broken builds for the past %s days" % (len(builds), NUM_OF_DAYS))
+    analyze_particular_task_root_cause(builds)
+    print("======== failure reasons ===========")
+    analyze_failure_reasons(builds)
+    print()
+    print("======== compilation failures ===========")
+    analyze_compilation_failures(builds)
+    print()
+    print("======== other failures ===========")
+    analyze_other_failures(builds)
+    print()
+
+
+def get_builds_from_redis():
     """
     Get broken builds from Redis via pagination.
     :return:
@@ -16,7 +33,7 @@ def get_builds_from_redis(num_of_days):
     end = now_in_millis()
     start = one_day_ago(end)
     broken_builds = []
-    for x in range(num_of_days):
+    for x in range(NUM_OF_DAYS):
         items = rds.zrangebyscore("treehouse_builds", start, end)
         for item in items:
             build = json.loads(item)
