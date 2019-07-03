@@ -97,7 +97,3 @@ def print_groups(groups):
     sorted_groups = sorted(new_groups.items(), key=operator.itemgetter(1), reverse=True)
     for key, value in sorted_groups:
         print("%s: %s" % (key, value))
-
-
-if __name__ == "__main__":
-    main()
