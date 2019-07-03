@@ -53,11 +53,8 @@ function gd
       end
     end
   end
-  # set cmd "$cwd/gradlew" $argv
-  # eval $cmd
-  cd $cwd
-  ./gradlew $argv
-  cd $old_cwd
+  set cmd "$cwd/gradlew" $argv
+  eval $cmd
 end
 
 # This assumes "gradlew" exists at the root of the git repo. So it's less
