@@ -1,9 +1,10 @@
 import json
 import operator
 import re
-import redis
 import time
 from itertools import (groupby, chain)
+
+import redis
 
 NUM_OF_DAYS = 1
 
