@@ -16,6 +16,7 @@ pr_numbers = {
 }
 start = 0
 end = rds.llen(redis_key)
+print("queue length: %s" % end)
 
 items = rds.lrange(redis_key, start, end)
 for item in items:
@@ -27,4 +28,4 @@ for item in items:
 
 for bad_item in sorted(bad_items):
     print("bad item: %s" % bad_item)
-    # rds.lrem(redis_key, 1, bad_item)
+    # rds.lrem(redis_key, 0, bad_item)

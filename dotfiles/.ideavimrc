@@ -24,6 +24,7 @@ nnoremap <Space> :nohlsearch<cr>
 :inoremap <leader>a ->
 :inoremap <C-h> <Left>
 :inoremap <C-l> <Right>
+:inoremap <C-e> <C-o>$
 
 " Emulated Vim Plugins
 set vim-surround
