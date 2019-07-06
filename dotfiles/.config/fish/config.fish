@@ -94,3 +94,6 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # OneTouch
 export K2=1
+
+# Don't generate .pyc files!
+export PYTHONDONTWRITEBYTECODE=1
