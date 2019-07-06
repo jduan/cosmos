@@ -2,5 +2,5 @@ import unittest
 
 
 class TestItem5(unittest.TestCase):
-    def test_slicing(self):
+    def test1(self):
         self.assertEqual(1, 1)
