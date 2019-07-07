@@ -28,8 +28,16 @@ def log(message, *values):
 #
 # To avoid this possibility entirely, you should use keyword-only arguments when you want to extend
 # functions that accept *args
-# TODO: fix this after item 21
 def log2(sequence, message, *values):
+    if values:
+        values_str = ', '.join(str(x) for x in values)
+        print("%s: %s: %s" % (sequence, message, values_str))
+    else:
+        print("%s: %s" % (sequence, message))
+
+
+# arguments after varargs are keyword-only arguments!
+def log3(message, *values, sequence):
     if values:
         values_str = ', '.join(str(x) for x in values)
         print("%s: %s: %s" % (sequence, message, values_str))
@@ -49,6 +57,10 @@ def main():
     log2(1, 'Favorites', 7, 33)
     # old usage breaks silently because the sequence will be 'Favorite numbers'
     log2('Favorite numbers', 7, 33)
+
+    # leverage keyword-only arguments
+    log3('Favorites', 7, 33, sequence=1)
+    log3('Favorite numbers', 7, 33, sequence=2)
 
 
 if __name__ == '__main__':
