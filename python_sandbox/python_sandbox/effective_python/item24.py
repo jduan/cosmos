@@ -1,9 +1,22 @@
+# Things to Remember
+#
+# Python only supports a single constructor per class, the __init__ method.
+#
+# Use @classmethod to define alternative constructors for your classes. They are like
+# "factory methods" in Java.
+#
+# Use class method polymorphism to provide "generic" ways to build and connect concrete subclasses.
+
+
 import os
 from threading import Thread
 
 
 class InputData(object):
     def read(self):
+        raise NotImplementedError
+    @classmethod
+    def generate_inputs(cls, config):
         raise NotImplementedError
 
 
@@ -14,6 +27,12 @@ class PathInputData(InputData):
 
     def read(self):
         return open(self.path).read()
+
+    @classmethod
+    def generate_inputs(cls, config):
+        data_dir = config['data_dir']
+        for name in os.listdir(data_dir):
+            yield cls(os.path.join(data_dir, name))
 
 
 class Worker(object):
@@ -26,6 +45,13 @@ class Worker(object):
 
     def reduce(self, other):
         raise NotImplementedError
+
+    @classmethod
+    def create_workers(cls, input_class, config):
+        workers = []
+        for input_data in input_class.generate_inputs(config):
+            workers.append(cls(input_data))
+        return workers
 
 
 class LineCountWorker(Worker):
@@ -59,15 +85,19 @@ def execute(workers):
     return first.result
 
 
-def map_reduce(data_dir):
-    inputs = generate_inputs(data_dir)
-    workers = create_workers(inputs)
+def map_reduce(worker_class, input_class, config):
+    """
+    The beauty if map_reduce is that it's generic. You can pass in different
+    worker_class and input_class, and it will glue them together!
+    """
+    workers = worker_class.create_workers(input_class, config)
     return execute(workers)
 
 
 def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    result = map_reduce(current_dir)
+    config = {'data_dir': current_dir}
+    result = map_reduce(LineCountWorker, PathInputData, config)
     print('There are %s lines' % result)
 
 
