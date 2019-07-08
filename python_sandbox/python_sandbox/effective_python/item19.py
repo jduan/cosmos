@@ -1,14 +1,14 @@
 # Things to Remember
 #
-# Image Function arguments can be specified by position or by keyword.
+# Function arguments can be specified by position or by keyword.
 #
-# Image Keywords make it clear what the purpose of each argument is when it would be confusing with
+# Keywords make it clear what the purpose of each argument is when it would be confusing with
 # only positional arguments.
 #
-# Image Keyword arguments with default values make it easy to add new behaviors to a function,
+# Keyword arguments with default values make it easy to add new behaviors to a function,
 # especially when the function has existing callers.
 #
-# Image Optional keyword arguments should always be passed by keyword instead of by position.
+# Optional keyword arguments should always be passed by keyword instead of by position.
 
 
 # All positional arguments to Python functions can also be passed by keyword, where the name of the

@@ -1,13 +1,13 @@
 # Things to Remember
 #
-# Image Keyword arguments make the intention of a function call more clear.
+# Keyword arguments make the intention of a function call more clear.
 #
-# Image Use keyword-only arguments to force callers to supply keyword arguments for potentially
+# Use keyword-only arguments to force callers to supply keyword arguments for potentially
 # confusing functions, especially those that accept multiple Boolean flags.
 #
-# Image Python 3 supports explicit syntax for keyword-only arguments in functions.
+# Python 3 supports explicit syntax for keyword-only arguments in functions.
 #
-# Image Python 2 can emulate keyword-only arguments for functions by using **kwargs and manually
+# Python 2 can emulate keyword-only arguments for functions by using **kwargs and manually
 # raising TypeError exceptions.
 
 

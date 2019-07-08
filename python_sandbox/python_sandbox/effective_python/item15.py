@@ -1,16 +1,16 @@
 # Things to Remember
 #
-# Image Closure functions can refer to variables from any of the scopes in which they were defined.
+# Closure functions can refer to variables from any of the scopes in which they were defined.
 #
-# Image By default, closures can’t affect enclosing scopes by assigning variables.
+# By default, closures can’t affect enclosing scopes by assigning variables.
 #
-# Image In Python 3, use the nonlocal statement to indicate when a closure can modify a variable in
+# In Python 3, use the nonlocal statement to indicate when a closure can modify a variable in
 # its enclosing scopes.
 #
-# Image In Python 2, use a mutable value (like a single-item list) to work around the lack of the
+# In Python 2, use a mutable value (like a single-item list) to work around the lack of the
 # nonlocal statement.
 #
-# Image Avoid using nonlocal statements for anything beyond simple functions.
+# Avoid using nonlocal statements for anything beyond simple functions.
 
 
 def sort_priority(values, group):

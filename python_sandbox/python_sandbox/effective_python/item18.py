@@ -1,14 +1,14 @@
 # # Things to Remember
 #
-# Image Functions can accept a variable number of positional arguments by using *args in the def
+# Functions can accept a variable number of positional arguments by using *args in the def
 # statement.
 #
-# Image You can use the items from a sequence as the positional arguments for a function with the *
+# You can use the items from a sequence as the positional arguments for a function with the *
 # operator.
 #
-# Image Using the * operator with a generator may cause your program to run out of memory and crash.
+# Using the * operator with a generator may cause your program to run out of memory and crash.
 #
-# Image Adding new positional parameters to functions that accept *args can introduce hard-to-find
+# Adding new positional parameters to functions that accept *args can introduce hard-to-find
 # bugs.
 
 

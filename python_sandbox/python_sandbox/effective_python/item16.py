@@ -7,13 +7,13 @@
 
 # Things to Remember
 #
-# Image Using generators can be clearer than the alternative of returning lists of accumulated
+# Using generators can be clearer than the alternative of returning lists of accumulated
 # results.
 #
-# Image The iterator returned by a generator produces the set of values passed to yield expressions
+# The iterator returned by a generator produces the set of values passed to yield expressions
 # within the generator function’s body.
 #
-# Image Generators can produce a sequence of outputs for arbitrarily large inputs because their
+# Generators can produce a sequence of outputs for arbitrarily large inputs because their
 # working memory doesn't include all inputs and outputs.
 
 
