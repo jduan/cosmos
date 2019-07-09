@@ -3,18 +3,20 @@
 # Avoid using multiple inheritance if mix-in classes can achieve the same outcome.
 #
 # Use pluggable behaviors at the instance level to provide per-class customization when mix-in
-# classes may require it.
+# classes may require it. Subclass can override certain methods/hooks in the mixin.
 #
-# Compose mix-ins to create complex functionality from simple behaviors.
+# Compose mix-ins to create complex functionality from simple behaviors. A mixin can
+# depend on another mixin.
 
 # Python is an object-oriented language with built-in facilities for making multiple inheritance
 # tractable (see Item 25: “Initialize Parent Classes with super”). However, it’s better to avoid
-# multiple inheritance altogether.
+# multiple inheritance altogether. Mixin should be the only use case.
 
 # If you find yourself desiring the convenience and encapsulation that comes with multiple
 # inheritance, consider writing a mix-in instead. A mix-in is a small class that only defines a set
 # of additional methods that a class should provide. Mix-in classes don’t define their own instance
-# attributes nor require their __init__ constructor to be called.
+# attributes nor require their __init__ constructor to be called. In other words,
+# mixins only have behaviors. They don't maintain states.
 
 # Writing mix-ins is easy because Python makes it trivial to inspect the current state of any object
 # regardless of its type. Dynamic inspection lets you write generic functionality a single time, in
@@ -56,6 +58,7 @@ class JsonMixin:
         return cls(**kwargs)
 
     def to_json(self):
+        # this mixin depends on the ToDictMixin to work
         return json.dumps(self.to_dict())
 
 
@@ -72,6 +75,7 @@ class BinaryTreeWithParent(BinaryTree):
         self.parent = parent
 
     def _traverse(self, key, value):
+        # Don't visit parent otherwise you will run into a loop
         if isinstance(value, BinaryTreeWithParent) and key == 'parent':
             return value.value
         else:

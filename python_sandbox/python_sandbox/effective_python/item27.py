@@ -1,6 +1,6 @@
 # Things to Remember
 #
-# Private attributes aren’t rigorously enforced by the Python compiler.
+# Private attributes aren't rigorously enforced by the Python compiler.
 #
 # Plan from the beginning to allow subclasses to do more with your internal APIs and attributes
 # instead of locking them out by default. Use "protected attributes" in this case.
@@ -62,6 +62,7 @@ def main():
     # the following throw an exception:
     # AttributeError: 'MyObject' object has no attribute '__private_field'
     # foo.__private_field
+
     assert MyObject.get_private_field_of_instance(foo) == 10
 
     child = MyChildObject()
