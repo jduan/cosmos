@@ -85,6 +85,7 @@ Plug 'google/vim-searchindex'
 " note-taking app
 Plug 'alok/notational-fzf-vim'
 Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'aserebryakov/vim-todo-lists'
 
 " Initialize plugin system
 call plug#end()
@@ -620,3 +621,6 @@ let vim_markdown_preview_browser='Google Chrome'
 
 " save and close a buffer
 :command Wd write|bdelete
+
+" vim-todo-lists
+autocmd BufRead,BufNewFile *.todo set ft=todo | call VimTodoListsInit()
