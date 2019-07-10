@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+#
+# Open the branch on GHE
+# Usage is ./opr
+
+remote = `git config --get remote.origin.url 2>/dev/null`.chomp
+raise "Invalid git repo" unless remote.length > 0
+
+branch=`git rev-parse --abbrev-ref HEAD 2>/dev/null`.chomp
+raise "Invalid git branch" unless branch.length > 0
+
+base_url = 'https://' + remote.gsub('git@','').gsub(':','/').gsub('.git','')
+branch_url = "#{base_url}/compare/#{branch}?expand=1"
+
+puts "Opening: #{branch_url}"
+`open #{branch_url}`
