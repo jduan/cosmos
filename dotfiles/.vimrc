@@ -82,6 +82,9 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 " shows how many times does a search pattern occur in the current buffer
 Plug 'google/vim-searchindex'
+" note-taking app
+Plug 'alok/notational-fzf-vim'
+Plug 'JamshedVesuna/vim-markdown-preview'
 
 " Initialize plugin system
 call plug#end()
@@ -420,7 +423,8 @@ autocmd BufWinLeave * call clearmatches()
 " easy window navigation
 map <C-h> <C-w>h
 map <C-j> <C-w>j
-map <C-k> <C-w>k
+" map <C-k> is used for taking notes now!
+" map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 " use w! save with sudo
@@ -605,3 +609,14 @@ aug END
 
 " Fugitive
 let g:github_enterprise_urls = ['https://git.musta.ch']
+
+" notational-fzf-vim
+let g:nv_search_paths = ['~/Dropbox/notes/']
+noremap <C-k> :NV<CR>
+
+" vim-markdown-preview
+let vim_markdown_preview_github=1
+let vim_markdown_preview_browser='Google Chrome'
+
+" save and close a buffer
+:command Wd write|bdelete
