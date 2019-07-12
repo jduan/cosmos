@@ -612,7 +612,8 @@ aug END
 let g:github_enterprise_urls = ['https://git.musta.ch']
 
 " notational-fzf-vim
-let g:nv_search_paths = ['~/Dropbox/notes/']
+" Create a symlink to the real directory that has my personal notes.
+let g:nv_search_paths = ['~/notes/']
 noremap <C-k> :NV<CR>
 
 " vim-markdown-preview
