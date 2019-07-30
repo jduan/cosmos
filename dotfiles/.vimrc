@@ -622,7 +622,7 @@ let vim_markdown_preview_browser='Google Chrome'
 let vim_markdown_preview_hotkey='<C-S-m>'
 
 " save and close a buffer
-:command Wd write|bdelete
+:command BWD write|bdelete
 
 " vim-todo-lists
 autocmd BufRead,BufNewFile *.todo set ft=todo | call VimTodoListsInit()
