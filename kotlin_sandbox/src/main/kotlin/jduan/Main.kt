@@ -15,4 +15,16 @@ fun main() {
         $tests
         """.trimIndent()
     println(str)
+
+    println("Result is: ${hello()}")
+}
+
+// This shows that "return" still works even if you have a "finally" block
+fun hello(): Int {
+    try {
+        println("hello")
+        return 1
+    } finally {
+        println("world")
+    }
 }
