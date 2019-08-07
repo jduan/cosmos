@@ -2,7 +2,7 @@ package jduan
 
 import fi.iki.elonen.NanoHTTPD
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.Random
 
 // This server is only for serving health check probes from k8s.
 class HttpServer(port: Int) : NanoHTTPD(port) {

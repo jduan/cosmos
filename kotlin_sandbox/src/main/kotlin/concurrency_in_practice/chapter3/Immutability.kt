@@ -1,14 +1,13 @@
 package concurrency_in_practice.chapter3
 
 import java.math.BigInteger
-import java.util.*
+import java.util.Arrays
 import javax.annotation.concurrent.Immutable
 import javax.annotation.concurrent.ThreadSafe
 import javax.servlet.Servlet
 import javax.servlet.ServletConfig
 import javax.servlet.ServletRequest
 import javax.servlet.ServletResponse
-import kotlin.collections.HashSet
 
 /**
  * This demos that immutable objects can still use mutable objects internally to
@@ -18,6 +17,7 @@ import kotlin.collections.HashSet
 @Immutable
 class ThreeStooges {
     private val stooges = HashSet<String>()
+
     init {
         stooges.add("Moe")
         stooges.add("Larry")
@@ -45,7 +45,8 @@ class OneValueCache(private val lastNumber: BigInteger, lastFactors: Array<BigIn
 
 @ThreadSafe
 class VolatileCachedFactorizer : Servlet {
-    private @Volatile var cache: OneValueCache? = null
+    @Volatile
+    private var cache: OneValueCache? = null
 
     override fun destroy() {
         TODO("not implemented")
@@ -65,7 +66,7 @@ class VolatileCachedFactorizer : Servlet {
         if (cache != null) {
             val factors = cache?.getFactors(bi)
             if (factors != null) {
-               // use the factors
+                // use the factors
             } else {
                 // calculate factors
                 val factors = arrayOf(BigInteger("12"))

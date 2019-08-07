@@ -1,6 +1,6 @@
 package concurrency_in_practice.chapter4
 
-import java.util.*
+import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import javax.annotation.concurrent.Immutable

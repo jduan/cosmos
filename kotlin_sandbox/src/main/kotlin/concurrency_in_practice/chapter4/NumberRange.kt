@@ -1,6 +1,5 @@
 package concurrency_in_practice.chapter4
 
-import java.lang.IllegalArgumentException
 import java.util.concurrent.atomic.AtomicInteger
 import javax.annotation.concurrent.NotThreadSafe
 

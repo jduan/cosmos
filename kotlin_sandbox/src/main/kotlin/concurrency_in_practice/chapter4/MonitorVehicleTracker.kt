@@ -1,11 +1,9 @@
 package concurrency_in_practice.chapter4
 
-import java.lang.IllegalArgumentException
-import java.util.*
+import java.util.Collections
 import javax.annotation.concurrent.GuardedBy
 import javax.annotation.concurrent.NotThreadSafe
 import javax.annotation.concurrent.ThreadSafe
-import kotlin.collections.HashMap
 
 @NotThreadSafe
 class MutablePoint(var x: Int, var y: Int) {

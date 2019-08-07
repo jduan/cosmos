@@ -1,16 +1,17 @@
 package concurrency_in_practice.chapter3
 
 import org.slf4j.LoggerFactory
+
 private val logger = LoggerFactory.getLogger("")
 
 class Holder(private var n: Int) {
-   fun assertSanity() {
-       if (n != n) {
-           throw AssertionError("This statement is false.")
-       } else {
-           logger.info("I'm sane.")
-       }
-   }
+    fun assertSanity() {
+        if (n != n) {
+            throw AssertionError("This statement is false.")
+        } else {
+            logger.info("I'm sane.")
+        }
+    }
 }
 
 /**

@@ -1,6 +1,6 @@
 package jduan.loop
 
-import java.util.*
+import java.util.TreeMap
 
 fun fizzBuzz(i: Int) =
     when {
