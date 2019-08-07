@@ -15,12 +15,14 @@ import javax.annotation.concurrent.NotThreadSafe
 @NotThreadSafe
 class NumberRange {
     private val lower = AtomicInteger(0)
-    private val upper = AtomicInteger(0)
+    private val upper = AtomicInteger(100)
 
     fun setLower(i: Int) {
         if (i > upper.get()) {
             throw IllegalArgumentException("Can't set lower to $i > $upper")
         }
+        // make thread to context switch
+        Thread.sleep(100)
         lower.set(i)
     }
 
@@ -28,8 +30,24 @@ class NumberRange {
         if (i < lower.get()) {
             throw IllegalArgumentException("Can't set upper to $i < $lower")
         }
-        lower.set(i)
+        upper.set(i)
     }
 
     fun isInRange(i: Int) = i >= lower.get() && i <= upper.get()
+
+    override fun toString(): String = "NumberRange(${lower.get()}, ${upper.get()})"
+}
+
+fun main() {
+    val range = NumberRange()
+    println("range: $range")
+    val thread1 = Thread(Runnable {
+        range.setLower(90)
+    }).also { t -> t.start() }
+    val thread2 = Thread(Runnable {
+        range.setUpper(50)
+    }).also { t -> t.start() }
+    thread1.join()
+    thread2.join()
+    println("range: $range")
 }
