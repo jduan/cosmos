@@ -21,7 +21,7 @@ fun main() {
             numbers.add(10)
         }
         if (number == 4) {
-            numbers.removeAt(4)
+            numbers.removeAt(0)
         }
         println(number)
     }
