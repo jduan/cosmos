@@ -9,6 +9,7 @@ import javax.annotation.concurrent.ThreadSafe
 class MutablePoint(var x: Int, var y: Int) {
     constructor() : this(0, 0)
     constructor(mp: MutablePoint) : this(mp.x, mp.y)
+    override fun toString(): String = "MutablePoint($x, $y)"
 }
 
 /**
@@ -58,12 +59,23 @@ class MonitorVehicleTracker(locations: Map<String, MutablePoint>) {
     companion object {
         private fun deepCopy(m: Map<String, MutablePoint>): Map<String, MutablePoint> {
             val result = HashMap<String, MutablePoint>()
-            for (id in m.keys) {
-                result[id] = MutablePoint(m.getValue(id))
+            for ((key, value) in m.entries) {
+                result[key] = MutablePoint(value)
             }
             // the map is read-only but values can be changed because MutablePoint
             // is mutable!
             return Collections.unmodifiableMap(result)
         }
     }
+}
+
+fun main() {
+    val locations = mapOf(
+        "Beijing" to MutablePoint(1, 2),
+        "Tianjing" to MutablePoint(3, 4)
+    )
+    val tracker = MonitorVehicleTracker(locations)
+    println("tracker: ${tracker.getLocations()}")
+    tracker.setLocation("Beijing", 10, 20)
+    println("tracker: ${tracker.getLocations()}")
 }
