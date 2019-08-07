@@ -11,7 +11,9 @@ import javax.annotation.concurrent.ThreadSafe
  * need to copy the locations when returning them.
  */
 @Immutable
-class Point(val x: Int, val y: Int)
+class Point(val x: Int, val y: Int) {
+    override fun toString(): String = "Point($x, $y)"
+}
 
 /**
  * This class doesn't use any explicit synchronization; all access to state
@@ -40,4 +42,17 @@ class DelegatingVehicleTracker(points: Map<String, Point>) {
             throw IllegalArgumentException("Invalid vehicle id: $id")
         }
     }
+}
+
+fun main() {
+    val tracker = DelegatingVehicleTracker(
+        mapOf(
+            "Beijing" to Point(1, 2),
+            "Tianjing" to Point(3, 4)
+        )
+    )
+    println("tracker: ${tracker.getLocations()}")
+    val locations = tracker.getLocations()
+    tracker.setLocation("Beijing", 10, 20)
+    println("Beijing's location changed: ${tracker.getLocation("Beijing")}")
 }
