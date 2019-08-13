@@ -174,3 +174,5 @@
 	date = local
 [hub]
 	host = git.musta.ch
+[fetch]
+	prune = true
