@@ -172,3 +172,5 @@
     submodulesummary = 1
 [log]
 	date = local
+[hub]
+	host = git.musta.ch
