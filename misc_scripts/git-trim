@@ -29,7 +29,7 @@ cleanup() {
 
 if [ $# -eq 0 ]
 then
-  branches=`git branch`
+  branches=`git for-each-ref --sort=-committerdate refs/heads/ --format="%(authordate:short) %(refname:short)"`
 else
   branches=`git ls-remote --heads $1 | awk '{print $2}' | awk 'BEGIN { FS = "/" } ; {print $3}'`
 fi
@@ -64,7 +64,9 @@ if [ $? != 0 ]; then
   exit 1
 fi
 
-delete=`diff --suppress-common-lines $all $keep | grep '^< ' | awk '{print $2}'`
+delete=`diff --suppress-common-lines $all $keep | grep '^< ' | awk '{print $3}'`
+echo $delete
+exit 0
 
 if [ $# -eq 0 ]
 then
