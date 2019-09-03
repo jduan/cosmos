@@ -37,6 +37,8 @@ dotfiles/.config/configstore/update-notifier-npm.json
 dotfiles/.vim/plugged/
 dotfiles/.vim/sessions/
 dotfiles/.config/wireshark/
+dotfiles/.config/pgcli/history
+dotfiles/.config/pgcli/log
 
 # rubocop
 rubocop_cache/
