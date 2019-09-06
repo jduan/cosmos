@@ -30,10 +30,8 @@ alias p4changes 'p4  changes -u jduan -l | less'
 
 # git
 alias g git
-alias gitlg 'git lg|head'
-alias g2 /usr/bin/git
-alias G /usr/bin/git
-alias gg /usr/bin/git
+# cd to the root of the git repo
+alias cdg 'cd (git rev-parse --show-cdup)'
 
 # Gradle
 #
