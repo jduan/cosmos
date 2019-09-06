@@ -176,3 +176,5 @@
 	host = git.musta.ch
 [fetch]
 	prune = true
+[remote "origin"]
+	tagOpt = --no-tags
