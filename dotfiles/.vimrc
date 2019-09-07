@@ -247,6 +247,8 @@ au BufNewFile,BufRead,BufReadPost BUILD set filetype=python
 " use clojure plugin to format Racket files
 au BufNewFile,BufRead,BufReadPost *.rkt,*.rktl set filetype=clojure
 au BufNewFile,BufRead,BufReadPost *.pipeline set filetype=groovy
+" scratch files
+au BufNewFile,BufRead,BufReadPost scratch,scratch2 set textwidth=0
 
 if has("win32")
     let Tlist_Ctags_Cmd='C:\Progra~1\ctags\ctags.exe'
