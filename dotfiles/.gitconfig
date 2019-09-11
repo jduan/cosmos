@@ -133,7 +133,6 @@
     meta = yellow
 [github]
     user = jduan
-    token = 1c29ea8a13206dc84afeb23312fb2daa
 [push]
 	default = current
 [merge]
