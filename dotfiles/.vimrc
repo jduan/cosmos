@@ -84,7 +84,7 @@ Plug 'xolox/vim-session'
 Plug 'google/vim-searchindex'
 " note-taking app
 Plug 'alok/notational-fzf-vim'
-Plug 'JamshedVesuna/vim-markdown-preview'
+" Plug 'JamshedVesuna/vim-markdown-preview'
 
 " Initialize plugin system
 call plug#end()
@@ -618,9 +618,9 @@ let g:nv_search_paths = ['~/notes/']
 noremap <C-k> :NV<CR>
 
 " vim-markdown-preview
-let vim_markdown_preview_github=1
-let vim_markdown_preview_browser='Google Chrome'
-let vim_markdown_preview_hotkey='<C-S-m>'
+" let vim_markdown_preview_github=1
+" let vim_markdown_preview_browser='Google Chrome'
+" let vim_markdown_preview_hotkey='<C-S-m>'
 
 " save and close a buffer
 :command BWD write|bdelete
