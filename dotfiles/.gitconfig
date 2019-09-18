@@ -50,6 +50,7 @@
     # from a user branch, diff the merge base from a non-master branch
     dmb = !sh -c 'git diff origin/$1...HEAD' -
     ds  = diff --staged
+    edit-conflict = "!f(){ files=$(git status | grep 'both modified:' | awk '{ print $3  }'); vim $files; }; f"
     empty-commit = "commit --allow-empty -m 'Empty commit'"
     f   = fetch
     fa  = fetch --all
@@ -151,7 +152,7 @@
     renameLimit = 17924
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
