@@ -19,6 +19,7 @@
       - cloc
       - bat
       - colordiff
+      - coreutils
       - ctags
       - fasd
       - fd
