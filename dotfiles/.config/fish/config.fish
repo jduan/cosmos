@@ -107,9 +107,15 @@ end
 # show the time consumed and the exit status
 # after the command is run
 function postcmd --on-event fish_postexec
+    set old_status $status
     set cmdend (/usr/local/bin/gdate '+%s%N')
     set taken (math "($cmdend - $cmdstart) / 1000000")
-    set_color magenta
-    printf "(Exit: %s, Time: %'dms)\n" $status $taken
+    switch $old_status
+    case 0
+        set_color magenta
+    case '*'
+        set_color red
+    end
+    printf "(Exit: %s, Time: %'dms)\n" $old_status $taken
     set_color normal
 end
