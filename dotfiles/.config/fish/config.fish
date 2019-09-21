@@ -97,3 +97,19 @@ export K2=1
 
 # Don't generate .pyc files!
 export PYTHONDONTWRITEBYTECODE=1
+
+# set a global variable to the current epoch time in seconds
+# before executing any comment
+function get_start --on-event fish_preexec
+    set -g cmdstart (/usr/local/bin/gdate '+%s%N')
+end
+
+# show the time consumed and the exit status
+# after the command is run
+function postcmd --on-event fish_postexec
+    set cmdend (/usr/local/bin/gdate '+%s%N')
+    set taken (math "($cmdend - $cmdstart) / 1000000")
+    set_color magenta
+    printf "(Exit: %s, Time: %'dms)\n" $status $taken
+    set_color normal
+end
