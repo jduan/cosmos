@@ -26,6 +26,12 @@ root_build_gradle = "%s/build.gradle" % git_repo_dir
 
 output = subprocess.getoutput("git diff origin/master...HEAD --name-only")
 files_changed = output.split("\n")
+should_run = any(file_changed.endswith(".java") or file_changed.endswith(".kt") for
+                 file_changed in files_changed)
+if not should_run:
+    print("No source files have been changed. Not going to run spotlessCheck.")
+    exit(0)
+
 project_dirs = set()
 for file_changed in files_changed:
     dir = Path(git_repo_dir).joinpath(file_changed).absolute().parent
