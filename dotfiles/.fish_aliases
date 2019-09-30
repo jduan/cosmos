@@ -62,6 +62,15 @@ function gd2
   eval $cmd
 end
 
+# Run a command from the root of the git repo
+function groot
+  set old_cwd $PWD
+  cd (git rev-parse --show-toplevel)
+  set cmd $argv
+  eval $cmd
+  cd $old_cwd
+end
+
 # tmux
 # tmux -2 forces tmux to assume the shell is using a 256 color terminal
 # alias tmux='tmux -2'
