@@ -85,7 +85,7 @@ Plug 'google/vim-searchindex'
 " note-taking app
 Plug 'alok/notational-fzf-vim'
 " Plug 'JamshedVesuna/vim-markdown-preview'
-
+Plug 'vim-scripts/groovy.vim'
 " Initialize plugin system
 call plug#end()
 
