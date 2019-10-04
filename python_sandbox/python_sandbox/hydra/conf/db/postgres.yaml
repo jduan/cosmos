@@ -1,0 +1,5 @@
+db:
+  driver: postgres
+  pass: postgres_pass
+  timeout: 30
+  user: postgres_user
