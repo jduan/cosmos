@@ -53,7 +53,10 @@ function fish_prompt
     end
   end
   if test $is_big_repo = true
-    printf ' '
+    set git_repo_root (git rev-parse --show-toplevel)
+    set git_repo_name (basename $git_repo_root)
+    # Show repo name for large repos
+    printf ' (%s) ' $git_repo_name
   else
     printf '%s ' (__fish_git_prompt)
   end
