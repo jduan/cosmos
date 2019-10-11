@@ -150,6 +150,7 @@
     compactionHeuristic = true
     renames = true
     renameLimit = 17924
+    noprefix = true
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path =
