@@ -1,4 +1,4 @@
-package jduan
+package jduan.lambdas
 
 import java.io.File
 
@@ -183,4 +183,23 @@ fun alphabet2() = buildString {
         append(letter)
     }
     append("\nNow I know the alphabet!")
+}
+
+fun main() {
+    printMessages(listOf("how are you?", "see you tomorrow"), "John:")
+    printProblemCounts(listOf("400", "500", "403", "502"))
+
+    val john = Person("Jonh", 30)
+    // Member reference: convert a method to a lambda
+    val getAge = Person::age
+    println("Jonh's age is ${getAge(john)}")
+
+    // Constructor reference
+    val createPerson = ::Person
+    val jack = createPerson("Jack", 20)
+    println("jack: $jack")
+
+    // Bound member reference
+    val johnAgeFunc = john::age
+    println("John's age is ${johnAgeFunc()}")
 }
