@@ -1,5 +1,7 @@
 package jduan.main
 
+import java.io.BufferedReader
+
 fun main() {
     val tests = listOf(
         "hello",
@@ -17,6 +19,8 @@ fun main() {
     println(str)
 
     println("Result is: ${hello()}")
+
+    parseNumber("33")
 }
 
 // This shows that "return" still works even if you have a "finally" block
@@ -27,4 +31,14 @@ fun hello(): Int {
     } finally {
         println("world")
     }
+}
+
+fun parseNumber(maybeNumber: String) {
+    val number = try {
+        Integer.parseInt(maybeNumber)
+    } catch (e: NumberFormatException) {
+        return
+    }
+
+    println(number)
 }
