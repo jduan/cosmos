@@ -1,4 +1,4 @@
-package jduan.main
+package jduan
 
 import java.io.BufferedReader
 

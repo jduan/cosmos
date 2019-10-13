@@ -1,4 +1,4 @@
-package jduan.github
+package jduan
 
 import org.kohsuke.github.GitHub
 

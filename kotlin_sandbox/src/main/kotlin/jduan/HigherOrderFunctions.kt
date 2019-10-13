@@ -1,4 +1,4 @@
-package jduan.hof
+package jduan
 
 fun runHOF() {
     twoAndThree { a, b -> a + b }

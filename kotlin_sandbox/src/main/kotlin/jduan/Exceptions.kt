@@ -1,4 +1,4 @@
-package jduan.exceptions
+package jduan
 
 import java.io.BufferedReader
 

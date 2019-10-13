@@ -1,4 +1,4 @@
-package jduan.misc
+package jduan
 
 data class Person(val name: String,
     // null by default

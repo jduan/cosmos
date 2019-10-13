@@ -1,4 +1,4 @@
-package jduan.types
+package jduan
 
 fun strLen(s: String) = s.length
 

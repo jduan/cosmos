@@ -1,4 +1,4 @@
-package jduan.delgations
+package jduan
 
 // Delegate most of the methods to "innerSet"
 class CoutingSet<T>(

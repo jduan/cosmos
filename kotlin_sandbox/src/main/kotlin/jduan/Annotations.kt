@@ -1,2 +1,2 @@
-package jduan.annotations
+package jduan
 

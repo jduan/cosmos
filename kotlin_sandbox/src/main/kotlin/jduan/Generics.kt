@@ -1,4 +1,4 @@
-package jduan.generics
+package jduan
 
 import kotlin.reflect.KClass
 

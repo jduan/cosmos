@@ -1,4 +1,4 @@
-package jduan.expr
+package jduan
 
 interface Expr
 
