@@ -13,7 +13,10 @@
 if [ -f '/usr/libexec/java_home' ];
     export JAVA_HOME=(/usr/libexec/java_home -v 1.8)
 end
+export CARGO_HOME=$HOME/.cargo/bin
+export RUSTUP_HOME=$HOME/.rustup
 set paths \
+    $CARGO_HOME \
     $JAVA_HOME \
     $HOME/github/jduan/cosmos/misc_scripts \
     $HOME/repos2/sysops/optica_tools \
