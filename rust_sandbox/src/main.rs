@@ -7,6 +7,7 @@ mod ownership;
 mod slice_type;
 mod structs;
 mod method_syntax;
+mod enums;
 
 fn main() {
     // guess_my_number::run();
@@ -17,5 +18,6 @@ fn main() {
     // ownership::run();
     // slice_type::run();
     // structs::run();
-    method_syntax::run();
+    // method_syntax::run();
+    enums::run();
 }
