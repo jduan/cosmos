@@ -19,7 +19,7 @@ fn nth_fib(n: u32) -> u32 {
         let mut x = 0;
         let mut y = 1;
 
-        for i in (2..n) {
+        for i in 2..n {
             ret = x + y;
             x = y;
             y = ret;
