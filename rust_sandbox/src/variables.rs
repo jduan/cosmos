@@ -28,7 +28,7 @@ pub fn run() {
     // arrays
     let nums = [1, 2, 3, 4, 5];
     // explicit type
-    let nums2: [i32; 5] = [1, 2, 3, 4 5];
+    let nums2: [i32; 5] = [1, 2, 3, 4, 5];
     // 3 means all elements are 3; 5 means size;
     let nums3 = [3; 5];
     let months = [
