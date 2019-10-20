@@ -14,6 +14,7 @@ mod strings;
 mod structs;
 mod variables;
 mod vectors;
+mod recover_from_errors;
 
 fn main() {
     // guess_my_number::run();
@@ -31,5 +32,12 @@ fn main() {
     // if_let::run();
     // vectors::run();
     // strings::run();
-    hash_maps::run();
+    // hash_maps::run();
+    // will_panic();
+    recover_from_errors::run();
+}
+
+fn will_panic() {
+    let v = vec![1, 2, 3];
+    v[99];
 }
