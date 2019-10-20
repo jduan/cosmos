@@ -11,6 +11,7 @@ mod enums;
 mod options;
 mod pattern_matching;
 mod if_let;
+mod vectors;
 
 fn main() {
     // guess_my_number::run();
@@ -25,5 +26,6 @@ fn main() {
     // enums::run();
     // options::run();
     // pattern_matching::run();
-    if_let::run();
+    // if_let::run();
+    vectors::run();
 }
