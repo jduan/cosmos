@@ -1,19 +1,19 @@
-mod guess_my_number;
-mod variables;
-mod functions;
 mod control_flow;
-mod exercise;
-mod ownership;
-mod slice_type;
-mod structs;
-mod method_syntax;
 mod enums;
-mod options;
-mod pattern_matching;
-mod if_let;
-mod vectors;
-mod strings;
+mod exercise;
+mod functions;
+mod guess_my_number;
 mod hash_maps;
+mod if_let;
+mod method_syntax;
+mod options;
+mod ownership;
+mod pattern_matching;
+mod slice_type;
+mod strings;
+mod structs;
+mod variables;
+mod vectors;
 
 fn main() {
     // guess_my_number::run();

@@ -19,7 +19,7 @@ pub fn run() {
 
     let msg1 = Message::Quit;
     msg1.call();
-    let msg2 = Message::Move {x: 30, y: 50};
+    let msg2 = Message::Move { x: 30, y: 50 };
     msg2.call();
     let msg3 = Message::Write(String::from("hello, world"));
     msg3.call();
@@ -63,9 +63,11 @@ impl Message {
     fn call(&self) {
         match self {
             Message::Quit => println!("This is a Quite message"),
-            Message::Move {x: x, y: y} => println!("This is a Move (x: {}, y: {}) message", x, y),
+            Message::Move { x: x, y: y } => println!("This is a Move (x: {}, y: {}) message", x, y),
             Message::Write(str) => println!("This is a Write message: {}", str),
-            Message::ChangeColor(r, g, b) => println!("This is a ChangeColor({}, {}, {}) message", r, g, b),
+            Message::ChangeColor(r, g, b) => {
+                println!("This is a ChangeColor({}, {}, {}) message", r, g, b)
+            }
         }
     }
 }

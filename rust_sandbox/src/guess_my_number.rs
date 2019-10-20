@@ -1,6 +1,6 @@
-use std::io;
-use std::cmp::Ordering;
 use rand::Rng;
+use std::cmp::Ordering;
+use std::io;
 
 pub fn run() {
     println!("Guess the number!");
@@ -10,7 +10,8 @@ pub fn run() {
     loop {
         println!("Please input your guess.");
         let mut guess = String::new();
-        io::stdin().read_line(&mut guess)
+        io::stdin()
+            .read_line(&mut guess)
             .expect("Failed to read line");
         // shadows the previous "guess" var. This feature is often used in situations
         // in which you want to convert a value from one type to another type.
