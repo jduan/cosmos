@@ -384,6 +384,7 @@ let NERDTreeIgnore=[
       \'generated-apps$[[dir]]',
       \'node_modules$[[dir]]',
       \'out$[[dir]]',
+      \'target$[[dir]]',
       \]
 
 " Press ii to exit insert mode
