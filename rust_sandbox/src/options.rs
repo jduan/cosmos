@@ -13,12 +13,25 @@ pub fn run() {
         None => println!("this should never happen"),
     }
 
-    println!("done");
+    placeholder(3);
+    placeholder(7);
+    placeholder(30);
 }
 
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
         Some(i) => Some(i + 1),
         None => None,
+    }
+}
+
+fn placeholder(num: u8) {
+    match num {
+        1 => println!("one"),
+        3 => println!("three"),
+        5 => println!("five"),
+        7 => println!("seven"),
+        // use _ to match everything else!
+        _ => (),
     }
 }
