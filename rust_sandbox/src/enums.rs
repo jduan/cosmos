@@ -49,10 +49,6 @@ enum IpAddr3 {
     V6(String),
 }
 
-fn route(ip_kind: IpAddrKind) {
-
-}
-
 // This enum has a wide variety of types embedded in its variants.
 enum Message {
     Quit,

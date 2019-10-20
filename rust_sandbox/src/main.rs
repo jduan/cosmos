@@ -8,6 +8,7 @@ mod slice_type;
 mod structs;
 mod method_syntax;
 mod enums;
+mod options;
 
 fn main() {
     // guess_my_number::run();
@@ -20,4 +21,5 @@ fn main() {
     // structs::run();
     // method_syntax::run();
     enums::run();
+    options::run();
 }
