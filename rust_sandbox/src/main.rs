@@ -12,6 +12,7 @@ mod options;
 mod pattern_matching;
 mod if_let;
 mod vectors;
+mod strings;
 
 fn main() {
     // guess_my_number::run();
@@ -27,5 +28,6 @@ fn main() {
     // options::run();
     // pattern_matching::run();
     // if_let::run();
-    vectors::run();
+    // vectors::run();
+    strings::run();
 }
