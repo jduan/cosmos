@@ -10,6 +10,7 @@ mod method_syntax;
 mod enums;
 mod options;
 mod pattern_matching;
+mod if_let;
 
 fn main() {
     // guess_my_number::run();
@@ -22,6 +23,7 @@ fn main() {
     // structs::run();
     // method_syntax::run();
     // enums::run();
-    options::run();
+    // options::run();
     // pattern_matching::run();
+    if_let::run();
 }
