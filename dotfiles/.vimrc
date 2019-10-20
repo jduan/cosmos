@@ -86,6 +86,8 @@ Plug 'google/vim-searchindex'
 Plug 'alok/notational-fzf-vim'
 " Plug 'JamshedVesuna/vim-markdown-preview'
 Plug 'vim-scripts/groovy.vim'
+" Close multiple buffers at once.
+Plug 'Asheq/close-buffers.vim'
 " Initialize plugin system
 call plug#end()
 
