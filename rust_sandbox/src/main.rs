@@ -13,6 +13,7 @@ mod pattern_matching;
 mod if_let;
 mod vectors;
 mod strings;
+mod hash_maps;
 
 fn main() {
     // guess_my_number::run();
@@ -29,5 +30,6 @@ fn main() {
     // pattern_matching::run();
     // if_let::run();
     // vectors::run();
-    strings::run();
+    // strings::run();
+    hash_maps::run();
 }
