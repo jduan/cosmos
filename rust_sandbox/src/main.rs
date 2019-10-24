@@ -15,6 +15,7 @@ mod structs;
 mod variables;
 mod vectors;
 mod recover_from_errors;
+mod generics;
 
 fn main() {
     // guess_my_number::run();
@@ -34,7 +35,8 @@ fn main() {
     // strings::run();
     // hash_maps::run();
     // will_panic();
-    recover_from_errors::run();
+    // recover_from_errors::run();
+    generics::run()
 }
 
 fn will_panic() {
