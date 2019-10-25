@@ -88,6 +88,7 @@ Plug 'alok/notational-fzf-vim'
 Plug 'vim-scripts/groovy.vim'
 " Close multiple buffers at once.
 Plug 'Asheq/close-buffers.vim'
+Plug 'rust-lang/rust.vim'
 " Initialize plugin system
 call plug#end()
 
@@ -626,3 +627,7 @@ noremap <C-k> :NV<CR>
 
 " save and close a buffer
 :command BWD write|bdelete
+
+" rust plugin
+" Run RustFmt upon save
+let g:rustfmt_autosave = 1
