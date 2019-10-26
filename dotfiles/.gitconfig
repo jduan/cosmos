@@ -99,7 +99,7 @@
     tags = "log --tags --simplify-by-decoration --pretty='format:%ai %d'"
     # show time of the tip/first/head commit
     tip = show -s --pretty=medium
-    unstage = reset HEAD --
+    unstage = restore --staged --
     parents = log --pretty=%P -n 1
     up = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git pull origin $branch\"; echo $cmd; $cmd; }; f"
     lp = log -p
