@@ -7,6 +7,18 @@ pub fn run() {
     };
 
     println!("1 new tweet: {}", tweet.summarize());
+
+    let article = NewsArticle {
+        headline: String::from("Make America Great Again"),
+        location: String::from("Washington DC"),
+        author: String::from("Trump"),
+        content: String::from("Make America Great Again"),
+    };
+
+    println!("1 news article: {}", article.summarize3());
+
+    notify(tweet);
+    notify2(article);
 }
 
 pub trait Summary {
@@ -61,5 +73,46 @@ impl Summary for Tweet {
 
     fn summarize_author(&self) -> String {
         format!("@{}", self.username)
+    }
+}
+
+// traits as parameters
+// this function can be called with any type that implements Summary
+fn notify(item: impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+
+// "trait bound"
+// this is equivalent to the function above, which is actually syntax sugar
+fn notify2<T: Summary>(item: T) {
+    println!("Breaking news! {}", item.summarize());
+}
+
+trait Display {
+    fn show(&self) -> String;
+}
+
+// specify multiple traits using +
+fn notify3<T: Summary + Display>(item: T) {
+    println!("Breaking news! {}", item.summarize());
+    println!("Show me the item: {}", item.show());
+}
+
+// "trait bound" using "where" clause between return type and open curly brace
+// this is easier to read when you have many trait bounds
+fn some_function<T, U>(t: T, u: U) -> i32
+where T: Display + Clone,
+      U: Clone + Summary,
+{
+    99
+}
+
+// returning types that implement traits
+fn returns_summarizable() -> impl Summary {
+    Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from("of course, as you probably already know, people"),
+        reply: false,
+        retweet: false,
     }
 }

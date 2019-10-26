@@ -56,10 +56,10 @@ pub fn run() {
     println!("largest number is {}", find_largest_number(&number_list));
 
     let char_list = vec!['y', 'm', 'a', 'q'];
-    // println!(
-    //     "largest char is {}",
-    //     find_largest_number_generic(&char_list)
-    // );
+    println!(
+        "largest char is {}",
+        find_largest_number_generic(&char_list)
+    );
 
     let integer = Point { x: 5, y: 10 };
     println!("integer.x = {}", integer.x);
@@ -82,13 +82,13 @@ fn find_largest_number(numbers: &[i32]) -> i32 {
     largest
 }
 
-// fn find_largest_number_generic<T>(list: &[T]) -> T {
-//     let mut largest = list[0];
-//     for &item in list.iter() {
-//         if item > largest {
-//             largest = item
-//         }
-//     }
-//
-//     largest
-// }
+fn find_largest_number_generic<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0];
+    for &item in list.iter() {
+        if item > largest {
+            largest = item
+        }
+    }
+
+    largest
+}
