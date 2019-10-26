@@ -1,7 +1,13 @@
+// This declaration will look for a file named "foo.rs" or "foo/mod.rs" and
+// insert its contents inside a module named `foo` under this scope. Hence
+// you can call functions like `foo::answer()` in this file.
+mod foo;
+
 mod control_flow;
 mod enums;
 mod exercise;
 mod functions;
+mod generics;
 mod guess_my_number;
 mod hash_maps;
 mod if_let;
@@ -9,16 +15,20 @@ mod method_syntax;
 mod options;
 mod ownership;
 mod pattern_matching;
+mod recover_from_errors;
 mod slice_type;
 mod strings;
 mod structs;
+mod traits;
 mod variables;
 mod vectors;
-mod recover_from_errors;
-mod generics;
-mod traits;
+
+use foo::answer;
 
 fn main() {
+    println!("foo::answer: {}", foo::answer());
+    println!("foo::answer: {}", answer());
+    println!("foo::bar::question: {}", foo::bar::question());
     // guess_my_number::run();
     // variables::run()
     // println!("10 + 5 is {}", functions::add5(10));

@@ -6,8 +6,8 @@
 use std::fs;
 use std::fs::File;
 use std::io;
-use std::io::Read;
 use std::io::ErrorKind;
+use std::io::Read;
 
 pub fn run() {
     // open_file();
