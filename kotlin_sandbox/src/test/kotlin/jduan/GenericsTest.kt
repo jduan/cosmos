@@ -1,4 +1,4 @@
-package jduan.generics
+package jduan
 
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse

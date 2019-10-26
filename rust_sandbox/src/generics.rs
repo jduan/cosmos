@@ -56,7 +56,10 @@ pub fn run() {
     println!("largest number is {}", find_largest_number(&number_list));
 
     let char_list = vec!['y', 'm', 'a', 'q'];
-    println!("largest char is {}", find_largest_number_generic(&char_list));
+    println!(
+        "largest char is {}",
+        find_largest_number_generic(&char_list)
+    );
 
     let integer = Point { x: 5, y: 10 };
     println!("integer.x = {}", integer.x);
