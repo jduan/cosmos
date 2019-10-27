@@ -4,6 +4,7 @@
 mod foo;
 
 mod control_flow;
+mod lifetime;
 mod enums;
 mod exercise;
 mod functions;
@@ -47,8 +48,9 @@ fn main() {
     // hash_maps::run();
     // will_panic();
     // recover_from_errors::run();
-    generics::run();
-    traits::run();
+    // generics::run();
+    // traits::run();
+    lifetime::run();
 }
 
 fn will_panic() {
