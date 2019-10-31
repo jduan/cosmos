@@ -9,8 +9,6 @@ fn main() {
         println!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
 
     // similar to unwrap_or_else but since we don't care about the return value (which would be ())
     // in the Ok case, we use "let Err(e)" to handle the error case only.
