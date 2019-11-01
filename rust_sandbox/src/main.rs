@@ -3,8 +3,8 @@
 // you can call functions like `foo::answer()` in this file.
 mod foo;
 
+mod closures;
 mod control_flow;
-mod lifetime;
 mod enums;
 mod exercise;
 mod functions;
@@ -12,6 +12,7 @@ mod generics;
 mod guess_my_number;
 mod hash_maps;
 mod if_let;
+mod lifetime;
 mod method_syntax;
 mod options;
 mod ownership;
@@ -27,9 +28,9 @@ mod vectors;
 use foo::answer;
 
 fn main() {
-    println!("foo::answer: {}", foo::answer());
-    println!("foo::answer: {}", answer());
-    println!("foo::bar::question: {}", foo::bar::question());
+    // println!("foo::answer: {}", foo::answer());
+    // println!("foo::answer: {}", answer());
+    // println!("foo::bar::question: {}", foo::bar::question());
     // guess_my_number::run();
     // variables::run()
     // println!("10 + 5 is {}", functions::add5(10));
@@ -50,7 +51,8 @@ fn main() {
     // recover_from_errors::run();
     // generics::run();
     // traits::run();
-    lifetime::run();
+    // lifetime::run();
+    closures::run();
 }
 
 fn will_panic() {
