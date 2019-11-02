@@ -1,9 +1,12 @@
+use std::iter::Iterator;
+
 pub fn run() {
     iterate_vector();
     iterate_manually();
     sum();
     iterator_adaptors();
     iterator_and_closure();
+    implement_iterator();
 }
 
 fn iterate_vector() {
@@ -58,4 +61,44 @@ fn iterator_and_closure() {
     // into_iter() creates an iterator that takes owernship of v1 and returns owned values.
     let v2: Vec<_> = v1.into_iter().filter(|n| n >= &target).collect();
     assert_eq!(v2, vec![3, 4, 5]);
+}
+
+struct Counter {
+    count: u32,
+}
+
+impl Counter {
+    fn new() -> Counter {
+        Counter { count: 0 }
+    }
+}
+
+impl Iterator for Counter {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.count += 1;
+        if self.count < 6 {
+            Some(self.count)
+        } else {
+            None
+        }
+    }
+}
+
+fn implement_iterator() {
+    let counter = Counter::new();
+    // let nums: Vec<_> = counter.into_iter().collect();
+    for num in counter.into_iter() {
+        println!("next count: {}", num);
+    }
+
+    // You can use other methods that are provided by the Iterator interface by default.
+    let sum: u32 = Counter::new()
+        .zip(Counter::new().skip(1))
+        .map(|(a, b)| a * b)
+        .filter(|x| x % 3 == 0)
+        .sum();
+    println!("The sum is {}", sum);
+    assert_eq!(18, sum);
 }
