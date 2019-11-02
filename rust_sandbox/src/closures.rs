@@ -7,6 +7,8 @@ pub fn run() {
     let simulated_random_number = 7;
 
     generate_workout(simulated_user_specified_value, simulated_random_number);
+
+    capture_env();
 }
 
 // memorization or lazy evaluation
@@ -75,4 +77,18 @@ fn types_are_inferred_once() {
     // closure, and we get a type error if we try to use a different type with the same
     // closure.
     // let n = closure(10);
+}
+
+// This function shows the equal_to_x closure captures its surrounding environment: x in this case.
+fn capture_env() {
+    let x = 4;
+    let equal_to_x = |z: u32| z == x;
+    let y = 4;
+    assert_eq!(y, x);
+
+    // This doesn't work with functions because they don't capture their surrounding environments.
+    // This function doesn't compile.
+    // fn equal_to_x2(z: u32) -> bool {
+    //     z == x
+    // }
 }
