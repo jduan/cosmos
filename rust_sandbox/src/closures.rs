@@ -8,20 +8,70 @@ pub fn run() {
     generate_workout(simulated_user_specified_value, simulated_random_number);
 }
 
+// memorization or lazy evaluation
+struct Cacher<T>
+where
+    // T is a closure type.
+    T: Fn(u32) -> u32,
+{
+    // private fields because we want to maintain them ourselves.
+    calculation: T,
+    value: Option<u32>,
+}
+
+impl<T> Cacher<T>
+where
+    T: Fn(u32) -> u32,
+{
+    fn new(calculation: T) -> Cacher<T> {
+        Cacher {
+            calculation,
+            value: None,
+        }
+    }
+
+    fn value(&mut self, arg: u32) -> u32 {
+        match self.value {
+            Some(v) => v,
+            None => {
+                let v = (self.calculation)(arg);
+                self.value = Some(v);
+                v
+            }
+        }
+    }
+}
+
 fn generate_workout(intensity: u32, random_number: u32) {
-    let expensive_closure = |num| {
+    // This is how you pass a closure as a argument to Cacher::new
+    let mut expensive_result = Cacher::new(|num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
         num
-    };
+    });
     if intensity < 25 {
-        println!("Today, do {} pushups!", expensive_closure(intensity));
-        println!("Next, do {} situps!", expensive_closure(intensity));
+        println!("Today, do {} pushups!", expensive_result.value(intensity));
+        println!("Next, do {} situps!", expensive_result.value(intensity));
     } else {
         if random_number == 3 {
             println!("Take a break today! Remember to stay hydrated!");
         } else {
-            println!("Today, run for {} minutes!", expensive_closure(intensity));
+            println!(
+                "Today, run for {} minutes!",
+                expensive_result.value(intensity)
+            );
         }
     }
+}
+
+fn types_are_inferred_once() {
+    let closure = |x| x;
+    let s = closure(String::from("hello"));
+
+    // The next line will trigger a compilation error because The first time we call
+    // closure with the String value, the compiler infers the type of x and the return type
+    // of the closure to be String. Those types are then locked in to the closure in
+    // closure, and we get a type error if we try to use a different type with the same
+    // closure.
+    // let n = closure(10);
 }
