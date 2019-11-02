@@ -20,6 +20,7 @@ mod ownership;
 mod pattern_matching;
 mod recover_from_errors;
 mod slice_type;
+mod smart_pointers;
 mod strings;
 mod structs;
 mod traits;
@@ -54,7 +55,8 @@ fn main() {
     // traits::run();
     // lifetime::run();
     // closures::run();
-    iterators::run();
+    // iterators::run();
+    smart_pointers::run();
 }
 
 fn will_panic() {
