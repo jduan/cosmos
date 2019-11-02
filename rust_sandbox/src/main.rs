@@ -12,6 +12,7 @@ mod generics;
 mod guess_my_number;
 mod hash_maps;
 mod if_let;
+mod iterators;
 mod lifetime;
 mod method_syntax;
 mod options;
@@ -52,7 +53,8 @@ fn main() {
     // generics::run();
     // traits::run();
     // lifetime::run();
-    closures::run();
+    // closures::run();
+    iterators::run();
 }
 
 fn will_panic() {
