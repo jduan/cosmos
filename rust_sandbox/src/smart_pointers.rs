@@ -1,6 +1,8 @@
 // This is so that you can refer Cons and Nil without prepending the List module
 use std::ops::Deref;
+use std::rc::Rc;
 use List::{Cons, Nil};
+use List2::{Cons as Cons2, Nil as Nil2};
 
 pub fn run() {
     box_simple_example();
@@ -11,6 +13,7 @@ pub fn run() {
     deref_coercion();
     drop_trait();
     drop_early();
+    reference_counting();
 }
 
 fn box_simple_example() {
@@ -162,4 +165,31 @@ fn drop_early() {
     // acquire the lock.
     drop(c);
     println!("CustomSmartPointer dropped before the end of the function.");
+}
+
+enum List2 {
+    Cons(i32, Rc<List2>),
+    Nil,
+}
+
+fn reference_counting() {
+    let a = Rc::new(Cons2(5, Rc::new(Cons2(10, Rc::new(Nil2)))));
+    // The initial reference count is 1
+    assert_eq!(1, Rc::strong_count(&a));
+
+    let b = Cons2(3, Rc::clone(&a));
+    // The reference count is 2 after one clone
+    assert_eq!(2, Rc::strong_count(&a));
+
+    {
+        // The reference count is 3 after another clone
+        let c = Cons2(4, Rc::clone(&a));
+        assert_eq!(3, Rc::strong_count(&a));
+    }
+
+    // The reference count is back to 2 after c goes out of scope
+    assert_eq!(2, Rc::strong_count(&a));
+
+    // When the function finishes, a/b/c all go out of scope and the entire
+    // list will be cleaned up completely.
 }
