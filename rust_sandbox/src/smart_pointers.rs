@@ -1,8 +1,10 @@
-// This is so that you can refer Cons and Nil without prepending the List module
+use std::cell::RefCell;
 use std::ops::Deref;
 use std::rc::Rc;
+// This is so that you can refer Cons and Nil without prepending the List module
 use List::{Cons, Nil};
 use List2::{Cons as Cons2, Nil as Nil2};
+use List3::{Cons3, Nil3};
 
 pub fn run() {
     box_simple_example();
@@ -14,6 +16,7 @@ pub fn run() {
     drop_trait();
     drop_early();
     reference_counting();
+    rc_and_refcell();
 }
 
 fn box_simple_example() {
@@ -236,22 +239,24 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::cell::RefCell;
 
+    // This is a mock that implements the Messenger trait.
     struct MockMessenger {
-        sent_messages: Vec<String>,
+        sent_messages: RefCell<Vec<String>>,
     }
 
     impl MockMessenger {
         fn new() -> MockMessenger {
             MockMessenger {
-                sent_messages: vec![],
+                sent_messages: RefCell::new(vec![]),
             }
         }
     }
 
     impl Messenger for MockMessenger {
         fn send(&self, message: &str) {
-            self.sent_messages.push(String::from(message));
+            self.sent_messages.borrow_mut().push(String::from(message));
         }
     }
 
@@ -262,6 +267,30 @@ mod tests {
 
         limit_tracker.set_value(80);
 
-        assert_eq!(mock_messenger.sent_messages.len(), 1);
+        assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
+        assert_eq!(
+            mock_messenger.sent_messages.borrow()[0],
+            "Warning: You've used up over 75% of your quota!"
+        );
     }
+}
+
+#[derive(Debug)]
+enum List3 {
+    Cons3(Rc<RefCell<i32>>, Rc<List3>),
+    Nil3,
+}
+
+fn rc_and_refcell() {
+    let value = Rc::new(RefCell::new(5));
+    let a = Rc::new(Cons3(Rc::clone(&value), Rc::new(Nil3)));
+
+    let b = Cons3(Rc::new(RefCell::new(6)), Rc::clone(&a));
+    let c = Cons3(Rc::new(RefCell::new(10)), Rc::clone(&a));
+
+    *value.borrow_mut() += 10;
+
+    println!("a after = {:?}", a);
+    println!("b after = {:?}", b);
+    println!("c after = {:?}", c);
 }

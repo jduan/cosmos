@@ -1,3 +1,5 @@
+mod smart_pointers;
+
 #[derive(Debug)]
 struct Rectangle {
     width: u32,
@@ -37,7 +39,7 @@ mod tests {
 
     #[test]
     fn another() {
-        panic!("Make this test fail!");
+        // panic!("Make this test fail!");
     }
 
     #[test]
@@ -91,7 +93,7 @@ mod tests {
     // them returns an "Err" variant.
     #[test]
     fn it_works() -> Result<(), String> {
-        if add_two(3) == 6 {
+        if add_two(3) == 5 {
             Ok(())
         } else {
             Err(String::from("two plus three doesn't equal to five!"))
