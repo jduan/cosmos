@@ -2,6 +2,8 @@ use std::thread;
 use std::time::Duration;
 // mpsc stands for "multiple producers, single consumer"
 use std::sync::mpsc;
+// Arc: atomic reference count. It's similar to Rc  but it's safe to use in concurrent situations.
+use std::sync::{Arc, Mutex};
 
 pub fn run() {
     create_thread();
@@ -9,6 +11,8 @@ pub fn run() {
     message_passing();
     message_passing2();
     multiple_producers();
+    use_mutex();
+    share_mutex_between_threads();
 }
 
 fn create_thread() {
@@ -129,4 +133,41 @@ fn multiple_producers() {
     for received in rx {
         println!("Got {}", received);
     }
+}
+
+fn use_mutex() {
+    println!("===== use_mutex =====");
+    let m = Mutex::new(5);
+    {
+        // Mutex<T> is a smart pointer. More accurately, the call to lock returns a smart pointer
+        // called MutexGuard, wrapped in a LockResult. The MutexGuard smart pointer implements
+        // Deref to point at our inner data. The smart pointer also has a Drop implementation that
+        // releases the lock automatically when a MutexGuard goes out of scope. As a result, we
+        // don't risk forgetting to release the lock and blocking the mutex from being used by
+        // other threads because the lock release happens automatically.
+        let mut num = m.lock().unwrap();
+        *num = 6;
+    }
+    println!("m = {:?}", m);
+}
+
+fn share_mutex_between_threads() {
+    println!("===== share_mutex_between_threads =====");
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
 }
