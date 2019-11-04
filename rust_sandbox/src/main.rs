@@ -23,6 +23,7 @@ mod slice_type;
 mod smart_pointers;
 mod strings;
 mod structs;
+mod threads;
 mod traits;
 mod variables;
 mod vectors;
@@ -56,7 +57,8 @@ fn main() {
     // lifetime::run();
     // closures::run();
     // iterators::run();
-    smart_pointers::run();
+    // smart_pointers::run();
+    threads::run();
 }
 
 fn will_panic() {
