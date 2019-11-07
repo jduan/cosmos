@@ -36,6 +36,7 @@ pub fn run() {
     cannot_move_indexed_content();
     work_with_indexed_content();
     loop_over_vector();
+    replace_member();
 }
 
 fn move_example() {
@@ -196,4 +197,23 @@ fn loop_over_vector() {
         println!("{}", s);
     }
     println!("v2 is still available after the loop: {:?}", v2);
+}
+
+struct Person2 {
+    name: Option<String>,
+    birth: i32,
+}
+
+// Replace a member of a struct
+fn replace_member() {
+    let mut composers = Vec::new();
+    composers.push(Person2 {
+        name: Some("Mozart".to_string()),
+        birth: 1525,
+    });
+    // this doesn't work
+    // let name = composers[0].name;
+
+    let name = std::mem::replace(&mut composers[0].name, None);
+    println!("name is {:?}", name);
 }
