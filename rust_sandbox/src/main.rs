@@ -39,7 +39,7 @@ fn main() {
     // println!("10 + 5 is {}", functions::add5(10));
     // control_flow::run();
     // exercise::run();
-    // ownership::run();
+    ownership::run();
     // slice_type::run();
     // structs::run();
     // method_syntax::run();
@@ -58,7 +58,7 @@ fn main() {
     // closures::run();
     // iterators::run();
     // smart_pointers::run();
-    threads::run();
+    // threads::run();
 }
 
 fn will_panic() {

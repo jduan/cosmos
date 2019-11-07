@@ -32,6 +32,9 @@ pub fn run() {
 
     multiple_mut_refs();
     multiple_mut_refs2();
+
+    cannot_move_indexed_content();
+    work_with_indexed_content();
 }
 
 fn move_example() {
@@ -107,4 +110,55 @@ fn multiple_mut_refs2() {
 
     let r3 = &mut s;
     println!("{}", r3);
+}
+
+struct Person {
+    name: String,
+    birth: i32,
+}
+
+fn misc() {
+    let s = vec!["udon".to_string(), "ramen".to_string(), "soba".to_string()];
+    let t = s;
+
+    let mut composers = Vec::new();
+    composers.push(Person {
+        name: "Palestrina".to_string(),
+        birth: 1525,
+    });
+}
+
+fn cannot_move_indexed_content() {
+    let mut v = Vec::new();
+    for i in 101..106 {
+        v.push(i.to_string());
+    }
+    // The line doesn't compile:
+    // cannot move out of index of `std::vec::Vec<std::string::String>`
+    // let third = v[2];
+
+    // This works because "numbers" are copied instead of moved.
+    let v2 = vec![1, 2, 3, 4, 5];
+    let third = v2[2];
+    println!("third element is {}", third);
+}
+
+fn work_with_indexed_content() {
+    let mut v = Vec::new();
+    for i in 101..106 {
+        v.push(i.to_string());
+    }
+
+    // 1. pop a value off the end
+    let fifth = v.pop().unwrap();
+    assert_eq!(fifth, "105");
+
+    // 2. swap one element with the one at the end
+    let second = v.swap_remove(1);
+    assert_eq!(second, "102");
+
+    // 3. replace one element and return it
+    let third = std::mem::replace(&mut v[2], "substitute".to_string());
+    assert_eq!(third, "103");
+    assert_eq!(v, vec!["101", "104", "substitute"]);
 }
