@@ -37,6 +37,8 @@ pub fn run() {
     work_with_indexed_content();
     loop_over_vector();
     replace_member();
+    user_defined_types_are_not_copy_types();
+    this_works_now();
 }
 
 fn move_example() {
@@ -216,4 +218,45 @@ fn replace_member() {
 
     let name = std::mem::replace(&mut composers[0].name, None);
     println!("name is {:?}", name);
+}
+
+struct Label {
+    number: i32,
+}
+
+fn user_defined_types_are_not_copy_types() {
+    fn print(label: Label) {
+        println!("Label: {}", label.number);
+    }
+
+    let label = Label { number: 3 };
+    print(label);
+    // This line doesn't compile because the ownership of label has been moved to "print" in the
+    // line above!
+    // println!("My label number is {}", label.number);
+}
+
+// If all the fields of a user-defined struct are themselves Copy types, you can make the struct
+// a Copy type too.
+#[derive(Copy, Clone)]
+struct Label2 {
+    number: i32,
+}
+
+// The derive annotation doesn't work because String isn't a Copy type!
+// #[derive(Copy, Clone)]
+struct StringLabel {
+    name: String,
+}
+
+fn this_works_now() {
+    fn print(label: Label2) {
+        println!("Label: {}", label.number);
+    }
+
+    let label = Label2 { number: 3 };
+    print(label);
+
+    // This works because the call of "print" above copies label.
+    println!("My label number is {}", label.number);
 }
