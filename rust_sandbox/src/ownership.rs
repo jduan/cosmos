@@ -35,6 +35,7 @@ pub fn run() {
 
     cannot_move_indexed_content();
     work_with_indexed_content();
+    loop_over_vector();
 }
 
 fn move_example() {
@@ -161,4 +162,38 @@ fn work_with_indexed_content() {
     let third = std::mem::replace(&mut v[2], "substitute".to_string());
     assert_eq!(third, "103");
     assert_eq!(v, vec!["101", "104", "substitute"]);
+}
+
+// Collection types like Vec also generally offer methods to consume all their elements in a loop
+fn loop_over_vector() {
+    let v = vec![
+        "hello".to_string(),
+        "world".to_string(),
+        "everyone".to_string(),
+    ];
+
+    println!("Loop over a vector");
+
+    // How does ownership work in a for loop?
+    // When we pass v to the for loop, this "moves" the vector out of v, leaving v uninitialized.
+    // The for loop's internal machinery takes ownership of the vector, and dissects it into its
+    // elements. At each iteration, the loop moves another element to the variables "s". Since s
+    // now owns the string, we're able to modify it in the loop before printing it. And since the
+    // vector itself is no longer visible to the code, nothing can observe it mid-loop in some
+    // partially emptied state.
+    for mut s in v {
+        s.push('!');
+        println!("{}", s);
+    }
+
+    // If you want to own v after the for loop, you need to borrow it.
+    let v2 = vec![
+        "hello".to_string(),
+        "world".to_string(),
+        "everyone".to_string(),
+    ];
+    for s in &v2 {
+        println!("{}", s);
+    }
+    println!("v2 is still available after the loop: {:?}", v2);
 }
