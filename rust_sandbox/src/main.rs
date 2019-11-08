@@ -19,6 +19,7 @@ mod options;
 mod ownership;
 mod pattern_matching;
 mod recover_from_errors;
+mod references;
 mod slice_type;
 mod smart_pointers;
 mod strings;
@@ -39,7 +40,8 @@ fn main() {
     // println!("10 + 5 is {}", functions::add5(10));
     // control_flow::run();
     // exercise::run();
-    ownership::run();
+    // ownership::run();
+    references::run();
     // slice_type::run();
     // structs::run();
     // method_syntax::run();
