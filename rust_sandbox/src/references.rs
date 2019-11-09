@@ -22,6 +22,7 @@ pub fn run() {
     static WORTH_POINTING_AT: i32 = 1000;
     update_globa_var2(&WORTH_POINTING_AT);
     distinct_lifetimes();
+    share_vs_mutate2();
 }
 
 // type alias
@@ -308,4 +309,52 @@ fn distinct_lifetimes() {
     }
 
     println!("r is {}", r);
+}
+
+// Throughout its lifetime, a shared reference makes its referent read-only: you may not assign to
+// the referent or move its value elsewhere.
+fn share_vs_mutate() {
+    let v = vec![1, 2, 3, 4, 5];
+    let r = &v;
+
+    // This line doesn't compile because you can't move "v" while the reference r (pointing to v)
+    // is still alive (due to the println! line below.)
+    // let aside = v;
+
+    println!("first element of vector is {}", r[0]);
+}
+
+// Extend a vector with elements of a slice
+fn extend(vec: &mut Vec<i32>, slice: &[i32]) {
+    for elt in slice {
+        vec.push(*elt);
+    }
+}
+
+// Rust's rules for mutation and sharing:
+//
+// * Shared access is read-only access. Values borrowed by shared references are read-only. Across
+// the lifetime of a shared reference, neither its referent, nor anything reachable from that
+// referent, can be changed by anything. There exist no live mutable references to anything in that
+// structure; its owner is held read-only; and so on. It’s really frozen.
+//
+// * Mutable access is exclusive access. A value borrowed by a mutable reference is reachable
+// exclusively via that reference. Across the lifetime of a mutable reference, there is no other
+// usable path to its referent, or to any value reachable from there. The only references whose
+// lifetimes may overlap with a mutable reference are those you borrow from the mutable reference
+// itself.
+fn share_vs_mutate2() {
+    let mut wave = Vec::new();
+    let head = vec![1, 2];
+    let tail = [3, 4];
+
+    extend(&mut wave, &head);
+    extend(&mut wave, &tail);
+
+    assert_eq!(wave, vec![1, 2, 3, 4]);
+
+    // this line doesn't compile
+    // While extending wave, it may run out of space so Rust needs to allow some new space on the
+    // heap. That would render the other "&wave" pointer dangling!
+    // extend(&mut wave, &wave);
 }
