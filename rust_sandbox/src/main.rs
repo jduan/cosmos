@@ -29,7 +29,7 @@ mod traits;
 mod variables;
 mod vectors;
 
-use foo::answer;
+// use foo::answer;
 
 fn main() {
     // println!("foo::answer: {}", foo::answer());
