@@ -21,6 +21,7 @@ pub fn run() {
     borrow_ref_of_any_expr();
     static WORTH_POINTING_AT: i32 = 1000;
     update_globa_var2(&WORTH_POINTING_AT);
+    distinct_lifetimes();
 }
 
 // type alias
@@ -236,4 +237,75 @@ fn update_globa_var2(p: &'static i32) {
     unsafe {
         STASH = p;
     }
+}
+
+fn ref_in_struct() {
+    // This says: the lifetime of any reference you store in r had better enclose 'a, and
+    // 'a must outlast the lifetime of whatever you store the S.
+    struct S<'a> {
+        // Whenever a reference type appears inside another type’s definition, you must write out
+        // its lifetime.
+        r: &'a i32,
+    }
+
+    let s;
+    {
+        let x = 10;
+        // The expression S { r: &x } creates a fresh S value with some lifetime 'a. When you
+        // store &x in the r field, you constrain 'a to lie entirely within x’s lifetime.
+        // The assignment s = S { ...  } stores this S in a variable whose lifetime extends to the
+        // end of the example, constraining 'a to outlast the lifetime of s. And now Rust has
+        // arrived at the same contradictory constraints as before: 'a must not outlive x, yet must
+        // live at least as long as s. No satisfactory lifetime exists, and Rust rejects the code.
+        s = S { r: &x };
+    }
+    // This line doesn't compile. See the above for now.
+    // If you move this line to the inner block right after "s = S {...}", it will compile.
+    // assert_eq!(10, *s.r);
+}
+
+// This isn't much different from the function above.
+fn struct_inside_struct() {
+    struct S {
+        name: String,
+    }
+
+    // We can’t leave off S’s lifetime parameter here: Rust needs to know how a T’s lifetime
+    // relates to that of the reference in its S
+    struct T<'a> {
+        s: &'a S,
+    }
+}
+
+// Function signatures can have similar effects. Suppose we have a function like this:
+//
+// fn f<'a>(r: &'a i32, s: &'a i32) -> &'a i32 { r  } // perhaps too tight
+//
+// Here, both reference parameters use the same lifetime 'a, which can unnecessarily constrain the
+// caller in the same way we’ve shown previously. If this is a problem, you can let parameters’
+// lifetimes vary independently:
+//
+// fn f<'a, 'b>(r: &'a i32, s: &'b i32) -> &'a i32 { r  } // looser
+//
+// Tactic: try the simplest possible definition first, and then loosen restrictions until the code
+// compiles
+fn distinct_lifetimes() {
+    // If you change x and y to have the same lifetime 'a, the code wouldn't compile.
+    struct S<'a, 'b> {
+        x: &'a i32,
+        y: &'b i32,
+    }
+
+    let x = 10;
+    let r;
+
+    {
+        let y = 20;
+        {
+            let s = S { x: &x, y: &y };
+            r = s.x;
+        }
+    }
+
+    println!("r is {}", r);
 }
