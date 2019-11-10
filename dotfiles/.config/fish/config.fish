@@ -13,7 +13,7 @@
 if [ -f '/usr/libexec/java_home' ];
     export JAVA_HOME=(/usr/libexec/java_home -v 1.8)
 end
-export CARGO_HOME=$HOME/.cargo/bin
+export CARGO_HOME=$HOME/.cargo
 export RUSTUP_HOME=$HOME/.rustup
 set paths \
     $CARGO_HOME \
