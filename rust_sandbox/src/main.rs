@@ -20,6 +20,7 @@ mod ownership;
 mod pattern_matching;
 mod recover_from_errors;
 mod references;
+mod sandbox;
 mod slice_type;
 mod smart_pointers;
 mod strings;
@@ -41,7 +42,7 @@ fn main() {
     // control_flow::run();
     // exercise::run();
     // ownership::run();
-    references::run();
+    // references::run();
     // slice_type::run();
     // structs::run();
     // method_syntax::run();
@@ -61,6 +62,7 @@ fn main() {
     // iterators::run();
     // smart_pointers::run();
     // threads::run();
+    sandbox::run();
 }
 
 fn will_panic() {
