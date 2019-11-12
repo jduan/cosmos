@@ -1,3 +1,4 @@
+mod arrays;
 mod smart_pointers;
 
 #[derive(Debug)]
