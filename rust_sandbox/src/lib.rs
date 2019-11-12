@@ -1,5 +1,6 @@
 mod arrays;
 mod smart_pointers;
+mod vectors;
 
 #[derive(Debug)]
 struct Rectangle {
