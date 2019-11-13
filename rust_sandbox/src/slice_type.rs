@@ -1,3 +1,10 @@
+/// A slice, written [T] without specifying the length, is a region of an array or vector. Since a
+/// slice can be any length, slices can't be stored directly in variables or passed as function
+/// arguments. Slices are always passed by references!
+///
+/// A slice is a "fat pointer": a two-word value comprising a pointer to the slice's first element,
+/// and the number of elements in the slice.
+///
 pub fn run() {
     let mut s = String::from("Hello, world!");
 
@@ -64,4 +71,41 @@ fn pass_string_slice(s: &str) -> &str {
     }
 
     &s[..]
+}
+
+// Because this function takes a slice reference as an argument, you can apply it to either a
+// vector or an array.
+fn iterate_slices(n: &[f64]) {
+    for elt in n {
+        println!("element is {}", elt);
+    }
+}
+
+// A slice, written [T] without specifying the length, is a region of an array or vector. Since a
+// slice can be any length, slices can’t be stored directly in variables or passed as function
+// arguments. Slices are always passed by reference.
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn create_slices() {
+        let v: Vec<f64> = vec![0.0, 0.707, 1.0, 0.707];
+        // similar to the vector above
+        let a: [f64; 4] = [0.0, 0.707, 1.0, 0.707];
+
+        let sv: &[f64] = &v;
+        let sa: &[f64] = &a;
+
+        assert_eq!(sv[0], 0.0);
+        assert_eq!(sv[1], 0.707);
+        assert_eq!(sa[0], 0.0);
+        assert_eq!(sa[1], 0.707);
+
+        iterate_slices(&sv); // works on vectors
+        iterate_slices(&sa); // works on arrays
+
+        iterate_slices(&sv[0..2]); // print the first 2 elements of v
+    }
 }

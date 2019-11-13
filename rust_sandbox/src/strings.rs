@@ -1,3 +1,5 @@
+use regex::Regex;
+
 pub fn run() {
     create_strings();
     update_strings();
@@ -83,5 +85,56 @@ fn iterate_string() {
     // your domain.
     for b in s.bytes() {
         println!("byte is {}", b);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn string_literals() {
+        let speech = "\"Outch!\" said the well.\n";
+
+        println!(
+            "A string literal may
+            span multiple lines."
+        );
+
+        // If one line of a string ends with a backslash, then the newline and the leading
+        // whitespace on the line are dropped. So this prints a single line.
+        println!(
+            "It was a bright, cold day in April, and \
+             there were four of us \
+             more or less."
+        );
+
+        // Raw strings. Everything inside a raw string are included verbatim. No escape sequences
+        // are recognized.
+        let default_win_install_path = r"C:\Program Files\Gorillas";
+        let pattern = Regex::new(r"\d+(\.\d+)*");
+    }
+
+    #[test]
+    fn byte_strings() {
+        // A byte string is a slice of u8 values, ie bytes, rather than UTF8 characters.
+        let method: &[u8; 3] = b"GET";
+        assert_eq!(method, &[b'G', b'E', b'T']);
+    }
+
+    #[test]
+    fn ways_to_create_strings() {
+        // .to_string() converts a &str to a String. This copies the string.
+        let error_message = "too many pets".to_string();
+
+        // format! works just like println! except it doesn't add a newline at the end
+        let date = format!("{}-{}-{}", 2019, 11, 11);
+        assert_eq!(date, "2019-11-11");
+
+        // arrays, slices, and vectors of strings have two methods (concat and join) that form a
+        // new String from many strings.
+        let bits = vec!["veni", "vidi", "vici"];
+        assert_eq!(bits.concat(), "venividivici");
+        assert_eq!(bits.join(", "), "veni, vidi, vici");
     }
 }

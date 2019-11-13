@@ -1,4 +1,5 @@
 mod arrays;
+mod slice_type;
 mod smart_pointers;
 mod vectors;
 
