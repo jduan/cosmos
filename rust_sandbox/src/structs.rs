@@ -80,3 +80,15 @@ struct Rectangle {
 fn area(rect: &Rectangle) -> u32 {
     rect.width * rect.height
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_tuple_structs() {
+        let red = Color(255, 0, 0);
+        assert_eq!(255, red.0);
+        assert_eq!(0, red.1);
+    }
+}

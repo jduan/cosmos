@@ -1,9 +1,3 @@
-mod arrays;
-mod expressions;
-mod slice_type;
-mod smart_pointers;
-mod vectors;
-
 #[derive(Debug)]
 struct Rectangle {
     width: u32,

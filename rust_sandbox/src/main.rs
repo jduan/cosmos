@@ -3,10 +3,12 @@
 // you can call functions like `foo::answer()` in this file.
 mod foo;
 
+mod arrays;
 mod closures;
 mod control_flow;
 mod enums;
 mod exercise;
+mod expressions;
 mod functions;
 mod generics;
 mod guess_my_number;
@@ -15,6 +17,7 @@ mod if_let;
 mod iterators;
 mod lifetime;
 mod method_syntax;
+mod misc;
 mod options;
 mod ownership;
 mod pattern_matching;
