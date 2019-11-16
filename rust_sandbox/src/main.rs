@@ -14,6 +14,7 @@ mod generics;
 mod guess_my_number;
 mod hash_maps;
 mod if_let;
+mod interior_mutability;
 mod iterators;
 mod lifetime;
 mod method_syntax;
