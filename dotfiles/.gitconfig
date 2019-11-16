@@ -12,9 +12,8 @@
     c   = commit
     co  = checkout
     # checkout all files starting from the root of the repo
-    coa = "!f(){ root=$(git rev-parse --show-toplevel); git checkout $root; }; f"
+    # coa = "!f(){ root=$(git rev-parse --show-toplevel); git checkout $root; }; f"
     com = checkout origin/master
-    cos = checkout origin/stable
     cp  = cherry-pick
     b   = branch
     # list branches ordered by most recent commit
