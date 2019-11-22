@@ -152,11 +152,13 @@ fn returns_summarizable() -> impl Summary {
     }
 }
 
+// This is a function that takes a "trait object".
 fn say_hello(out: &mut Write) -> std::io::Result<()> {
     out.write_all(b"hello world\n")?;
     out.flush()
 }
 
+// This is a generic function whose type parameter W is bound by trait Write.
 fn say_hello2<W: Write>(out: &mut W) -> std::io::Result<()> {
     out.write_all(b"hello world\n");
     out.flush()
