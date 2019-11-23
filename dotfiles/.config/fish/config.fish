@@ -16,7 +16,7 @@ end
 export CARGO_HOME=$HOME/.cargo
 export RUSTUP_HOME=$HOME/.rustup
 set paths \
-    $CARGO_HOME \
+    $CARGO_HOME/bin \
     $JAVA_HOME \
     $HOME/github/jduan/cosmos/misc_scripts \
     $HOME/repos2/sysops/optica_tools \
