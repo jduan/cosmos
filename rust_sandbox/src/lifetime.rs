@@ -95,7 +95,6 @@ fn calling_longest1() {
 //     println!("The longest string is '{}'", result);
 // }
 
-
 // lifetime annotations in struct
 #[derive(Debug)]
 // This lifetype annotation means an instance of `Excerpt` can't outlive the
@@ -108,10 +107,10 @@ struct Excerpt<'a> {
 // owner of the string object.
 fn get_excerpt() {
     let novel = String::from("Call me Ishmael. Some years ago...");
-    let first_sentence: &str = novel.split('.')
-        .next()
-        .expect("Could not find a '.'");
-    let i = Excerpt { part: first_sentence };
+    let first_sentence: &str = novel.split('.').next().expect("Could not find a '.'");
+    let i = Excerpt {
+        part: first_sentence,
+    };
     println!("First sentence is {:?}", i);
 }
 
@@ -132,7 +131,9 @@ impl<'a> Excerpt<'a> {
 // Because lifetimes are a type of generic, the declarations of the lifetime parameter 'a and the
 // generic type parameter T go in the same list inside the angle brackets after the function name.
 fn longest_with_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
-where T: Display {
+where
+    T: Display,
+{
     println!("Announcement: {}", ann);
     if x.len() > y.len() {
         x
