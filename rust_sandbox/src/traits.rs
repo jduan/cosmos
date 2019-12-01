@@ -165,13 +165,13 @@ fn returns_summarizable() -> impl Summary {
     }
 }
 
-// This is a function that takes a "trait object".
+// This is a plain function that takes a "trait object".
 fn say_hello(out: &mut Write) -> std::io::Result<()> {
     out.write_all(b"hello world\n")?;
     out.flush()
 }
 
-// This is a generic function whose type parameter W is bound by trait Write.
+// In contrast, this is a generic function whose type parameter W is bound by trait Write.
 fn say_hello2<W: Write>(out: &mut W) -> std::io::Result<()> {
     out.write_all(b"hello world\n");
     out.flush()
@@ -186,16 +186,9 @@ fn top_ten<T: Debug + Hash + Eq>(values: &Vec<T>) -> Vec<&T> {
         *counter += 1;
     }
 
-    let mut map_vec: Vec<_> = map.iter().collect();
-    map_vec.sort_by_key(|a| a.1);
-    map_vec.reverse();
-    let key_vec: Vec<&T> = map_vec.iter().map(|a| *a.0).collect();
-    let first_n = if key_vec.len() > 10 {
-        10
-    } else {
-        key_vec.len()
-    };
-    key_vec[0..first_n].to_vec()
+    let mut map_vec: Vec<_> = map.into_iter().collect();
+    map_vec.sort_by(|a, b| b.1.cmp(&a.1));
+    map_vec.into_iter().map(|a| a.0).take(10).collect()
 }
 
 trait Mapper {}
