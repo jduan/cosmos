@@ -43,6 +43,7 @@ if [[ ! $EDITOR ]]; then
 fi
 
 current_branch=`git branch --show-current`
+current_branch=${current_branch:-"origin/master"}
 echo "$branches" | grep -v $current_branch | grep -v '^*' | sed 's/^  //' | tee $all $keep > /dev/null
 
 if [ `cat $all | wc -l` == 0 ]; then
