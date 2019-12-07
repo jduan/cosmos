@@ -40,9 +40,58 @@
 /// in scope by default: they’re part of the standard prelude, names that Rust automatically
 /// imports into every module. In fact, the prelude is mostly a carefully chosen selection of
 /// traits.
+///
+///
+/// ## when to use which (trait objects vs generic functions)
+///
+/// Both features are based on traits. They have a lot in common but there are subtle differences.
+///
+/// 1. Trait objects are the right choice when you need a collection of values of mixed types, all together.
+///
+/// trait Vegetable {...}
+///
+/// struct Salad<V: Vegetable> {
+///   veggies: Vec<V>
+/// }
+///
+/// This works but each such salad consists entirely of a single type of vegetable.
+///
+/// struct Salad {
+///     veggies: Vec<Vegetable>  // error: `Vegetable` does not have
+///                              //        a constant size
+/// }
+///
+///
+/// struct Salad {
+///     veggies: Vec<Box<Vegetable>>
+/// }
+///
+/// This code works because each Box<Vegetable> can own any type of vegetable, but the box itself
+/// has a constant size—two pointers—suitable for storing in a vector.
+///
+/// 2. Another possible reason to use trait objects is to reduce the total amount of compiled code.
+/// Rust may have to compile a generic function many times, once for each type it’s used with.
+/// This could make the binary large, a phenomenon called code bloat in C++ circles.
+///
+/// ### when to use generic functions
+///
+/// Generics have two important advantages over trait objects, with the result that in Rust,
+/// generics are the more common choice.
+///
+/// 1. The first advantage is speed. Each time the Rust compiler generates machine code for a
+/// generic function, it knows which types it’s working with, so it knows at that time which
+/// write method to call. There’s no need for dynamic dispatch.
+///
+/// Compare that to the behavior with trait objects. Rust never knows what type of value a trait
+/// object points to until run time.
+///
+/// 2. The second advantage of generics is that not every trait can support trait objects. Traits
+/// support several features, such as static methods, that work only with generics: they rule out
+/// trait objects entirely.
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::hash::Hash;
+use std::io;
 use std::io::Write;
 
 pub fn run() {
@@ -103,6 +152,14 @@ impl Summary for NewsArticle {
 
     fn summarize_author(&self) -> String {
         format!("by {}", self.author)
+    }
+}
+
+impl NewsArticle {
+    // You can't define this function in the "impl Summary for NewsArticle" block
+    // because it's not a function of the NewsArticle trait!
+    fn get_headline(&self) -> &String {
+        &self.headline
     }
 }
 
@@ -171,7 +228,7 @@ fn say_hello(out: &mut Write) -> std::io::Result<()> {
     out.flush()
 }
 
-// In contrast, this is a generic function whose type parameter W is bound by trait Write.
+// In contrast, this is a generic function whose type parameter W is bound by "Write" trait.
 fn say_hello2<W: Write>(out: &mut W) -> std::io::Result<()> {
     out.write_all(b"hello world\n");
     out.flush()
@@ -179,7 +236,10 @@ fn say_hello2<W: Write>(out: &mut W) -> std::io::Result<()> {
 
 // Find the top occurring elements from a vector.
 // This is how to special a type parameter that implements multiple traits.
-fn top_ten<T: Debug + Hash + Eq>(values: &Vec<T>) -> Vec<&T> {
+fn top_ten<T>(values: &Vec<T>) -> Vec<&T>
+where
+    T: Debug + Hash + Eq,
+{
     let mut map = HashMap::new();
     for value in values {
         let counter = map.entry(value).or_insert(0);
@@ -197,7 +257,7 @@ trait Serialize {}
 struct DataSet {}
 // Generic functions can have multiple type parameters: M and R.
 fn run_query<M: Mapper + Serialize, R: Reducer + Serialize>(data: &DataSet, map: M, reduce: R) {
-    // not implemented
+    unimplemented!()
 }
 
 // Alternative syntax: bounds can be specified in the where clause
@@ -206,7 +266,17 @@ where
     M: Mapper + Serialize,
     R: Reducer + Serialize,
 {
-    // not implemented
+    unimplemented!()
+}
+
+trait MeasureDistance {}
+// A generic function can have both lifetime parameters and type parameters. Lifetime parameters
+// come first.
+fn nearest<'t, 'c, P>(target: &'t P, candidates: &'c [P]) -> &'c P
+where
+    P: MeasureDistance,
+{
+    unimplemented!()
 }
 
 /// This is a generic function. It works with parameters that implement the "Ord" trait.
@@ -216,6 +286,39 @@ fn min<T: Ord>(m: T, n: T) -> T {
         m
     } else {
         n
+    }
+}
+
+/// Rust lets you implement any trait on any type, as long as either the trait or the type is
+/// introduced in the current crate. This means that any time you want to add a method to any type,
+/// you can use a trait to do it. This is called an "extension trait".
+trait IsEmoji {
+    fn is_emoji(&self) -> bool;
+}
+
+impl IsEmoji for char {
+    fn is_emoji(&self) -> bool {
+        unimplemented!()
+    }
+}
+
+/// We said earlier that when you implement a trait, either the trait or the type must be new in
+/// the current crate. This is called the "coherence rule". It helps Rust ensure that trait
+/// implementations are unique. Your code can’t "impl Write for u8", because both Write and u8 are
+/// defined in the standard library. If Rust let crates do that, there could be multiple
+/// implementations of Write for u8, in different crates, and Rust would have no reasonable way to
+/// decide which implementation to use for a given method call.
+
+///You can even use a generic impl block to add an extension trait to a whole family of types at once.
+struct HtmlDocument {}
+trait WriteHtml {
+    fn write_html(&mut self, html: &HtmlDocument) -> io::Result<()>;
+}
+
+/// You can write HTML to any std::io writer.
+impl<W: Write> WriteHtml for W {
+    fn write_html(&mut self, html: &HtmlDocument) -> io::Result<()> {
+        unimplemented!()
     }
 }
 
