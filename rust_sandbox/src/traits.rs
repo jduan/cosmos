@@ -322,6 +322,10 @@ impl<W: Write> WriteHtml for W {
     }
 }
 
+/// Self in traits
+///
+/// A trait can use the keyword Self as a type. It represents the trait itself.
+
 #[cfg(test)]
 mod tests {
     use super::*;
