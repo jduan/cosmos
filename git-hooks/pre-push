@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+import subprocess
 
-print("running pre-push.py")
-exit(1)
+print("running pre-push")
+
+# Run "cargo clippy" for a few projects:
+# * rust_by_example
+def cargo_clippy(file_changed):
+    should_run = any(file_changed.startswith("rust_by_example") for file_changed in files_changed)
+    if should_run:
+        print("Going to run 'cargo clippy' for rust_by_example.")
+        subprocess.check_call("cd rust_by_example; env RUSTFLAGS=-Dwarnings cargo clippy", shell=True)
+
+output = subprocess.getoutput("git diff origin/master...HEAD --name-only")
+files_changed = output.split("\n")
+cargo_clippy(files_changed)
