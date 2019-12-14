@@ -3,8 +3,8 @@
 /// the module files would be inserted in places where mod declarations in the crate file are found,
 /// before running the compiler over it. In other words, modules do not get compiled individually,
 /// only crates get compiled.
-mod debug_trait;
-mod print_things;
+pub mod debug_trait;
+pub mod print_things;
 
 #[allow(clippy::print_literal)]
 fn main() {
