@@ -325,6 +325,17 @@ impl<W: Write> WriteHtml for W {
 /// Self in traits
 ///
 /// A trait can use the keyword Self as a type. It represents the trait itself.
+trait MyClone {
+    fn clone(&self) -> Self;
+}
+
+/// Subtraits: we can define a trait is an extension of another trait
+/// This means that every type that implements Creature must also implement the Display trait.
+trait Creature: Display {
+    fn position(&self) -> (i32, i32);
+}
+// impl Display for Broom {}
+// impl Creature for Broom {}
 
 #[cfg(test)]
 mod tests {
