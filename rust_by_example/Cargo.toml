@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 float-cmp = "0.6"
+regex = "1"
 
 [dev-dependencies]
 float-cmp = "0.6"

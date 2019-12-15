@@ -10,6 +10,7 @@ extern crate float_cmp;
 pub mod arrays_and_slices;
 pub mod casting;
 pub mod constants;
+pub mod conversions;
 pub mod debug_trait;
 pub mod enums;
 pub mod literals;
