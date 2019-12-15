@@ -1,38 +1,49 @@
+#[cfg(test)]
+#[macro_use]
+extern crate float_cmp;
+
 // This declaration will look for a file named "foo.rs" or "foo/mod.rs" and
 // insert its contents inside a module named `foo` under this scope. Hence
 // you can call functions like `foo::answer()` in this file.
-mod foo;
+pub mod foo;
 
-mod arrays;
-mod closures;
-mod control_flow;
-mod enums;
-mod exercise;
-mod expressions;
-mod functions;
-mod generics;
-mod guess_my_number;
-mod hash_maps;
-mod if_let;
-mod interior_mutability;
-mod iterators;
-mod lifetime;
-mod method_syntax;
-mod misc;
-mod options;
-mod ownership;
-mod pattern_matching;
-mod recover_from_errors;
-mod references;
-mod sandbox;
-mod slice_type;
-mod smart_pointers;
-mod strings;
-mod structs;
-mod threads;
-mod traits;
-mod variables;
-mod vectors;
+pub mod arrays;
+pub mod casting;
+pub mod closures;
+pub mod constants;
+pub mod control_flow;
+pub mod conversions;
+pub mod debug_trait;
+pub mod enums;
+pub mod exercise;
+pub mod expressions;
+pub mod functions;
+pub mod generics;
+pub mod guess_my_number;
+pub mod hash_maps;
+pub mod if_let;
+pub mod interior_mutability;
+pub mod iterators;
+pub mod lifetime;
+pub mod literals;
+pub mod method_syntax;
+pub mod misc;
+pub mod options;
+pub mod ownership;
+pub mod pattern_matching;
+pub mod print_things;
+pub mod recover_from_errors;
+pub mod references;
+pub mod sandbox;
+pub mod slice_type;
+pub mod smart_pointers;
+pub mod strings;
+pub mod structs;
+pub mod threads;
+pub mod traits;
+pub mod type_alias;
+pub mod variables;
+pub mod vectors;
 
 // use foo::answer;
 
