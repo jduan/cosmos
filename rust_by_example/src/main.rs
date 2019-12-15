@@ -12,6 +12,7 @@ pub mod casting;
 pub mod constants;
 pub mod debug_trait;
 pub mod enums;
+pub mod literals;
 pub mod print_things;
 pub mod str_and_string;
 pub mod structs;
