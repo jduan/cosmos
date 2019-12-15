@@ -3,21 +3,21 @@ import subprocess
 
 print("running pre-push")
 
-# Ruy a few things for the "rust_by_example" project;
+# Ruy a few things for the "rust_sandbox" project;
 # * cargo clippy
 # * cargo test
-def rust_by_example(file_changed):
-    should_run = any(file_changed.startswith("rust_by_example") for file_changed in files_changed)
+def rust_sandbox(file_changed):
+    should_run = any(file_changed.startswith("rust_sandbox") for file_changed in files_changed)
     if should_run:
-        print("Going to run 'cargo clippy' for rust_by_example.")
+        # print("Going to run 'cargo clippy' for rust_sandbox.")
+        # subprocess.check_call(
+        #     "cd rust_sandbox; env RUSTFLAGS=-Dwarnings cargo clippy",
+        #     shell=True)
+        print("Going to run 'cargo test' for rust_sandbox.")
         subprocess.check_call(
-            "cd rust_by_example; env RUSTFLAGS=-Dwarnings cargo clippy",
-            shell=True)
-        print("Going to run 'cargo test' for rust_by_example.")
-        subprocess.check_call(
-            "cd rust_by_example; env RUSTFLAGS=-Dwarnings cargo test",
+            "cd rust_sandbox; cargo test",
             shell=True)
 
 output = subprocess.getoutput("git diff origin/master...HEAD --name-only")
 files_changed = output.split("\n")
-rust_by_example(files_changed)
+rust_sandbox(files_changed)
