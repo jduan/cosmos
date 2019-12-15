@@ -9,7 +9,9 @@ extern crate float_cmp;
 /// only crates get compiled.
 pub mod arrays_and_slices;
 pub mod debug_trait;
+pub mod enums;
 pub mod print_things;
+pub mod str_and_string;
 pub mod structs;
 
 #[allow(clippy::print_literal)]

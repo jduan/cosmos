@@ -82,7 +82,7 @@ mod tests {
         let pair = Pair(1, 0.1);
         assert_eq!(1, pair.0);
 
-        let Pair(integer, decimal) = pair;
+        let Pair(integer, _decimal) = pair;
         assert_eq!(1, integer);
     }
 
