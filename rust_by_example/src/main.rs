@@ -13,6 +13,7 @@ pub mod enums;
 pub mod print_things;
 pub mod str_and_string;
 pub mod structs;
+pub mod type_alias;
 
 #[allow(clippy::print_literal)]
 fn main() {
