@@ -42,3 +42,36 @@ fn loops() {
         println!("number is {}", number);
     }
 }
+
+pub fn fizzbuzz(n: u32) -> Vec<String> {
+    let mut words: Vec<String> = Vec::new();
+    // From 1 to 15
+    for n in 1..=15 {
+        if n % 15 == 0 {
+            words.push(String::from("fizzbuzz"));
+        } else if n % 3 == 0 {
+            words.push(String::from("fizz"));
+        } else if n % 5 == 0 {
+            words.push(String::from("buzz"));
+        } else {
+            words.push(format!("{}", n));
+        }
+    }
+
+    words
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::control_flow::fizzbuzz;
+
+    #[test]
+    fn test_loops() {
+        let words = fizzbuzz(15);
+        let expected_words = vec![
+            "1", "2", "fizz", "4", "buzz", "fizz", "7", "8", "fizz", "buzz", "11", "fizz", "13",
+            "14", "fizzbuzz",
+        ];
+        assert_eq!(expected_words, words);
+    }
+}
