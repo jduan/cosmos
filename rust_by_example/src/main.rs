@@ -8,6 +8,7 @@ extern crate float_cmp;
 /// before running the compiler over it. In other words, modules do not get compiled individually,
 /// only crates get compiled.
 pub mod arrays_and_slices;
+pub mod constants;
 pub mod debug_trait;
 pub mod enums;
 pub mod print_things;
