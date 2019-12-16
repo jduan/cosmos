@@ -44,6 +44,7 @@ pub mod traits;
 pub mod type_alias;
 pub mod variables;
 pub mod vectors;
+pub mod while_let;
 
 // use foo::answer;
 
