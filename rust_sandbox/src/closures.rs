@@ -1,3 +1,11 @@
+/// The syntax and capabilities of closures make them very convenient for on the fly
+/// usage. Calling a closure is exactly like calling a function. However, both input
+/// and return types can be inferred and input variable names must be specified.
+///
+/// Other characteristics of closures:
+/// 1. use || instead of () around input variables
+/// 2. optional body delimination {} for a single expression; mandatory otherwisie
+/// 3. the ability to capture the outer environment variables
 use std::collections::HashMap;
 use std::thread;
 use std::time::Duration;
@@ -103,4 +111,24 @@ fn move_and_take_ownership() {
 
     let y = vec![1, 2, 3];
     assert!(equal_to_x(y));
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn closure_syntax() {
+        // Closures are anonymous, here we are binding them to references
+        // Annotation is identical to function annotation but is optional
+        // as are the `{}` wrapping the body. These nameless functions
+        // are assigned to appropriately named variables.
+        let closure_annotated = |i: i32| -> i32 { i + 1 };
+        let closure_inferred = |i| i + 1;
+        assert_eq!(4, closure_annotated(3));
+        assert_eq!(4, closure_inferred(3));
+
+        // A closure taking no arguments which returns an `i32`.
+        // The return type is inferred.
+        let one = || 1;
+        assert_eq!(1, one());
+    }
 }
