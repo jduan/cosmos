@@ -17,10 +17,44 @@ pub fn run() {
     match_number(None);
 }
 
-fn match_number(num: Option<u8>) {
+fn match_number(num: Option<u8>) -> &'static str {
     if let Some(3) = num {
-        println!("three");
+        "three"
     } else {
-        println!("None");
+        "None"
+    }
+}
+
+enum Foo {
+    Bar,
+    Baz,
+    Qux(u32),
+}
+
+fn match_enum(foo: Foo) -> &'static str {
+    if let Foo::Bar = foo {
+        "foobar"
+    } else if let Foo::Baz = foo {
+        "foobaz"
+    } else {
+        "qux"
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::if_let::{match_enum, match_number, Foo};
+
+    #[test]
+    fn test_match_number() {
+        assert_eq!(match_number(Some(3)), "three");
+        assert_eq!(match_number(None), "None");
+    }
+
+    #[test]
+    fn test_match_enum() {
+        assert_eq!(match_enum(Foo::Bar), "foobar");
+        assert_eq!(match_enum(Foo::Baz), "foobaz");
+        assert_eq!(match_enum(Foo::Qux(8)), "qux");
     }
 }
