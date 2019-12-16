@@ -1,3 +1,7 @@
+/// There are 3 functions that can iterate through a collection and they return different views:
+/// iter: borrows each element of the collection through each iteration
+/// iter_mut: mutably borrows each element of the collection through each iteration
+/// into_iter: consumes each element of the collection through each iteration
 use std::iter::Iterator;
 
 pub fn run() {
@@ -101,4 +105,36 @@ fn implement_iterator() {
         .sum();
     println!("The sum is {}", sum);
     assert_eq!(18, sum);
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_iter() {
+        let names = vec!["Bob", "Frank", "Ferris"];
+        for name in names {
+            println!("name is {}", name);
+        }
+    }
+
+    #[test]
+    fn test_into_iter() {
+        let names = vec!["Bob", "Frank", "Ferris"];
+        for name in names.into_iter() {
+            println!("name is {}", name);
+        }
+        // The line below won't compile.
+        // println!("names are {:?}", names);
+    }
+
+    #[test]
+    fn test_iter_mut() {
+        let mut scores = vec![1, 2, 3];
+        for score in scores.iter_mut() {
+            *score += 10;
+        }
+        assert_eq!(11, scores[0]);
+        assert_eq!(12, scores[1]);
+        assert_eq!(13, scores[2]);
+    }
 }
