@@ -96,10 +96,29 @@ fn use_guard(pair: (i32, i32)) -> &'static str {
     }
 }
 
+// Binding: use @ sigil to bind values to names
+fn report_age(age: u32) -> String {
+    match age {
+        0 => String::from("I'm not born yet I guess"),
+        n @ 1..=12 => format!("I'm a child of age {}", n),
+        n @ 13..=19 => format!("I'm a teen of age {}", n),
+        n => format!("I'm an old person of age {}", n),
+    }
+}
+
+fn use_binding(number: Option<u32>) -> String {
+    match number {
+        Some(n @ 42) => format!("The answer is {}", n),
+        Some(n) => format!("Not interesting {}", n),
+        _ => String::from("I'm None"),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::pattern_matching::{
-        destruct_enums, destruct_structs, destruct_tuples, get_number_value, use_guard, Color, Foo,
+        destruct_enums, destruct_structs, destruct_tuples, get_number_value, report_age,
+        use_binding, use_guard, Color, Foo,
     };
 
     #[test]
@@ -151,5 +170,20 @@ mod tests {
         assert_eq!(use_guard((1, -1)), "Antimatter, kaboom!");
         assert_eq!(use_guard((3, 4)), "The first one is odd");
         assert_eq!(use_guard((6, 7)), "No correlation");
+    }
+
+    #[test]
+    fn test_binding() {
+        assert_eq!(report_age(0), String::from("I'm not born yet I guess"));
+        assert_eq!(report_age(3), String::from("I'm a child of age 3"));
+        assert_eq!(report_age(13), String::from("I'm a teen of age 13"));
+        assert_eq!(report_age(30), String::from("I'm an old person of age 30"));
+    }
+
+    #[test]
+    fn test_binding2() {
+        assert_eq!(use_binding(Some(42)), String::from("The answer is 42"));
+        assert_eq!(use_binding(Some(21)), String::from("Not interesting 21"));
+        assert_eq!(use_binding(None), String::from("I'm None"));
     }
 }
