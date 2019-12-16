@@ -82,8 +82,8 @@ fn types_are_inferred_once() {
 
     // The next line will trigger a compilation error because The first time we call
     // closure with the String value, the compiler infers the type of x and the return type
-    // of the closure to be String. Those types are then locked in to the closure in
-    // closure, and we get a type error if we try to use a different type with the same
+    // of the closure to be String. Those types are then locked in to the closure
+    // and we get a type error if we try to use a different type with the same
     // closure.
     // let n = closure(10);
 }
@@ -115,6 +115,8 @@ fn move_and_take_ownership() {
 
 #[cfg(test)]
 mod tests {
+    use std::mem;
+
     #[test]
     fn closure_syntax() {
         // Closures are anonymous, here we are binding them to references
@@ -130,5 +132,62 @@ mod tests {
         // The return type is inferred.
         let one = || 1;
         assert_eq!(1, one());
+    }
+
+    /// Closures are inherently flexible and will do what the functionality requires
+    /// to make the closure work without annotation. This allows capturing to flexibly
+    /// adapt to the use case, sometimes moving and sometimes borrowing.
+    /// Closures can capture variables:
+    /// 1. by reference: &T
+    /// 2. by mutable reference: &mut T
+    /// 3. by value: T
+    #[test]
+    fn test_capturing() {
+        let color = "green";
+        // This closure only requires "borrowing" a reference to "color".
+        let print = || {
+            println!("color is {}", color);
+            assert_eq!("green", color);
+        };
+        // Call the closure using the borrow.
+        print();
+        print();
+
+        let mut count = 0;
+        // A closure to increment `count` could take either `&mut count`
+        // or `count` but `&mut count` is less restrictive so it takes
+        // that. Immediately borrows `count`.
+        // A `mut` is required on `inc` because a `&mut` reference is stored inside.
+        let mut inc = || {
+            count += 1;
+            println!("count is {}", count);
+        };
+        // call the closure.
+        inc();
+        inc();
+        assert_eq!(2, count);
+
+        // A non-copy type.
+        let movable = Box::new(3);
+        let consume = || {
+            println!("movable: {}", movable);
+            mem::drop(movable);
+        };
+        // `mem::drop` requires `T` so this must take by value. A copy type
+        // would copy into the closure leaving the original untouched.
+        // A non-copy must move and so `movable` immediately moves into
+        // the closure.
+        consume();
+        // "consume" consumes the variable so this can only be called once!
+        // consume();
+
+        let haystack = vec![1, 2, 3];
+        // The "move" keyword explicitly forces closure to take ownership of captured
+        // variables, such as "haystack".
+        let contains = move |needle| haystack.contains(needle);
+        assert!(contains(&1));
+        assert_eq!(false, contains(&10));
+        // This line doesn't compile because "haystack" has been moved to the closure.
+        // haystack.push(4);
     }
 }
