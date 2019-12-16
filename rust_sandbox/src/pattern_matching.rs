@@ -1,3 +1,5 @@
+use crate::pattern_matching::Color::*;
+
 pub fn run() {
     println!("Penny is worth {}", value_in_cents(Coin::Penny));
     println!("Dime is worth {}", value_in_cents(Coin::Dime));
@@ -46,9 +48,59 @@ fn get_number_value(n: u32) -> &'static str {
     }
 }
 
+fn destruct_tuples(pair: (i32, i32)) -> String {
+    match pair {
+        (0, y) => format!("First is 0 and y is {}", y),
+        (x, 0) => format!("x is {} and last is 0", x),
+        _ => String::from("It doesn't matter what they are"),
+    }
+}
+
+enum Color {
+    Red,
+    Blue,
+    Green,
+    RGB(u32, u32, u32),
+}
+
+fn destruct_enums(color: Color) -> String {
+    match color {
+        Red => String::from("Red"),
+        Blue => String::from("Blue"),
+        Green => String::from("Green"),
+        RGB(r, g, b) => format!("Red: {}, Green: {}, Blue: {}", r, g, b),
+    }
+}
+
+struct Foo {
+    x: (u32, u32),
+    y: u32,
+}
+
+fn destruct_structs(foo: Foo) -> String {
+    match foo {
+        Foo { x: (1, b), y } => format!("First of x is 1, b = {}, y = {}", b, y),
+        Foo { y: 2, x: x } => format!("y is 2, x = {:?}", x),
+        // Use ".." to ignore some fields
+        Foo { y, .. } => format!("y = {}, and we don't care about x", y),
+    }
+}
+
+// A match guard can be added to filter the arm.
+fn use_guard(pair: (i32, i32)) -> &'static str {
+    match pair {
+        (x, y) if x == y => "These are twins",
+        (x, y) if x + y == 0 => "Antimatter, kaboom!",
+        (x, _) if x % 2 == 1 => "The first one is odd",
+        _ => "No correlation",
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::pattern_matching::get_number_value;
+    use crate::pattern_matching::{
+        destruct_enums, destruct_structs, destruct_tuples, get_number_value, use_guard, Color, Foo,
+    };
 
     #[test]
     fn test_get_number_value() {
@@ -57,5 +109,47 @@ mod tests {
         assert_eq!("Teen", get_number_value(13));
         assert_eq!("Teen", get_number_value(19));
         assert_eq!("Aren't special", get_number_value(190));
+    }
+
+    #[test]
+    fn test_destruct_tuples() {
+        assert_eq!("First is 0 and y is 3", destruct_tuples((0, 3)));
+        assert_eq!("x is 3 and last is 0", destruct_tuples((3, 0)));
+        assert_eq!("It doesn't matter what they are", destruct_tuples((30, 10)));
+    }
+
+    #[test]
+    fn test_destruct_enums() {
+        assert_eq!("Red", destruct_enums(Color::Red));
+        assert_eq!("Green", destruct_enums(Color::Green));
+        assert_eq!("Blue", destruct_enums(Color::Blue));
+        assert_eq!(
+            "Red: 100, Green: 200, Blue: 255",
+            destruct_enums(Color::RGB(100, 200, 255))
+        );
+    }
+
+    #[test]
+    fn test_destruct_structs() {
+        assert_eq!(
+            String::from("First of x is 1, b = 2, y = 3"),
+            destruct_structs(Foo { x: (1, 2), y: 3 })
+        );
+        assert_eq!(
+            String::from("y is 2, x = (10, 2)"),
+            destruct_structs(Foo { x: (10, 2), y: 2 })
+        );
+        assert_eq!(
+            String::from("y = 5, and we don't care about x"),
+            destruct_structs(Foo { x: (10, 2), y: 5 })
+        );
+    }
+
+    #[test]
+    fn test_use_guard() {
+        assert_eq!(use_guard((1, 1)), "These are twins");
+        assert_eq!(use_guard((1, -1)), "Antimatter, kaboom!");
+        assert_eq!(use_guard((3, 4)), "The first one is odd");
+        assert_eq!(use_guard((6, 7)), "No correlation");
     }
 }
