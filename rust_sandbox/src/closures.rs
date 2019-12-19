@@ -113,8 +113,77 @@ fn move_and_take_ownership() {
     assert!(equal_to_x(y));
 }
 
+/// When a function takes a closure as an input parameter, the closure's complete type
+/// must be annotated using one of a few traits. In order of decreasing restriction,
+/// they are:
+//
+//  1.  Fn: the closure captures by reference (&T)
+//  2.  FnMut: the closure captures by mutable reference (&mut T)
+//  3.  FnOnce: the closure captures by value (T)
+fn apply<F>(f: F)
+where
+    F: FnOnce(),
+{
+    f();
+}
+
+fn apply2<F>(f: F)
+where
+    F: Fn(),
+{
+    f();
+}
+
+fn apply_to_3<F>(f: F) -> i32
+where
+    F: Fn(i32) -> i32,
+{
+    f(3)
+}
+
+/// On a variable-by-variable basis, the compiler will capture variables in the least restrictive
+/// manner possible.
+///
+/// For instance, consider a parameter annotated as FnOnce. This specifies that the closure may
+/// capture by &T, &mut T, or T, but the compiler will ultimately choose based on how the captured
+/// variables are used in the closure.
+///
+/// This is because if a move is possible, then any type of borrow should also be possible. Note
+/// that the reverse is not true. If the parameter is annotated as Fn, then capturing variables by
+/// &mut T or T are not allowed.
+
+// Even if "apply" takes a FnOnce, you can pass "diary" to it. "diary" is a Fn.
+fn test_apply_1() {
+    let greeting = "hello";
+    let diary = || {
+        println!("I said {}", greeting);
+    };
+    apply(diary);
+}
+
+// Even if "apply" takes a FnOnce, you can pass "diary" to it. "diary" is a FnMut.
+fn test_apply_2() {
+    let mut greeting = String::from("hello");
+    let diary = || {
+        greeting.push_str(", world");
+        println!("I said {}", greeting);
+    };
+    apply(diary);
+}
+
+fn test_apply_3() {
+    let mut greeting = String::from("hello");
+    let diary = || {
+        greeting.push_str(", world");
+        println!("I said {}", greeting);
+    };
+    // This line doesn't compile. "apply2" expects a Fn but "diary" is a FnMut.
+    // apply2(diary);
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
     use std::mem;
 
     #[test]
@@ -189,5 +258,11 @@ mod tests {
         assert_eq!(false, contains(&10));
         // This line doesn't compile because "haystack" has been moved to the closure.
         // haystack.push(4);
+    }
+
+    #[test]
+    fn test_apply() {
+        test_apply_1();
+        test_apply_2();
     }
 }
