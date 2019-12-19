@@ -1,8 +1,3 @@
-// This declaration will look for a file named "foo.rs" or "foo/mod.rs" and
-// insert its contents inside a module named `foo` under this scope. Hence
-// you can call functions like `foo::answer()` in this file.
-pub mod foo;
-
 pub mod arrays;
 pub mod casting;
 pub mod closures;
@@ -14,6 +9,7 @@ pub mod diverging_functions;
 pub mod enums;
 pub mod exercise;
 pub mod expressions;
+pub mod foo;
 pub mod functions;
 pub mod generics;
 pub mod guess_my_number;
@@ -44,7 +40,7 @@ pub mod variables;
 pub mod vectors;
 pub mod while_let;
 
-// use foo::answer;
+use foo::answer;
 
 fn main() {
     // println!("foo::answer: {}", foo::answer());
