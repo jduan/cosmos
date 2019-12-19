@@ -181,6 +181,42 @@ fn test_apply_3() {
     // apply2(diary);
 }
 
+/// You can also return closures from functions. However, anonymous closure types are, by definition, unknown, so we have to use impl Trait to return them.
+///
+/// The valid traits for returns are slightly different than before:
+//
+//    Fn: normal
+//    FnMut: normal
+//    FnOnce: There are some unusual things at play here, so the FnBox type is currently needed, and is unstable. This is expected to change in the future.
+
+fn create_fn() -> impl Fn() {
+    let text = String::from("Fn");
+    let mut count = 0;
+    move || {
+        // This line doesn't compile.
+        // Cannot assign to `count`, as it is a captured variable in a `Fn` closure.
+        // count += 1;
+        println!("calling fn #{}", count);
+        println!("This is a {}", text)
+    }
+}
+
+fn create_fn_mut() -> impl FnMut() {
+    let mut text = String::from("FnMut");
+    let mut count = 0;
+    move || {
+        count += 1;
+        println!("calling fn_mut #{}", count);
+        text.push_str(" hello");
+        println!("This is a {}", text)
+    }
+}
+
+fn create_fn_once() -> impl FnOnce() {
+    let text = String::from("FnOnce");
+    move || println!("This is a {}", text)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -264,5 +300,19 @@ mod tests {
     fn test_apply() {
         test_apply_1();
         test_apply_2();
+    }
+
+    #[test]
+    fn functions_that_return_closures() {
+        let fn_plain = create_fn();
+        fn_plain();
+        fn_plain();
+        let mut fn_mut = create_fn_mut();
+        fn_mut();
+        fn_mut();
+        let fn_once = create_fn_once();
+        fn_once();
+        // This line doesn't compile because you can't call fn_once more than once!
+        // fn_once();
     }
 }
