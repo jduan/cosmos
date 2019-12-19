@@ -3,7 +3,7 @@
 //    Tuple structs, which are, basically, named tuples.
 //    The classic C structs
 //    Unit structs, which are field-less, are useful for generics.
-
+use float_cmp::approx_eq;
 /// A tuple struct
 pub struct Pair(i32, f32);
 
