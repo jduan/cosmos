@@ -29,6 +29,7 @@ pub mod lifetime;
 pub mod literals;
 pub mod method_syntax;
 pub mod misc;
+pub mod modules;
 pub mod options;
 pub mod ownership;
 pub mod pattern_matching;
