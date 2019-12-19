@@ -14,6 +14,7 @@ pub mod constants;
 pub mod control_flow;
 pub mod conversions;
 pub mod debug_trait;
+pub mod diverging_functions;
 pub mod enums;
 pub mod exercise;
 pub mod expressions;
