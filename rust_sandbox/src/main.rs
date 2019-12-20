@@ -1,4 +1,5 @@
 pub mod arrays;
+pub mod associate_types;
 pub mod casting;
 pub mod closures;
 pub mod constants;
