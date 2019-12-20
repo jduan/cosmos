@@ -260,3 +260,87 @@ fn this_works_now() {
     // This works because the call of "print" above copies label.
     println!("My label number is {}", label.number);
 }
+
+struct Book {
+    // `&'static str` is a reference to a string allocated in read only memory
+    author: &'static str,
+    title: &'static str,
+    year: u32,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_mutability() {
+        let immutable_book = Book {
+            author: "Douglas John",
+            title: "Go Home",
+            year: 1981,
+        };
+
+        assert_eq!(1981, immutable_book.year);
+
+        let mut mutable_book = immutable_book;
+        mutable_book.year = 2000;
+
+        //        assert_eq!(1981, immutable_book.year);
+        assert_eq!(2000, mutable_book.year);
+    }
+
+    #[test]
+    /// When data is immutably borrowed, it also freezes. Frozen data can't be modified
+    /// via the original object until all references to it go out of scope.
+    fn test_freezing() {
+        let mut num = 7i32;
+        {
+            let larger_integer = &num;
+            // Can't change num because it's being immutably borrowed.
+            // num = 50;
+
+            assert_eq!(7, *larger_integer);
+
+            // Now you can change "num"
+            num = 50;
+            assert_eq!(50, num);
+        }
+    }
+
+    #[test]
+    fn test_aliasing() {
+        struct Point {
+            x: i32,
+            y: i32,
+            z: i32,
+        }
+        let mut point = Point { x: 0, y: 0, z: 0 };
+        let borrowed_point = &point;
+        let another_borrow = &point;
+        // Data can be accessed via the references
+        assert_eq!(0, borrowed_point.x);
+        assert_eq!(0, another_borrow.y);
+        // Data can be accessed via the original owner as well
+        assert_eq!(0, point.z);
+
+        // The immutable references are no longer used for the rest of the code so
+        // it is possible to reborrow with a mutable reference.
+        let mutable_borrow = &mut point;
+        mutable_borrow.x = 5;
+        mutable_borrow.y = 2;
+        mutable_borrow.z = 1;
+
+        // Can't borrow because point is currently being borrowed as mutable.
+        //        let y = &point.y;
+
+        // Can't print because `println!` takes an immutable reference.
+        //        println!("Point.z is {}", point.z);
+
+        assert_eq!(5, mutable_borrow.x);
+
+        // The mutable reference is no longer used for the rest of the code so it
+        // is possible to reborrow.
+        let new_borrowed_point = &point;
+        assert_eq!(2, new_borrowed_point.y);
+    }
+}
