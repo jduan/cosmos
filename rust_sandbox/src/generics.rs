@@ -42,33 +42,10 @@ enum MyOption<T> {
     None,
 }
 
-// redefinition of std Option
+// redefinition of std Result
 enum MyResult<T, U> {
     Ok(T),
     Err(U),
-}
-
-pub fn run() {
-    let number_list = vec![34, 50, 25, 100, 65];
-    println!("largest number is {}", find_largest_number(&number_list));
-
-    let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
-    println!("largest number is {}", find_largest_number(&number_list));
-
-    let char_list = vec!['y', 'm', 'a', 'q'];
-    println!(
-        "largest char is {}",
-        find_largest_number_generic(&char_list)
-    );
-
-    let integer = Point { x: 5, y: 10 };
-    println!("integer.x = {}", integer.x);
-    let float = Point { x: 1.0, y: 4.0 };
-
-    let integer_and_float = Point2 { x: 5, y: 4.0 };
-    let p2 = Point2 { x: "Hello", y: 'c' };
-    let p3 = integer_and_float.mixup(p2);
-    println!("p3 is {:?}", p3);
 }
 
 fn find_largest_number(numbers: &[i32]) -> i32 {
@@ -91,4 +68,31 @@ fn find_largest_number_generic<T: PartialOrd + Copy>(list: &[T]) -> T {
     }
 
     largest
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_struct() {
+        let number_list = vec![34, 50, 25, 100, 65];
+        assert_eq!(100, find_largest_number(&number_list));
+
+        let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
+        assert_eq!(6000, find_largest_number(&number_list));
+
+        let char_list = vec!['y', 'm', 'a', 'q'];
+        assert_eq!('y', find_largest_number_generic(&char_list));
+
+        let integer = Point { x: 5, y: 10 };
+        assert_eq!(5, integer.x);
+        let float = Point { x: 1.0, y: 4.0 };
+
+        let integer_and_float = Point2 { x: 5, y: 4.0 };
+        let p2 = Point2 { x: "Hello", y: 'c' };
+        let p3 = integer_and_float.mixup(p2);
+        assert_eq!(5, p3.x);
+        assert_eq!('c', p3.y);
+    }
 }
