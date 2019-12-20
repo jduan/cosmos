@@ -26,6 +26,7 @@ pub mod modules;
 pub mod options;
 pub mod ownership;
 pub mod pattern_matching;
+pub mod phantom_types;
 pub mod print_things;
 pub mod recover_from_errors;
 pub mod references;
