@@ -166,7 +166,8 @@ fn drop_early() {
     // Rust to drop a value before the end of its scope. One example is when using smart pointers
     // to manage "locks". You might want to release the lock so other code in the same scope can
     // acquire the lock.
-    drop(c);
+    std::mem::drop(c);
+
     println!("CustomSmartPointer dropped before the end of the function.");
 }
 
@@ -236,6 +237,26 @@ where
     }
 }
 
+#[derive(Debug)]
+enum List3 {
+    Cons3(Rc<RefCell<i32>>, Rc<List3>),
+    Nil3,
+}
+
+fn rc_and_refcell() {
+    let value = Rc::new(RefCell::new(5));
+    let a = Rc::new(Cons3(Rc::clone(&value), Rc::new(Nil3)));
+
+    let b = Cons3(Rc::new(RefCell::new(6)), Rc::clone(&a));
+    let c = Cons3(Rc::new(RefCell::new(10)), Rc::clone(&a));
+
+    *value.borrow_mut() += 10;
+
+    println!("a after = {:?}", a);
+    println!("b after = {:?}", b);
+    println!("c after = {:?}", c);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -273,24 +294,10 @@ mod tests {
             "Warning: You've used up over 75% of your quota!"
         );
     }
-}
 
-#[derive(Debug)]
-enum List3 {
-    Cons3(Rc<RefCell<i32>>, Rc<List3>),
-    Nil3,
-}
-
-fn rc_and_refcell() {
-    let value = Rc::new(RefCell::new(5));
-    let a = Rc::new(Cons3(Rc::clone(&value), Rc::new(Nil3)));
-
-    let b = Cons3(Rc::new(RefCell::new(6)), Rc::clone(&a));
-    let c = Cons3(Rc::new(RefCell::new(10)), Rc::clone(&a));
-
-    *value.borrow_mut() += 10;
-
-    println!("a after = {:?}", a);
-    println!("b after = {:?}", b);
-    println!("c after = {:?}", c);
+    #[test]
+    fn test_drop_trait() {
+        drop_trait();
+        drop_early();
+    }
 }
