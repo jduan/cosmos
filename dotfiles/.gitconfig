@@ -125,16 +125,10 @@
     usewatchman = true
 	precomposeunicode = true
 	sparseCheckout = true
-	pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
-	ui = true
+    ui = auto
 [color "diff"]
-	meta = 11
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+    meta = yellow
 [github]
     user = jduan
 [push]
@@ -154,7 +148,6 @@
     renames = true
     renameLimit = 17924
     noprefix = true
-	colorMoved = zebra
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path =
@@ -165,6 +158,12 @@
     postBuffer = 524288000
 [gc]
     auto = 0
+[pager]
+    log = diff-highlight | less
+    show = diff-highlight | less
+    diff = diff-highlight | less
+[interactive]
+    diffFilter = diff-highlight
 [rerere]
 	enabled = true
 [status]
