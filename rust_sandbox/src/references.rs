@@ -358,3 +358,16 @@ fn share_vs_mutate2() {
     // heap. That would render the other "&wave" pointer dangling!
     // extend(&mut wave, &wave);
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn mutablity_can_be_changed_when_ownership_is_transferred() {
+        let immutable_box = Box::new(5);
+        assert_eq!(5, *immutable_box);
+
+        let mut mutable_box = immutable_box;
+        *mutable_box = 4;
+        assert_eq!(4, *mutable_box);
+    }
+}
