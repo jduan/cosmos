@@ -6,6 +6,10 @@ trait Person {
     fn name(&self) -> String;
 }
 
+trait Race {
+    fn name(&self) -> String;
+}
+
 trait Student: Person {
     fn university(&self) -> String;
 }
@@ -32,9 +36,24 @@ impl Student for CornellStudent {
     }
 }
 
+/// A type can implement many different traits. What if two traits both require the same name?
+/// For example, many traits might have a method named get(). They might even have different
+/// return types!
+///
+/// Good news: because each trait implementation gets its own impl block, it's clear which
+/// trait's get method you're implementing.
+///
+/// What about when it comes time to call those methods? To disambiguate between them, we
+/// have to use "Fully Qualified Syntax". See the "disambiguate_traits" test below.
 impl Person for CornellStudent {
     fn name(&self) -> String {
         String::from("John Jones")
+    }
+}
+
+impl Race for CornellStudent {
+    fn name(&self) -> String {
+        String::from("Asian")
     }
 }
 
@@ -55,7 +74,7 @@ fn comp_sci_student_greeting(student: &dyn CompSciStudent) -> String {
 
 #[cfg(test)]
 mod tests {
-    use crate::supertrait::{comp_sci_student_greeting, CornellStudent};
+    use super::*;
 
     #[test]
     fn test_supertrait() {
@@ -64,5 +83,15 @@ mod tests {
             "My name is John Jones and I attend Cornell. My Git username is jjones",
             comp_sci_student_greeting(&john)
         );
+    }
+
+    #[test]
+    fn disambiguate_traits() {
+        let john = CornellStudent {};
+        let race_name = <CornellStudent as Race>::name(&john);
+        assert_eq!(String::from("Asian"), race_name);
+
+        let person_name = <CornellStudent as Person>::name(&john);
+        assert_eq!(String::from("John Jones"), person_name);
     }
 }
