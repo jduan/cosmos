@@ -27,6 +27,27 @@ impl Iterator for Counter {
     }
 }
 
+struct Fibonacci {
+    curr: u32,
+    next: u32,
+}
+
+impl Fibonacci {
+    fn new() -> Fibonacci {
+        Fibonacci { curr: 0, next: 1 }
+    }
+}
+impl Iterator for Fibonacci {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<u32> {
+        let new_next = self.curr + self.next;
+        self.curr = self.next;
+        self.next = new_next;
+        Some(self.curr)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -134,5 +155,24 @@ mod tests {
             .sum();
         println!("The sum is {}", sum);
         assert_eq!(18, sum);
+    }
+
+    #[test]
+    fn test_fibonacci() {
+        let mut fib = Fibonacci::new();
+        assert_eq!(Some(1), fib.next());
+        assert_eq!(Some(1), fib.next());
+        assert_eq!(Some(2), fib.next());
+        assert_eq!(Some(3), fib.next());
+        assert_eq!(Some(5), fib.next());
+    }
+
+    #[test]
+    fn iterate_arrays() {
+        let array = [1u32, 3, 3, 7];
+        // The `iter` method produces an `Iterator` over an array/slice.
+        for n in array.iter() {
+            println!("next element of array is {}", n);
+        }
     }
 }
