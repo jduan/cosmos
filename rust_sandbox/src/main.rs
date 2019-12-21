@@ -24,6 +24,7 @@ pub mod interior_mutability;
 pub mod iterators;
 pub mod lifetime;
 pub mod literals;
+pub mod macros;
 pub mod method_syntax;
 pub mod misc;
 pub mod modules;
