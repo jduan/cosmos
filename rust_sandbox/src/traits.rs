@@ -337,6 +337,65 @@ trait Creature: Display {
 // impl Display for Broom {}
 // impl Creature for Broom {}
 
+trait Animal {
+    // Static method: Self refers to the implementor type
+    fn new(name: &'static str) -> Self;
+
+    // Instance methods
+    fn name(&self) -> &'static str;
+    fn noise(&self) -> &'static str;
+
+    // Traits can provide default implementation.
+    fn talk(&self) {
+        println!("{} says {}", self.name(), self.noise());
+    }
+}
+
+struct Sheep {
+    naked: bool,
+    name: &'static str,
+}
+
+impl Sheep {
+    fn is_naked(&self) -> bool {
+        self.naked
+    }
+
+    fn shear(&mut self) {
+        if self.is_naked() {
+            // You can call the trait method "name()" here because Sheep implements
+            // the Animal trait.
+            println!("{} is already naked...", self.name());
+        } else {
+            println!("{} gets a haircut!", self.name);
+            self.naked = true;
+        }
+    }
+}
+
+impl Animal for Sheep {
+    fn new(name: &'static str) -> Self {
+        Self { naked: false, name }
+    }
+
+    fn name(&self) -> &'static str {
+        self.name
+    }
+
+    fn noise(&self) -> &'static str {
+        if self.is_naked() {
+            "baaaaaa?"
+        } else {
+            "baaaaaa!"
+        }
+    }
+
+    // Default implementation can be overridden.
+    fn talk(&self) {
+        println!("{} pauses briefly... {}", self.name(), self.noise());
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -416,5 +475,13 @@ mod tests {
         ];
         let top10 = top_ten(&names);
         assert_eq!(vec!["Oakland", "San Francisco", "Alameda"], top10);
+    }
+
+    #[test]
+    fn test_sheep() {
+        let mut sheep = Sheep::new("Dolly");
+        sheep.talk();
+        sheep.shear();
+        sheep.talk();
     }
 }
