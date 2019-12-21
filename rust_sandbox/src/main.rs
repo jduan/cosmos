@@ -1,3 +1,5 @@
+#![feature(never_type)]
+
 // declare modules
 pub mod arrays;
 pub mod associate_types;
@@ -37,6 +39,7 @@ pub mod slice_type;
 pub mod smart_pointers;
 pub mod strings;
 pub mod structs;
+pub mod supertrait;
 pub mod threads;
 pub mod traits;
 pub mod type_alias;
