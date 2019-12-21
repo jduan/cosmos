@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use std::fmt::Display;
 
 pub fn run() {
@@ -171,9 +172,45 @@ impl Owner {
     }
 }
 
+struct Borrowed<'a> {
+    x: &'a i32,
+}
+
+/// Annotation of lifetimes in trait methods are similar to functions.
+impl<'a> Default for Borrowed<'a> {
+    fn default() -> Self {
+        Self { x: &10 }
+    }
+}
+
+/// A longer lifetime can be coerced into a shorter one so that it works inside a scope it normally wouldn't work in.
+fn multiply<'a>(first: &'a i32, second: &'a i32) -> i32 {
+    first * second
+}
+
+/// <'a: 'b, 'b>` reads as lifetime `'a` is at least as long as `'b`.
+/// Here, we take in an `&'a i32` and return a `&'b i32` as a result of coercion.
+fn choose_first<'a: 'b, 'b>(first: &'a i32, second: &'b i32) -> &'b i32 {
+    first
+}
+
+/// A 'static lifetime is the longest possible lifetime, and lasts for the lifetime of
+/// the running program. A 'static lifetime may also be coerced to a shorter lifetime.
+/// There are two ways to make a variable with 'static lifetime, and both are stored
+/// in the read-only memory of the binary:
+///
+///    Make a constant with the static declaration.
+///    Make a string literal which has type: &'static str.
+static NUM: i32 = 18;
+
+/// Returns a reference to `NUM` where its `'static` lifetime is coerced to that of the input argument.
+fn coerce_static<'a>(_: &'a i32) -> &'a i32 {
+    &NUM
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::lifetime::{failed_borrow, pass_x, print_refs, Excerpt, Owner};
+    use super::*;
 
     #[test]
     fn explicit_lifetime_annotation() {
@@ -212,5 +249,52 @@ mod tests {
         let announcement = String::from("Storm is coming.");
         let part = excerpt.announce_and_return_part(&announcement);
         assert_eq!(part, "Call me Ishmael");
+    }
+
+    #[test]
+    fn annotate_trait_methods() {
+        let borrowed = Borrowed::default();
+        assert_eq!(10, *borrowed.x);
+    }
+
+    #[test]
+    fn lifetime_coercion() {
+        let first = 2; // longer lifetime
+        let result: &i32;
+        {
+            let second = 3; // shorter lifetime
+            assert_eq!(6, multiply(&first, &second));
+            result = choose_first(&first, &second);
+            assert_eq!(&2, result);
+        }
+        // You can't access "result" here because its lifetime is the same as second's lifetime
+        // which doesn't live long enough.
+        //        assert_eq!(&2, result);
+    }
+
+    #[test]
+    fn static_lifetime() {
+        {
+            // Make a `string` literal and print it:
+            let static_string = "I'm in read-only memory";
+            println!("static_string: {}", static_string);
+
+            // When `static_string` goes out of scope, the reference
+            // can no longer be used, but the data remains in the binary.
+        }
+
+        let coerced_static: &i32;
+        {
+            // Make an integer to use for `coerce_static`:
+            let lifetime_num = 9;
+
+            // Coerce `NUM` to lifetime of `lifetime_num`:
+            coerced_static = coerce_static(&lifetime_num);
+
+            // If you move this line outside of this block, it won't compile.
+            println!("coerced_static: {}", coerced_static);
+        }
+
+        println!("NUM: {} stays accessible!", NUM);
     }
 }
