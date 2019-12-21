@@ -338,9 +338,6 @@ trait Creature: Display {
 // impl Creature for Broom {}
 
 trait Animal {
-    // Static method: Self refers to the implementor type
-    fn new(name: &'static str) -> Self;
-
     // Instance methods
     fn name(&self) -> &'static str;
     fn noise(&self) -> &'static str;
@@ -374,10 +371,6 @@ impl Sheep {
 }
 
 impl Animal for Sheep {
-    fn new(name: &'static str) -> Self {
-        Self { naked: false, name }
-    }
-
     fn name(&self) -> &'static str {
         self.name
     }
@@ -393,6 +386,55 @@ impl Animal for Sheep {
     // Default implementation can be overridden.
     fn talk(&self) {
         println!("{} pauses briefly... {}", self.name(), self.noise());
+    }
+}
+
+/// The compiler is capable of providing basic implementations for some traits via
+/// the #[derive] attribute. The following is a list of derivable traits:
+///
+/// * Comparison traits: Eq, PartialEq, Ord, PartialOrd.
+/// * Clone: to create T from &T via a copy.
+/// * Copy: to give a type 'copy semantics' instead of 'move semantics'.
+/// * Hash: to compute a hash from &T.
+/// * Default: to create an empty instance of a data type.
+/// * Debug: to format a value using the {:?} formatter.
+
+/// Returning Traits with "dyn"
+///
+/// The Rust compiler needs to know how much space every function's return type requires. This
+/// means all your functions have to return a concrete type. Unlike other languages, if you have a
+/// trait like Animal, you can't write a function that returns Animal, because its different
+/// implementations will need different amounts of memory.
+///
+/// However, there's an easy workaround. Instead of returning a trait object directly, our
+/// functions return a Box which contains some Animal. A box is just a reference to some memory in
+/// the heap. Because a reference has a statically-known size, and the compiler can guarantee it
+/// points to a heap-allocated Animal, we can return a trait from our function!
+///
+/// Rust tries to be as explicit as possible whenever it allocates memory on the heap. So if your
+/// function returns a pointer-to-trait-on-heap in this way, you need to write the return type with
+/// the dyn keyword, e.g. Box<dyn Animal>.
+
+struct Cow {}
+
+impl Animal for Cow {
+    fn name(&self) -> &'static str {
+        "Dave"
+    }
+
+    fn noise(&self) -> &'static str {
+        "Moo"
+    }
+}
+
+fn random_animal(random_number: f64) -> Box<dyn Animal> {
+    if random_number < 0.5 {
+        Box::new(Sheep {
+            name: "Bob",
+            naked: true,
+        })
+    } else {
+        Box::new(Cow {})
     }
 }
 
@@ -479,9 +521,18 @@ mod tests {
 
     #[test]
     fn test_sheep() {
-        let mut sheep = Sheep::new("Dolly");
+        let mut sheep = Sheep {
+            naked: true,
+            name: "Dolly",
+        };
         sheep.talk();
         sheep.shear();
         sheep.talk();
+    }
+
+    #[test]
+    fn return_trait_object() {
+        let animal = random_animal(0.3);
+        assert_eq!("baaaaaa?", animal.noise());
     }
 }
