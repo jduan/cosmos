@@ -8,7 +8,6 @@ pub fn run() {
     let result = longest(s1.as_str(), s2);
     println!("The longest string is '{}'", result);
     calling_longest1();
-    get_excerpt();
 }
 
 // fn dangling_references() {
@@ -95,23 +94,12 @@ fn calling_longest1() {
 //     println!("The longest string is '{}'", result);
 // }
 
-// lifetime annotations in struct
+// lifetime annotations in struct are similar to functions/methods
 #[derive(Debug)]
 // This lifetype annotation means an instance of `Excerpt` can't outlive the
 // reference it holds in its "part" field.
 struct Excerpt<'a> {
     part: &'a str,
-}
-
-// This code compiles because the Excerpt instance i and "part" don't outlive novel which is the
-// owner of the string object.
-fn get_excerpt() {
-    let novel = String::from("Call me Ishmael. Some years ago...");
-    let first_sentence: &str = novel.split('.').next().expect("Could not find a '.'");
-    let i = Excerpt {
-        part: first_sentence,
-    };
-    println!("First sentence is {:?}", i);
 }
 
 impl<'a> Excerpt<'a> {
@@ -185,7 +173,7 @@ impl Owner {
 
 #[cfg(test)]
 mod tests {
-    use crate::lifetime::{failed_borrow, pass_x, print_refs, Owner};
+    use crate::lifetime::{failed_borrow, pass_x, print_refs, Excerpt, Owner};
 
     #[test]
     fn explicit_lifetime_annotation() {
@@ -210,5 +198,19 @@ mod tests {
         owner.add_one();
         owner.print();
         assert_eq!(100, owner.0);
+    }
+
+    #[test]
+    fn annotate_structs() {
+        let novel = String::from("Call me Ishmael. Some years ago...");
+        let first_sentence: &str = novel.split('.').next().expect("Could not find a '.'");
+        let excerpt = Excerpt {
+            part: first_sentence,
+        };
+        println!("First sentence is {:?}", excerpt);
+
+        let announcement = String::from("Storm is coming.");
+        let part = excerpt.announce_and_return_part(&announcement);
+        assert_eq!(part, "Call me Ishmael");
     }
 }
