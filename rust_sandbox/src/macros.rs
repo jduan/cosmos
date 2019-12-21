@@ -42,6 +42,32 @@ macro_rules! print_result {
     };
 }
 
+/// Overload
+///
+/// Macros can be overloaded to accept different combinations of arguments. In that regard,
+/// macro_rules! can work similarly to a match block.
+macro_rules! test {
+    // Arguments don't need to be separated by a comma. Any template can be used!
+    ($left:expr; and $right:expr) => {{
+        println!(
+            "{:?} and {:?} is {:?}",
+            stringify!($left),
+            stringify!($right),
+            $left && $right
+        );
+        $left && $right
+    }};
+    ($left:expr; or $right:expr) => {{
+        println!(
+            "{:?} or {:?} is {:?}",
+            stringify!($left),
+            stringify!($right),
+            $left || $right
+        );
+        $left || $right
+    }};
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -58,5 +84,11 @@ mod tests {
             let x = 7u32;
             x * x + 2 * x - 1
         });
+    }
+
+    #[test]
+    fn test_overload() {
+        assert_eq!(false, test!(1 + 1 == 2; and 2 + 2 == 5));
+        assert_eq!(true, test!(1 + 1 == 2; or 2 + 2 == 5));
     }
 }
