@@ -343,4 +343,50 @@ mod tests {
         let new_borrowed_point = &point;
         assert_eq!(2, new_borrowed_point.y);
     }
+
+    #[test]
+    fn ref_pattern() {
+        #[derive(Clone, Copy)]
+        struct Point {
+            x: i32,
+            y: i32,
+        }
+
+        let c = 'Q';
+
+        // both ref_c1 and ref_c2 are references to c
+        let ref ref_c1 = c;
+        let ref_c2 = &c;
+        assert_eq!(*ref_c1, *ref_c2);
+
+        let point = Point { x: 0, y: 0 };
+        let copy_of_x = {
+            let Point {
+                x: ref ref_to_x,
+                y: _,
+            } = point;
+            // Return a copy of the "x" field
+            *ref_to_x
+        };
+        assert_eq!(0, copy_of_x);
+
+        // a mutable copy of point
+        let mut mutable_point = point;
+        {
+            let Point {
+                x: _,
+                y: ref mut mut_ref_to_y,
+            } = mutable_point;
+            *mut_ref_to_y = 1;
+        }
+        assert_eq!(1, mutable_point.y);
+
+        // A mutable tuple that includes a pointer
+        let mut mutable_tuple = (Box::new(5u32), 3u32);
+        {
+            let (_, ref mut last) = mutable_tuple;
+            *last = 10u32;
+        }
+        assert_eq!(10, mutable_tuple.1);
+    }
 }
