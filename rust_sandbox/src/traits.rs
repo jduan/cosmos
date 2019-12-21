@@ -93,6 +93,7 @@ use std::fmt::Debug;
 use std::hash::Hash;
 use std::io;
 use std::io::Write;
+use std::ops::{Add, Mul};
 
 pub fn run() {
     let tweet = Tweet {
@@ -438,6 +439,26 @@ fn random_animal(random_number: f64) -> Box<dyn Animal> {
     }
 }
 
+/// Operator overloading
+/// https://doc.rust-lang.org/core/ops/
+/// In Rust, many of the operators can be overloaded via traits. That is, some operators can be used to accomplish different tasks based on their input arguments. This is possible because operators are syntactic sugar for method calls. For example, the + operator in a + b calls the add method (as in a.add(b)). This add method is part of the Add trait. Hence, the + operator can be used by any implementor of the Add trait.
+
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Mul<u32> for Rectangle {
+    type Output = Self;
+
+    fn mul(self, times: u32) -> Self::Output {
+        Rectangle {
+            width: self.width * times,
+            height: self.height * times,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -534,5 +555,16 @@ mod tests {
     fn return_trait_object() {
         let animal = random_animal(0.3);
         assert_eq!("baaaaaa?", animal.noise());
+    }
+
+    #[test]
+    fn operator_overloading() {
+        let rect = Rectangle {
+            width: 10,
+            height: 20,
+        };
+        let rect2 = rect * 10;
+        assert_eq!(100, rect2.width);
+        assert_eq!(200, rect2.height);
     }
 }
