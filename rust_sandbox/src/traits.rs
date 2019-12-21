@@ -459,6 +459,25 @@ impl Mul<u32> for Rectangle {
     }
 }
 
+/// impl Trait
+/// If your function returns a type that implements MyTrait, you can write its return
+/// type as -> impl MyTrait. This can help simplify your type signatures quite a lot!
+
+fn combine_vecs(v: Vec<i32>, u: Vec<i32>) -> impl Iterator<Item = i32> {
+    // You could also write the following which is a lot more complicated.
+    //    -> std::iter::Chain<std::vec::IntoIter<i32>, std::vec::IntoIter<i32>> {
+    v.into_iter().chain(u.into_iter())
+}
+
+/// More importantly, some Rust types can't be written out. For example, every
+/// closure has its own unnamed concrete type. Before impl Trait syntax, you had
+/// to allocate on the heap in order to return a closure. But now you can do it
+/// all statically, like this:
+fn make_adder(y: i32) -> impl Fn(i32) -> i32 {
+    let closure = move |x: i32| x + y;
+    closure
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -566,5 +585,24 @@ mod tests {
         let rect2 = rect * 10;
         assert_eq!(100, rect2.width);
         assert_eq!(200, rect2.height);
+    }
+
+    #[test]
+    fn test_combine_vecs() {
+        let v1 = vec![1, 2, 3];
+        let v2 = vec![4, 5];
+        let mut v3 = combine_vecs(v1, v2);
+        assert_eq!(Some(1), v3.next());
+        assert_eq!(Some(2), v3.next());
+        assert_eq!(Some(3), v3.next());
+        assert_eq!(Some(4), v3.next());
+        assert_eq!(Some(5), v3.next());
+        assert_eq!(None, v3.next());
+    }
+
+    #[test]
+    fn test_make_adder() {
+        let add_one = make_adder(1);
+        assert_eq!(2, add_one(1));
     }
 }
