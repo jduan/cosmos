@@ -141,3 +141,74 @@ where
         y
     }
 }
+
+// Note that the lifetime annotations 'a and 'b can be inferred by Rust
+// based on the elision rules: each parameter that is a reference gets its
+// own lifetime parameter.
+fn print_refs<'a, 'b>(x: &'a i32, y: &'b i32) {
+    println!("x is {} and y is {}", x, y);
+}
+
+fn failed_borrow<'a>() {
+    let x = 12;
+    // This line doesn't compile because "borrowed value doesn't live long enough".
+    // The lifetime 'a can be anything while x only lives as long as this function lives.
+    //    let y: &'a i32 = &x;
+}
+
+fn pass_x<'a, 'b>(x: &'a i32, y: &'b i32) -> &'a i32 {
+    x
+}
+
+// This function is invalid: `'a` must live longer than the function.
+// Here, `&String::from("foo")` would create a `String`, followed by a
+// reference. Then the data is dropped upon exiting the scope, leaving
+// a reference to invalid data to be returned.
+//fn invalid_output<'a>() -> &'a String {
+//    &String::from("foo")
+//}
+
+/// Methods are annotated similarly to functions.
+struct Owner(i32);
+
+impl Owner {
+    // Explicitly annotate lifetimes. This isn't needed due to elision rules.
+    fn add_one<'a>(&'a mut self) {
+        self.0 += 1;
+    }
+
+    // Explicitly annotate lifetimes. This isn't needed due to elision rules.
+    fn print<'a>(&'a self) {
+        println!("Owner is {}", self.0);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::lifetime::{failed_borrow, pass_x, print_refs, Owner};
+
+    #[test]
+    fn explicit_lifetime_annotation() {
+        print_refs(&1, &2);
+
+        // `failed_borrow` contains no references to force `'a` to be
+        // longer than the lifetime of the function, but `'a` is longer.
+        // Because the lifetime is never constrained, it defaults to `'static`.
+        failed_borrow();
+    }
+
+    #[test]
+    fn functions_that_return_refs() {
+        let (x, y) = (1, 2);
+        let ref_x = pass_x(&x, &y);
+        assert_eq!(1, *ref_x);
+    }
+
+    #[test]
+    fn annotate_methods() {
+        let mut owner = Owner(99);
+        owner.add_one();
+        owner.print();
+        assert_eq!(100, owner.0);
+    }
+}
