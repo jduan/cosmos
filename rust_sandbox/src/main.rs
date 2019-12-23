@@ -41,6 +41,7 @@ pub mod smart_pointers;
 pub mod strings;
 pub mod structs;
 pub mod supertrait;
+pub mod template;
 pub mod threads;
 pub mod traits;
 pub mod type_alias;

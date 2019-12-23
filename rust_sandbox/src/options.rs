@@ -1,3 +1,11 @@
+/// You can use the ? operator on Options.  If x is an Option, then evaluating x? will
+/// 1. return the underlying value if x is Some,
+/// 2. otherwise it will terminate whatever function is being executed and return None.
+fn next_birthday(current_age: Option<u8>) -> Option<String> {
+    let next_age: u8 = current_age?;
+    Some(format!("Next year I will be {}", next_age))
+}
+
 pub fn run() {
     let some_number = Some(5);
     let some_string = Some("a string");
@@ -33,5 +41,16 @@ fn placeholder(num: u8) {
         7 => println!("seven"),
         // use _ to match everything else!
         _ => (),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_next_birthday() {
+        let age = None;
+        assert_eq!(None, next_birthday(age));
     }
 }
