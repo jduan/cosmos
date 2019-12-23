@@ -27,6 +27,66 @@ impl Person {
     }
 }
 
+/// match is a valid method for handling Options. However, you may eventually find heavy
+/// usage tedious, especially with operations only valid with an input. In these cases,
+/// combinators can be used to manage control flow in a modular fashion.
+///
+/// Option has a built in method called map(), a combinator for the simple mapping of
+/// Some -> Some and None -> None. Multiple map() calls can be chained together for even
+/// more flexibility.
+#[derive(Debug)]
+enum Food {
+    Apple,
+    Carrot,
+    Potato,
+}
+
+#[derive(Debug)]
+struct Peeled(Food);
+#[derive(Debug)]
+struct Chopped(Food);
+#[derive(Debug)]
+struct Cooked(Food);
+
+// Peeling food. If there isn't any, then return `None`. Otherwise, return the peeled food.
+fn peel(food: Option<Food>) -> Option<Peeled> {
+    match food {
+        Some(food) => Some(Peeled(food)),
+        None => None,
+    }
+}
+
+// Peeling food. If there isn't any, then return `None`. Otherwise, return the peeled food.
+fn chop(food: Option<Peeled>) -> Option<Chopped> {
+    match food {
+        Some(Peeled(food)) => Some(Chopped(food)),
+        None => None,
+    }
+}
+
+// Peeling food. If there isn't any, then return `None`. Otherwise, return the peeled food.
+fn cook(food: Option<Chopped>) -> Option<Cooked> {
+    match food {
+        Some(Chopped(food)) => Some(Cooked(food)),
+        None => None,
+    }
+}
+
+// A function to peel, chop, and cook food all in sequence.
+// We chain multiple uses of `map()` to simplify the code.
+fn process(food: Option<Food>) -> Option<Cooked> {
+    food.map(|food| Peeled(food))
+        .map(|Peeled(food)| Chopped(food))
+        .map(|Chopped(food)| Cooked(food))
+}
+
+fn eat(food: Option<Cooked>) {
+    match food {
+        Some(Cooked(food)) => println!("Mmm. I love {:?}", food),
+        None => println!("Oh no! It wasn't edible."),
+    }
+}
+
 pub fn run() {
     let some_number = Some(5);
     let some_string = Some("a string");
@@ -93,5 +153,20 @@ mod tests {
         };
 
         assert_eq!(61, person.work_phone_area_code().unwrap());
+    }
+
+    #[test]
+    fn test_map_combinators() {
+        let apple = Food::Apple;
+        let carrot = Food::Carrot;
+        let potato = None;
+
+        let cooked_apple = cook(chop(peel(Some(apple))));
+        let cooked_carrot = cook(chop(peel(Some(carrot))));
+        let cooked_potato = cook(chop(peel(potato)));
+
+        eat(cooked_apple);
+        eat(cooked_carrot);
+        eat(cooked_potato);
     }
 }
