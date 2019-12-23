@@ -6,6 +6,27 @@ fn next_birthday(current_age: Option<u8>) -> Option<String> {
     Some(format!("Next year I will be {}", next_age))
 }
 
+/// You can chain many ?s together to make your code much more readable.
+struct Person {
+    job: Option<Job>,
+}
+
+struct Job {
+    phone_number: Option<PhoneNumber>,
+}
+
+struct PhoneNumber {
+    area_code: Option<u8>,
+    number: u32,
+}
+
+impl Person {
+    fn work_phone_area_code(self) -> Option<u8> {
+        // This would need many nested `match` statements without the `?` operator.
+        self.job?.phone_number?.area_code
+    }
+}
+
 pub fn run() {
     let some_number = Some(5);
     let some_string = Some("a string");
@@ -52,5 +73,25 @@ mod tests {
     fn test_next_birthday() {
         let age = None;
         assert_eq!(None, next_birthday(age));
+
+        let age = Some(99u8);
+        assert_eq!(
+            Some(String::from("Next year I will be 99")),
+            next_birthday(age)
+        );
+    }
+
+    #[test]
+    fn test_chain_question_mark_operator() {
+        let person = Person {
+            job: Some(Job {
+                phone_number: Some(PhoneNumber {
+                    area_code: Some(61),
+                    number: 1234567,
+                }),
+            }),
+        };
+
+        assert_eq!(61, person.work_phone_area_code().unwrap());
     }
 }
