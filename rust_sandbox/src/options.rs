@@ -27,6 +27,10 @@ impl Person {
     }
 }
 
+/// Combinators:
+/// 1. map: maps Option to Option (similar to map a function over a collection)
+/// 2. and_then: map a function over an Option but the function itself returns an Option too
+
 /// match is a valid method for handling Options. However, you may eventually find heavy
 /// usage tedious, especially with operations only valid with an input. In these cases,
 /// combinators can be used to manage control flow in a modular fashion.
@@ -84,6 +88,46 @@ fn eat(food: Option<Cooked>) {
     match food {
         Some(Cooked(food)) => println!("Mmm. I love {:?}", food),
         None => println!("Oh no! It wasn't edible."),
+    }
+}
+
+/// map() was described as a chainable way to simplify match statements. However,
+/// using map() on a function that returns an Option<T> results in the nested
+/// Option<Option<T>>. Chaining multiple calls together can then become confusing.
+/// That's where another combinator called and_then(), known in some languages as
+/// flatmap, comes in.
+fn get_shortest(names: Vec<&str>) -> Option<&str> {
+    unimplemented!()
+}
+
+struct JSON {}
+struct User {}
+
+fn find_user_by_name(name: &str) -> Option<JSON> {
+    unimplemented!()
+}
+
+fn json_to_user(json: JSON) -> Option<User> {
+    unimplemented!()
+}
+
+fn get_user_with_shortest_name(names: Vec<&str>) -> Option<User> {
+    get_shortest(names)
+        .and_then(|shortest| find_user_by_name(shortest))
+        .and_then(|user| json_to_user(user))
+}
+
+// This is equivalent to the function above but much more verbose!
+fn get_user_with_shortest_name2(names: Vec<&str>) -> Option<User> {
+    match get_shortest(names) {
+        None => None,
+        Some(name) => match find_user_by_name(name) {
+            None => None,
+            Some(json) => match json_to_user(json) {
+                None => None,
+                Some(user) => Some(user),
+            },
+        },
     }
 }
 
