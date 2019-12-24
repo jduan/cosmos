@@ -49,42 +49,6 @@ pub mod variables;
 pub mod vectors;
 pub mod while_let;
 
-use foo::answer;
-
 fn main() {
-    // println!("foo::answer: {}", foo::answer());
-    // println!("foo::answer: {}", answer());
-    // println!("foo::bar::question: {}", foo::bar::question());
-    // guess_my_number::run();
-    // variables::run()
-    // println!("10 + 5 is {}", functions::add5(10));
-    // control_flow::run();
-    // exercise::run();
-    // ownership::run();
-    // references::run();
-    // slice_type::run();
-    // structs::run();
-    // method_syntax::run();
-    // enums::run();
-    // options::run();
-    // pattern_matching::run();
-    // if_let::run();
-    // vectors::run();
-    // strings::run();
-    // hash_maps::run();
-    // will_panic();
-    // error_handling::run();
-    // generics::run();
-    // traits::run();
-    // lifetime::run();
-    // closures::run();
-    // iterators::run();
-    // smart_pointers::run();
-    // threads::run();
-    sandbox::run();
-}
-
-fn will_panic() {
-    let v = vec![1, 2, 3];
-    v[99];
+    println!("Hello World from Rust!");
 }

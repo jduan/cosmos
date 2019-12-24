@@ -1,56 +1,50 @@
-pub fn run() {
-    let v = build_vector();
-    for e in v {
-        println!("element: {}", e);
+#[derive(Debug, Clone)]
+struct Name {
+    first: String,
+    last: String,
+}
+
+impl Name {
+    fn new(first: &str, last: &str) -> Name {
+        Name {
+            first: first.into(),
+            last: last.into(),
+        }
     }
-    iterate();
-    long_array();
-    cannot_index_strings();
-}
 
-// Given the return type of this function, Rust can infer the type of "mut v".
-fn build_vector() -> Vec<i16> {
-    let mut v = Vec::new();
-    v.push(10);
-    v.push(20);
-    v
-}
-
-fn iterate() {
-    let n = -10;
-    // it's ok even if n is a negative number
-    for i in 0..n {
-        println!("i is {}", i);
+    fn first_name(&self) -> &str {
+        &self.first
     }
 }
 
-fn long_array() {
-    // create an array of 10 identical strings
-    let mut a = ["Are we there yet?"; 10];
-    a[0] = "Hello, world!";
-    for i in a.iter() {
-        println!("{:?}", i);
+struct Person {
+    name: Name,
+    age: u8,
+}
+
+impl Person {
+    fn new(name: Name, age: u8) -> Person {
+        Person {
+            name: name,
+            age: age,
+        }
     }
 
-    if a.len() > 5 {
-        println!("array has more than 5 elements");
-    } else {
-        println!("array has <= 5 elements");
+    fn name(&self) -> Name {
+        self.name.clone()
     }
 }
 
-fn cannot_index_strings() {
-    let hachiko = "忠犬ハチ公";
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    for b in hachiko.as_bytes() {
-        print!("{}, ", b);
+    #[test]
+    fn test_sandbox() {
+        let name = Name::new("Jill", "Johnson");
+        let mut jill = Person::new(name, 20);
+        let name = jill.name();
+        let first_name = name.first_name();
+        assert_eq!("Jill", first_name);
     }
-
-    println!("");
-
-    for c in hachiko.chars() {
-        print!("{}, ", c);
-    }
-
-    println!("");
 }
