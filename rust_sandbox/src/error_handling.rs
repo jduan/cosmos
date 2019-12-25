@@ -287,6 +287,7 @@ pub struct JsonError {
 
 use std;
 use std::fmt;
+use std::fmt::Display;
 use std::num::ParseIntError;
 
 // Errors should be printable.
@@ -344,6 +345,35 @@ fn double_first2(vec: Vec<&str>) -> Result<Option<i32>, ParseIntError> {
     Ok(opt)
 }
 
+/// Sometimes it simplifies the code to mask all of the different errors with a
+/// single type of error you define.
+#[derive(Debug, Clone, PartialEq)]
+struct DoubleError;
+type DoubleErrorResult<T> = std::result::Result<T, DoubleError>;
+impl Display for DoubleError {
+    // Note that we don't store any extra info about the errors. This means we can't state
+    // which string failed to parse without modifying our types to carry that information.
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "invalid first item to double")
+    }
+}
+
+// This is important for other errors to wrap this one.
+impl std::error::Error for DoubleError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        // Generic error, underlying cause isn't tracked.
+        None
+    }
+}
+
+fn double_first3(vec: Vec<&str>) -> DoubleErrorResult<i32> {
+    vec.first()
+        // DoubleError is a unit struct. A unit struct is a type as well as an
+        // instance of that type.
+        .ok_or(DoubleError)
+        .and_then(|s| s.parse::<i32>().map_err(|_| DoubleError).map(|i| 2 * i))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -378,5 +408,15 @@ mod tests {
         assert_eq!(Ok(Some(84)), double_first2(numbers));
         assert_eq!(Ok(None), double_first2(empty));
         assert!(double_first2(strings).is_err());
+    }
+
+    #[test]
+    fn test_double_first3() {
+        let numbers = vec!["42", "93", "18"];
+        let empty = vec![];
+        let strings = vec!["hello", "world"];
+        assert_eq!(Ok(84), double_first3(numbers));
+        assert_eq!(Err(DoubleError), double_first3(empty));
+        assert_eq!(Err(DoubleError), double_first3(strings));
     }
 }

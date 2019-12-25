@@ -1,13 +1,14 @@
 /// There are three types of structures ("structs") that can be created using the struct keyword:
-//
-//    Tuple structs, which are, basically, named tuples.
-//    The classic C structs
-//    Unit structs, which are field-less, are useful for generics.
-use float_cmp::approx_eq;
+///
+///  1.  Tuple structs, which are, basically, named tuples.
+///  2.  The classic C structs
+///  3.  Unit structs, which are field-less, are useful for generics.
+
 /// A tuple struct
 pub struct Pair(i32, f32);
 
 /// A unit struct
+/// A unit struct is a type as well as an instance of that type.
 pub struct Nil;
 
 /// A classic C struct
@@ -212,6 +213,7 @@ fn find_extrema(slice: &[i32]) -> Extrema {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use float_cmp::approx_eq;
 
     #[test]
     fn test_person() {
