@@ -319,6 +319,13 @@ fn multiply(first_number_str: &str, second_number_str: &str) -> AliasedResult<i3
     })
 }
 
+/// The ? operator allows you to return a Err from a function instead of panicking!
+fn multiply2(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
+    let first_number = first_number_str.parse::<i32>()?;
+    let second_number = second_number_str.parse::<i32>()?;
+    Ok(first_number * second_number)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -327,5 +334,11 @@ mod tests {
     fn test_multiply_two_numbers() {
         assert_eq!(200, multiply("10", "20").unwrap());
         assert!(multiply("not a number", "20").is_err());
+    }
+
+    #[test]
+    fn test_multiply_two_numbers2() {
+        assert_eq!(200, multiply2("10", "20").unwrap());
+        assert!(multiply2("not a number", "20").is_err());
     }
 }
