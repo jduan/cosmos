@@ -287,7 +287,7 @@ pub struct JsonError {
 
 use std;
 use std::fmt;
-use std::fmt::Display;
+use std::fmt::{Debug, Display, Formatter};
 use std::num::ParseIntError;
 
 // Errors should be printable.
@@ -372,6 +372,74 @@ fn double_first3(vec: Vec<&str>) -> DoubleErrorResult<i32> {
         // instance of that type.
         .ok_or(DoubleError)
         .and_then(|s| s.parse::<i32>().map_err(|_| DoubleError).map(|i| 2 * i))
+}
+
+/// A way to write simple code while preserving the original errors is to Box them.
+/// The drawback is that the underlying error type is only known at runtime and not
+/// statically determined.
+/// The stdlib helps in boxing our errors by having Box implement conversion from
+/// any type that implements the Error trait into the trait object Box<Error>, via From.
+fn double_first4(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
+    vec.first()
+        .ok_or_else(|| DoubleError.into())
+        .and_then(|s| s.parse::<i32>().map_err(|e| e.into()))
+        .map(|i| 2 * i)
+}
+
+/// ? was previously explained as either unwrap or "return Err(err)". This is only
+/// mostly true. It actually means unwrap or "return Err(From::from(err))". Since
+/// From::from is a conversion utility between different types, this means that
+/// if you ? where the error is convertible to the return type, it will convert
+/// automatically.
+fn double_first5(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
+    let first = vec.first().ok_or(DoubleError)?;
+    let parsed = first.parse::<i32>()?;
+    Ok(parsed * 2)
+}
+
+#[derive(Debug)]
+enum MyError {
+    EmptyVec,
+    ParseError(ParseIntError),
+}
+
+impl Display for MyError {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            MyError::EmptyVec => write!(f, "please use a vector with at least one element."),
+            // delegate to ParseIntError's fmt method
+            MyError::ParseError(err) => std::fmt::Display::fmt(&err, f),
+        }
+    }
+}
+
+impl std::error::Error for MyError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            MyError::EmptyVec => None,
+            MyError::ParseError(err) => Some(err),
+        }
+    }
+}
+
+// Implement the conversion from `ParseIntError` to `DoubleError`.
+// This will be automatically called by `?` if a `ParseIntError`
+// needs to be converted into a `DoubleError`.
+impl From<ParseIntError> for MyError {
+    fn from(err: ParseIntError) -> MyError {
+        MyError::ParseError(err)
+    }
+}
+
+/// An alternative to boxing errors is to wrap them in your own error type.
+/// This also returns a single error type (defined by us) and it's an enum of different types.
+/// This adds a bit more boilerplate for handling errors and might not be needed in all
+/// applications. There are some libraries that can take care of the boilerplate for you.
+fn double_first6(vec: Vec<&str>) -> Result<i32, MyError> {
+    let first = vec.first().ok_or(MyError::EmptyVec)?;
+    // ? converts ParseIntError into MyError
+    let parsed = first.parse::<i32>()?;
+    Ok(parsed * 2)
 }
 
 #[cfg(test)]
