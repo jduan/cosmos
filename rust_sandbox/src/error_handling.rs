@@ -287,6 +287,7 @@ pub struct JsonError {
 
 use std;
 use std::fmt;
+use std::num::ParseIntError;
 
 // Errors should be printable.
 impl fmt::Display for JsonError {
@@ -302,10 +303,22 @@ impl std::error::Error for JsonError {
     }
 }
 
+/// The Result type has various combinators: map, and_then.
+fn multiply(first_number_str: &str, second_number_str: &str) -> Result<i32, ParseIntError> {
+    first_number_str.parse::<i32>().and_then(|first_number| {
+        second_number_str
+            .parse::<i32>()
+            .map(|second_number| first_number * second_number)
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn handle_result_type() {}
+    fn test_multiply_two_numbers() {
+        assert_eq!(200, multiply("10", "20").unwrap());
+        assert!(multiply("not a number", "20").is_err());
+    }
 }
