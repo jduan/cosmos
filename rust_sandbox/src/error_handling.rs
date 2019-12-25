@@ -326,6 +326,24 @@ fn multiply2(first_number_str: &str, second_number_str: &str) -> AliasedResult<i
     Ok(first_number * second_number)
 }
 
+/// How to handle multiple error types?
+///
+/// Sometimes an Option needs to interact with a Result, or a Result<T, Error1> needs
+/// to interact with a Result<T, Error2>. In those cases, we want to manage our
+/// different error types in a way that makes them composable and easy to interact with.
+fn double_first(vec: Vec<&str>) -> Option<Result<i32, ParseIntError>> {
+    vec.first().map(|first| first.parse::<i32>().map(|i| i * 2))
+}
+
+/// There are times when we'll want to stop processing on errors (like with ?) but keep
+/// going when the Option is None. A couple of combinators come in handy to swap the
+/// Result and Option.
+fn double_first2(vec: Vec<&str>) -> Result<Option<i32>, ParseIntError> {
+    let opt = vec.first().map(|first| first.parse::<i32>().map(|i| i * 2));
+    let opt = opt.map_or(Ok(None), |r| r.map(Some))?;
+    Ok(opt)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -340,5 +358,25 @@ mod tests {
     fn test_multiply_two_numbers2() {
         assert_eq!(200, multiply2("10", "20").unwrap());
         assert!(multiply2("not a number", "20").is_err());
+    }
+
+    #[test]
+    fn test_double_first() {
+        let numbers = vec!["42", "93", "18"];
+        let empty = vec![];
+        let strings = vec!["hello", "world"];
+        assert_eq!(Some(Ok(84)), double_first(numbers));
+        assert_eq!(None, double_first(empty));
+        assert!(double_first(strings).unwrap().is_err());
+    }
+
+    #[test]
+    fn test_double_first2() {
+        let numbers = vec!["42", "93", "18"];
+        let empty = vec![];
+        let strings = vec!["hello", "world"];
+        assert_eq!(Ok(Some(84)), double_first2(numbers));
+        assert_eq!(Ok(None), double_first2(empty));
+        assert!(double_first2(strings).is_err());
     }
 }
