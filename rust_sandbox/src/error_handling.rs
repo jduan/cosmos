@@ -303,8 +303,15 @@ impl std::error::Error for JsonError {
     }
 }
 
+/// When you want to reuse the same specific Result type many times in a module,
+/// you can define an alias. At a module level, creating aliases can be particularly
+/// helpful. Errors found in a specific module often have the same Err type, so a
+/// single alias can succinctly define all associated Results. This is so useful
+/// that the std library even supplies one: io::Result!
+type AliasedResult<T> = Result<T, ParseIntError>;
+
 /// The Result type has various combinators: map, and_then.
-fn multiply(first_number_str: &str, second_number_str: &str) -> Result<i32, ParseIntError> {
+fn multiply(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
     first_number_str.parse::<i32>().and_then(|first_number| {
         second_number_str
             .parse::<i32>()
