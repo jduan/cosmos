@@ -88,3 +88,58 @@ fn get_map() -> HashMap<String, i32> {
 
     scores
 }
+
+/// Define your own type as hash keys?
+///
+/// Any type that implements the Eq and Hash traits can be a key in HashMap. You can
+/// easily implement Eq and Hash for a custom type with just one line:
+///
+/// #[derive(ParitialEq, Eq, Hash)]
+///
+/// All collection classes implement Eq and Hash if their contained type also respectively
+/// implements Eq and Hash. For example, Vec<T> will implement Hash if T implements Hash.
+#[derive(PartialEq, Eq, Hash, Clone, Copy)]
+struct Account<'a> {
+    username: &'a str,
+    password: &'a str,
+}
+
+fn deposit<'a>(account: Account<'a>, amount: f64, map: &mut HashMap<Account<'a>, f64>) {
+    let mut balance = map.entry(account).or_insert(0.0);
+    *balance += amount;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use float_cmp::*;
+
+    #[test]
+    fn test_strings_as_keys() {
+        let mut map = HashMap::new();
+        // Strings can be used as hash keys even though Strings are mutable.
+        // The reason is that the "insert" method moves the ownership of the String key
+        // into the hash map so there will be no way to change the key afterwards.
+        let daniel = String::from("Daniel");
+        map.insert(daniel, "798-1364");
+        map.insert(String::from("John"), "123-7844");
+
+        if let Some(value) = map.get("Daniel") {
+            println!("Daniel's number is {}", value);
+        } else {
+            println!("Failed to find Daniel's number");
+        }
+    }
+
+    #[test]
+    fn test_custom_hash_key() {
+        let account = Account {
+            username: "John",
+            password: "Secret",
+        };
+        let mut map = HashMap::new();
+        map.insert(account, 100.0);
+        deposit(account, 50.0, &mut map);
+        approx_eq!(f64, 150.0, *map.get(&account).unwrap());
+    }
+}
