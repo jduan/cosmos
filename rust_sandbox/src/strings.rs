@@ -194,4 +194,50 @@ mod tests {
         assert_eq!(bits.concat(), "venividivici");
         assert_eq!(bits.join(", "), "veni, vidi, vici");
     }
+
+    #[test]
+    fn test_string_literals() {
+        // This is a raw string literal.
+        let raw_str = r"Escapes don't work here: \x3F \u{211D}";
+        println!("{}", raw_str);
+
+        // If you need quotes in a raw string, add a pair of #s
+        let quotes = r#"And then I said: "There is no escape!""#;
+        println!("{}", quotes);
+
+        // If you need "# in your string, just use more #s in the delimiter.
+        // There is no limit for the number of #s you can use.
+        let longer_delimiter = r###"A string with "# in it. And even "##!"###;
+        print!("{}", longer_delimiter);
+    }
+
+    #[test]
+    fn test_byte_strings() {
+        let bs: &[u8; 21] = b"this is a byte string";
+        // Byte strings don't implement the Display trait.
+        println!("A byte string: {:?}", bs);
+
+        // Byte strings can have byte escapes...
+        let escaped = b"\x52\x75\x73\x74 as bytes";
+        println!("Some escaped bytes: {:?}", escaped);
+
+        // Raw byte strings work just like raw strings
+        let raw_bytestring = br"\u{211D} is not escaped here";
+        println!("Raw byte string: {:?}", raw_bytestring);
+
+        // Converting a byte string to &str can fail
+        if let Ok(my_str) = std::str::from_utf8(raw_bytestring) {
+            println!("And the same as text: {}", my_str);
+        } else {
+            eprint!("Failed to convert byte string to &str");
+        }
+
+        // Byte strings don't have to be UTF-8
+        let shift_jis = b"\x82\xe6\x82\xa8\x82\xb1\x82";
+        println!("shift_jis: {:?}", shift_jis);
+        match std::str::from_utf8(shift_jis) {
+            Ok(my_str) => println!("Conversion successful: '{}'", my_str),
+            Err(e) => println!("Conversion failed: {:?}", e),
+        };
+    }
 }
