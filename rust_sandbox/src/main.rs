@@ -37,6 +37,7 @@ pub mod ownership;
 pub mod pattern_matching;
 pub mod phantom_types;
 pub mod print_things;
+pub mod processes;
 pub mod references;
 pub mod sandbox;
 pub mod slice_type;
