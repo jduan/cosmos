@@ -4,6 +4,7 @@
 pub mod arrays;
 pub mod associate_types;
 pub mod casting;
+pub mod channels;
 pub mod clone_trait;
 pub mod closures;
 pub mod constants;
