@@ -26,6 +26,7 @@ pub mod iterators;
 pub mod lifetime;
 pub mod literals;
 pub mod macros;
+pub mod map_reduce;
 pub mod method_syntax;
 pub mod misc;
 pub mod modules;
