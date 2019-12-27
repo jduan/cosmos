@@ -16,6 +16,7 @@ pub mod enums;
 pub mod error_handling;
 pub mod exercise;
 pub mod expressions;
+pub mod files;
 pub mod foo;
 pub mod functions;
 pub mod generics;
