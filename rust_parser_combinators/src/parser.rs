@@ -84,6 +84,26 @@ where
     }
 }
 
+/// This is a parser combiner. It combines two parsers, P1 and P2, but only returns the
+/// result of the first parser, discarding the result of the second parser.
+fn left<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Parser<'a, R1>
+where
+    P1: Parser<'a, R1>,
+    P2: Parser<'a, R2>,
+{
+    map(pair(parser1, parser2), |(r1, r2)| r1)
+}
+
+/// This is a parser combiner. It combines two parsers, P1 and P2, but only returns the
+/// result of the second parser, discarding the result of the first parser.
+fn right<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Parser<'a, R2>
+where
+    P1: Parser<'a, R1>,
+    P2: Parser<'a, R2>,
+{
+    map(pair(parser1, parser2), |(r1, r2)| r2)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -134,5 +154,24 @@ mod tests {
             Ok(("/>", "my-first-element".to_string())),
             tag_opener.parse("<my-first-element/>")
         );
+    }
+
+    #[test]
+    fn test_left() {
+        let tag_opener = left(match_literal("<"), identifier);
+        assert_eq!(Ok(("/>", ())), tag_opener.parse("<my-first-element/>"));
+        assert_eq!(Err("oops"), tag_opener.parse("oops"));
+        assert_eq!(Err("!oops"), tag_opener.parse("<!oops"));
+    }
+
+    #[test]
+    fn test_right() {
+        let tag_opener = right(match_literal("<"), identifier);
+        assert_eq!(
+            Ok(("/>", "my-first-element".to_string())),
+            tag_opener.parse("<my-first-element/>")
+        );
+        assert_eq!(Err("oops"), tag_opener.parse("oops"));
+        assert_eq!(Err("!oops"), tag_opener.parse("<!oops"));
     }
 }
