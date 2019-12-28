@@ -24,8 +24,8 @@ where
 
 /// This function returns a parser function that matches the input string with
 /// an expected string.
-fn match_literal(expected: &'static str) -> impl Fn(&str) -> Result<(&str, ()), &str> {
-    move |input| match input.get(0..expected.len()) {
+fn match_literal<'a>(expected: &'static str) -> impl Parser<'a, ()> {
+    move |input: &'a str| match input.get(0..expected.len()) {
         Some(next) if next == expected => Ok((&input[expected.len()..], ())),
         _ => Err(input),
     }
@@ -34,7 +34,7 @@ fn match_literal(expected: &'static str) -> impl Fn(&str) -> Result<(&str, ()), 
 /// Parse the next identifier.
 /// An identifier starts with one alphabetical character and is followed by zero or more
 /// of either an alphabetical character, a number, or a dash.
-fn identifier(input: &str) -> Result<(&str, String), &str> {
+fn identifier(input: &str) -> ParseResult<String> {
     let mut matched = String::new();
     let mut chars = input.chars();
 
@@ -91,7 +91,7 @@ where
     P1: Parser<'a, R1>,
     P2: Parser<'a, R2>,
 {
-    map(pair(parser1, parser2), |(r1, r2)| r1)
+    map(pair(parser1, parser2), |(r1, _r2)| r1)
 }
 
 /// This is a parser combiner. It combines two parsers, P1 and P2, but only returns the
@@ -101,7 +101,7 @@ where
     P1: Parser<'a, R1>,
     P2: Parser<'a, R2>,
 {
-    map(pair(parser1, parser2), |(r1, r2)| r2)
+    map(pair(parser1, parser2), |(_r1, r2)| r2)
 }
 
 #[cfg(test)]
@@ -112,12 +112,12 @@ mod tests {
     #[test]
     fn test_match_literal() {
         let parse_joe = match_literal("Hello Joe!");
-        assert_eq!(Ok(("", ())), parse_joe("Hello Joe!"));
+        assert_eq!(Ok(("", ())), parse_joe.parse("Hello Joe!"));
         assert_eq!(
             Ok((" Hello Robert!", ())),
-            parse_joe("Hello Joe! Hello Robert!")
+            parse_joe.parse("Hello Joe! Hello Robert!")
         );
-        assert_eq!(Err("Hello Mike!"), parse_joe("Hello Mike!"));
+        assert_eq!(Err("Hello Mike!"), parse_joe.parse("Hello Mike!"));
     }
 
     #[test]
