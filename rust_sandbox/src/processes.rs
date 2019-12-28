@@ -63,4 +63,15 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn wait_for_process_to_finish() -> std::io::Result<()> {
+        let mut child = Command::new("sleep").arg("2").spawn()?;
+
+        let result = child.wait()?;
+        assert!(result.success());
+        assert_eq!(0, result.code().unwrap());
+
+        Ok(())
+    }
 }
