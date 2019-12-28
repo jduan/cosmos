@@ -32,23 +32,13 @@ fn match_literal<'a>(expected: &'static str) -> impl Parser<'a, ()> {
 }
 
 /// Expects one or more whitespaces.
-fn match_whitespaces(input: &str) -> ParseResult<()> {
-    let mut chars = input.chars();
-    let mut count = 0;
-    match chars.next() {
-        Some(next) if next.is_whitespace() => {
-            count += 1;
-        }
-        _ => return Err(input),
-    }
+fn one_or_more_whitespaces<'a>() -> impl Parser<'a, Vec<char>> {
+    one_or_more(whitespace_char())
+}
 
-    while let Some(next) = chars.next() {
-        if next.is_whitespace() {
-            count += 1;
-        }
-    }
-
-    Ok((&input[count..], ()))
+/// Expects one or more whitespaces.
+fn zero_or_more_whitespaces<'a>() -> impl Parser<'a, Vec<char>> {
+    zero_or_more(whitespace_char())
 }
 
 /// Matches one or more things.
@@ -88,6 +78,35 @@ where
 
         Ok((input, result))
     }
+}
+
+/// Matches any character.
+fn any_char(input: &str) -> ParseResult<char> {
+    match input.chars().next() {
+        Some(ch) => Ok((&input[ch.len_utf8()..], ch)),
+        None => Err(input),
+    }
+}
+
+fn predicate<'a, P, R, F>(parser: P, pred: F) -> impl Parser<'a, R>
+where
+    P: Parser<'a, R>,
+    F: Fn(&R) -> bool,
+{
+    move |input| match parser.parse(input) {
+        Ok((next_input, result)) => {
+            if pred(&result) {
+                Ok((next_input, result))
+            } else {
+                Err(input)
+            }
+        }
+        Err(err) => Err(err),
+    }
+}
+
+fn whitespace_char<'a>() -> impl Parser<'a, char> {
+    predicate(any_char, |ch| ch.is_whitespace())
 }
 
 /// Parse the next identifier.
@@ -180,10 +199,39 @@ mod tests {
     }
 
     #[test]
-    fn test_match_whitespaces() {
-        assert_eq!(Ok(("hello", ())), match_whitespaces(" hello"));
-        assert_eq!(Ok(("hello", ())), match_whitespaces("      hello"));
-        assert_eq!(Ok(("hello", ())), match_whitespaces("      \t    hello"));
+    fn test_one_or_more_whitespaces() {
+        assert_eq!(
+            Ok(("hello", vec![' ',])),
+            one_or_more_whitespaces().parse(" hello")
+        );
+        assert_eq!(
+            Ok(("hello", vec![' ', '\t'])),
+            one_or_more_whitespaces().parse(" \thello")
+        );
+        assert_eq!(
+            Ok(("hello", vec![' ', '\t', ' '])),
+            one_or_more_whitespaces().parse(" \t hello")
+        );
+    }
+
+    #[test]
+    fn test_zero_or_more_whitespaces() {
+        assert_eq!(
+            Ok(("hello", vec![])),
+            zero_or_more_whitespaces().parse("hello")
+        );
+        assert_eq!(
+            Ok(("hello", vec![' ',])),
+            zero_or_more_whitespaces().parse(" hello")
+        );
+        assert_eq!(
+            Ok(("hello", vec![' ', '\t'])),
+            zero_or_more_whitespaces().parse(" \thello")
+        );
+        assert_eq!(
+            Ok(("hello", vec![' ', '\t', ' '])),
+            zero_or_more_whitespaces().parse(" \t hello")
+        );
     }
 
     #[test]
@@ -255,5 +303,26 @@ mod tests {
         assert_eq!(Ok(("", vec![(), (), ()])), parser.parse("hahaha"));
         assert_eq!(Ok(("ahah", vec![])), parser.parse("ahah"));
         assert_eq!(Ok(("", vec![])), parser.parse(""));
+    }
+
+    #[test]
+    fn test_any_char() {
+        assert_eq!(Ok(("ello", 'H')), any_char("Hello"));
+        assert_eq!(Err(""), any_char(""));
+    }
+
+    #[test]
+    fn test_predicate() {
+        let parser = predicate(any_char, |ch| ch.is_whitespace());
+        assert_eq!(Ok(("hello", ' ')), parser.parse(" hello"));
+        assert_eq!(Err("!hello"), parser.parse("!hello"));
+    }
+
+    #[test]
+    fn test_whitespace_char() {
+        let parser = whitespace_char();
+        assert_eq!(Ok(("hello", ' ')), parser.parse(" hello"));
+        assert_eq!(Ok(("hello", '\t')), parser.parse("\thello"));
+        assert_eq!(Err("!hello"), parser.parse("!hello"));
     }
 }
