@@ -51,6 +51,45 @@ fn match_whitespaces(input: &str) -> ParseResult<()> {
     Ok((&input[count..], ()))
 }
 
+/// Matches one or more things.
+fn one_or_more<'a, P, R>(parser: P) -> impl Parser<'a, Vec<R>>
+where
+    P: Parser<'a, R>,
+{
+    move |mut input| {
+        let mut result: Vec<R> = vec![];
+        match parser.parse(input) {
+            Ok((next_input, r)) => {
+                result.push(r);
+                input = next_input;
+                while let Ok((next_input, r)) = parser.parse(input) {
+                    result.push(r);
+                    input = next_input;
+                }
+            }
+            Err(err) => return Err(err),
+        }
+
+        Ok((input, result))
+    }
+}
+
+/// Matches zero or more things.
+fn zero_or_more<'a, P, R>(parser: P) -> impl Parser<'a, Vec<R>>
+where
+    P: Parser<'a, R>,
+{
+    move |mut input| {
+        let mut result: Vec<R> = vec![];
+        while let Ok((next_input, r)) = parser.parse(input) {
+            result.push(r);
+            input = next_input;
+        }
+
+        Ok((input, result))
+    }
+}
+
 /// Parse the next identifier.
 /// An identifier starts with one alphabetical character and is followed by zero or more
 /// of either an alphabetical character, a number, or a dash.
@@ -200,5 +239,21 @@ mod tests {
         );
         assert_eq!(Err("oops"), tag_opener.parse("oops"));
         assert_eq!(Err("!oops"), tag_opener.parse("<!oops"));
+    }
+
+    #[test]
+    fn test_one_or_more() {
+        let parser = one_or_more(match_literal("ha"));
+        assert_eq!(Ok(("", vec![(), (), ()])), parser.parse("hahaha"));
+        assert_eq!(Err("ahah"), parser.parse("ahah"));
+        assert_eq!(Err(""), parser.parse(""));
+    }
+
+    #[test]
+    fn zero_or_more_combinator() {
+        let parser = zero_or_more(match_literal("ha"));
+        assert_eq!(Ok(("", vec![(), (), ()])), parser.parse("hahaha"));
+        assert_eq!(Ok(("ahah", vec![])), parser.parse("ahah"));
+        assert_eq!(Ok(("", vec![])), parser.parse(""));
     }
 }
