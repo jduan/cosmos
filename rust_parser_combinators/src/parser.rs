@@ -6,9 +6,9 @@
 /// </parent-element>
 /// ```
 
-type ParseResult<'a, Output> = Result<(&'a str, Output), &'a str>;
+pub type ParseResult<'a, Output> = Result<(&'a str, Output), &'a str>;
 
-trait Parser<'a, Output> {
+pub trait Parser<'a, Output> {
     fn parse(&self, input: &'a str) -> ParseResult<'a, Output>;
 }
 
@@ -24,7 +24,7 @@ where
 
 /// This function returns a parser function that matches the input string with
 /// an expected string.
-fn match_literal<'a>(expected: &'static str) -> impl Parser<'a, ()> {
+pub fn match_literal<'a>(expected: &'static str) -> impl Parser<'a, ()> {
     move |input: &'a str| match input.get(0..expected.len()) {
         Some(next) if next == expected => Ok((&input[expected.len()..], ())),
         _ => Err(input),
@@ -32,17 +32,17 @@ fn match_literal<'a>(expected: &'static str) -> impl Parser<'a, ()> {
 }
 
 /// Expects one or more whitespaces.
-fn one_or_more_whitespaces<'a>() -> impl Parser<'a, Vec<char>> {
+pub fn one_or_more_whitespaces<'a>() -> impl Parser<'a, Vec<char>> {
     one_or_more(whitespace_char())
 }
 
 /// Expects one or more whitespaces.
-fn zero_or_more_whitespaces<'a>() -> impl Parser<'a, Vec<char>> {
+pub fn zero_or_more_whitespaces<'a>() -> impl Parser<'a, Vec<char>> {
     zero_or_more(whitespace_char())
 }
 
 /// Matches one or more things.
-fn one_or_more<'a, P, R>(parser: P) -> impl Parser<'a, Vec<R>>
+pub fn one_or_more<'a, P, R>(parser: P) -> impl Parser<'a, Vec<R>>
 where
     P: Parser<'a, R>,
 {
@@ -65,7 +65,7 @@ where
 }
 
 /// Matches zero or more things.
-fn zero_or_more<'a, P, R>(parser: P) -> impl Parser<'a, Vec<R>>
+pub fn zero_or_more<'a, P, R>(parser: P) -> impl Parser<'a, Vec<R>>
 where
     P: Parser<'a, R>,
 {
@@ -81,14 +81,14 @@ where
 }
 
 /// Matches any character.
-fn any_char(input: &str) -> ParseResult<char> {
+pub fn any_char(input: &str) -> ParseResult<char> {
     match input.chars().next() {
         Some(ch) => Ok((&input[ch.len_utf8()..], ch)),
         None => Err(input),
     }
 }
 
-fn predicate<'a, P, R, F>(parser: P, pred: F) -> impl Parser<'a, R>
+pub fn predicate<'a, P, R, F>(parser: P, pred: F) -> impl Parser<'a, R>
 where
     P: Parser<'a, R>,
     F: Fn(&R) -> bool,
@@ -105,14 +105,14 @@ where
     }
 }
 
-fn whitespace_char<'a>() -> impl Parser<'a, char> {
+pub fn whitespace_char<'a>() -> impl Parser<'a, char> {
     predicate(any_char, |ch| ch.is_whitespace())
 }
 
 /// Parse the next identifier.
 /// An identifier starts with one alphabetical character and is followed by zero or more
 /// of either an alphabetical character, a number, or a dash.
-fn identifier(input: &str) -> ParseResult<String> {
+pub fn identifier(input: &str) -> ParseResult<String> {
     let mut matched = String::new();
     let mut chars = input.chars();
 
@@ -121,7 +121,7 @@ fn identifier(input: &str) -> ParseResult<String> {
         _ => return Err(input),
     }
 
-    while let Some(next) = chars.next() {
+    for next in chars {
         if next.is_alphanumeric() || next == '-' {
             matched.push(next);
         } else {
@@ -135,7 +135,7 @@ fn identifier(input: &str) -> ParseResult<String> {
 
 /// This is a parser combiner. It combines two parsers, P1 and P2, and return another parser
 /// that applies both P1 and P2 and returns a pair of (R1, R2).
-fn pair<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Parser<'a, (R1, R2)>
+pub fn pair<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Parser<'a, (R1, R2)>
 where
     P1: Parser<'a, R1>,
     P2: Parser<'a, R2>,
@@ -150,7 +150,7 @@ where
 }
 
 /// This is a combinator that changes the type of the result of a parser by applying another function.
-fn map<'a, P, F, A, B>(parser: P, map_fn: F) -> impl Parser<'a, B>
+pub fn map<'a, P, F, A, B>(parser: P, map_fn: F) -> impl Parser<'a, B>
 where
     P: Parser<'a, A>,
     F: Fn(A) -> B,
@@ -164,7 +164,7 @@ where
 
 /// This is a parser combiner. It combines two parsers, P1 and P2, but only returns the
 /// result of the first parser, discarding the result of the second parser.
-fn left<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Parser<'a, R1>
+pub fn left<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Parser<'a, R1>
 where
     P1: Parser<'a, R1>,
     P2: Parser<'a, R2>,
@@ -174,7 +174,7 @@ where
 
 /// This is a parser combiner. It combines two parsers, P1 and P2, but only returns the
 /// result of the second parser, discarding the result of the first parser.
-fn right<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Parser<'a, R2>
+pub fn right<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Parser<'a, R2>
 where
     P1: Parser<'a, R1>,
     P2: Parser<'a, R2>,
