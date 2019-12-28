@@ -31,6 +31,26 @@ fn match_literal<'a>(expected: &'static str) -> impl Parser<'a, ()> {
     }
 }
 
+/// Expects one or more whitespaces.
+fn match_whitespaces(input: &str) -> ParseResult<()> {
+    let mut chars = input.chars();
+    let mut count = 0;
+    match chars.next() {
+        Some(next) if next.is_whitespace() => {
+            count += 1;
+        }
+        _ => return Err(input),
+    }
+
+    while let Some(next) = chars.next() {
+        if next.is_whitespace() {
+            count += 1;
+        }
+    }
+
+    Ok((&input[count..], ()))
+}
+
 /// Parse the next identifier.
 /// An identifier starts with one alphabetical character and is followed by zero or more
 /// of either an alphabetical character, a number, or a dash.
@@ -118,6 +138,13 @@ mod tests {
             parse_joe.parse("Hello Joe! Hello Robert!")
         );
         assert_eq!(Err("Hello Mike!"), parse_joe.parse("Hello Mike!"));
+    }
+
+    #[test]
+    fn test_match_whitespaces() {
+        assert_eq!(Ok(("hello", ())), match_whitespaces(" hello"));
+        assert_eq!(Ok(("hello", ())), match_whitespaces("      hello"));
+        assert_eq!(Ok(("hello", ())), match_whitespaces("      \t    hello"));
     }
 
     #[test]
