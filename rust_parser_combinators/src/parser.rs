@@ -197,6 +197,11 @@ pub fn quoted_string<'a>() -> impl Parser<'a, String> {
     )
 }
 
+/// Parses an attribute pair like: name="John"
+pub fn attribute_pair<'a>() -> impl Parser<'a, (String, String)> {
+    pair(left(identifier, match_literal("=")), quoted_string())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -347,5 +352,14 @@ mod tests {
         assert_eq!(String::from("hello"), parser.parse("\"hello\"").unwrap().1);
         assert_eq!(String::from("45"), parser.parse("\"45\"").unwrap().1);
         assert_eq!(Err("hello\""), parser.parse("hello\""));
+    }
+
+    #[test]
+    fn test_attribute_pair() {
+        let parser = attribute_pair();
+        assert_eq!(
+            (String::from("name"), String::from("John")),
+            parser.parse(r#"name="John""#).unwrap().1
+        );
     }
 }
