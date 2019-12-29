@@ -6,10 +6,72 @@
 /// </parent-element>
 /// ```
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct Element {
+    name: String,
+    attributes: Vec<(String, String)>,
+    children: Vec<Element>,
+}
+
+impl Element {
+    pub fn new(name: String, attributes: Vec<(String, String)>) -> Self {
+        Element {
+            name,
+            attributes,
+            children: vec![],
+        }
+    }
+}
+
 pub type ParseResult<'a, Output> = Result<(&'a str, Output), &'a str>;
+
+enum List<A> {
+    Nil,
+    Cons(A, Box<List<A>>),
+}
+
+pub struct BoxedParser<'a, Output> {
+    parser: Box<dyn Parser<'a, Output> + 'a>,
+}
+
+impl<'a, Output> BoxedParser<'a, Output> {
+    pub fn new<P>(parser: P) -> Self
+    where
+        P: Parser<'a, Output> + 'a,
+    {
+        BoxedParser {
+            parser: Box::new(parser),
+        }
+    }
+}
+
+impl<'a, Output> Parser<'a, Output> for BoxedParser<'a, Output> {
+    fn parse(&self, input: &'a str) -> ParseResult<'a, Output> {
+        self.parser.parse(input)
+    }
+}
 
 pub trait Parser<'a, Output> {
     fn parse(&self, input: &'a str) -> ParseResult<'a, Output>;
+
+    fn map<F, NewOutput>(self, map_fn: F) -> BoxedParser<'a, NewOutput>
+    where
+        Self: Sized + 'a,
+        Output: 'a,
+        NewOutput: 'a,
+        F: Fn(Output) -> NewOutput + 'a,
+    {
+        BoxedParser::new(map(self, map_fn))
+    }
+
+    fn predicate<F>(self, pred_fn: F) -> BoxedParser<'a, Output>
+    where
+        Self: Sized + 'a,
+        Output: 'a,
+        F: Fn(&Output) -> bool + 'a,
+    {
+        BoxedParser::new(predicate(self, pred_fn))
+    }
 }
 
 /// Implement the Parser trait for any function that matches the signature of a parser.
@@ -184,17 +246,15 @@ where
 
 /// Returns a parser that parses a quoted string.
 pub fn quoted_string<'a>() -> impl Parser<'a, String> {
-    map(
-        left(
-            right(
-                match_literal("\""),
-                // This parser accepts anything but a quote
-                zero_or_more(predicate(any_char, |c| *c != '"')),
-            ),
+    left(
+        right(
             match_literal("\""),
+            // This parser accepts anything but a quote
+            zero_or_more(any_char.predicate(|c| *c != '"')),
         ),
-        |vec| vec.into_iter().collect(),
+        match_literal("\""),
     )
+    .map(|vec| vec.into_iter().collect())
 }
 
 /// Parses an attribute pair like: name="John"
@@ -205,6 +265,24 @@ pub fn attribute_pair<'a>() -> impl Parser<'a, (String, String)> {
 /// Parses all attribute pairs. It could be empty.
 pub fn attributes<'a>() -> impl Parser<'a, Vec<(String, String)>> {
     zero_or_more(right(one_or_more_whitespaces(), attribute_pair()))
+}
+
+/// Parses the start of an element: < + identifier + a list of attributes
+pub fn element_start<'a>() -> impl Parser<'a, (String, Vec<(String, String)>)> {
+    pair(right(match_literal("<"), identifier), attributes())
+}
+
+/// Parses the end of an element: </identifier>
+pub fn element_end<'a>() -> impl Parser<'a, String> {
+    left(right(match_literal("</"), identifier), match_literal(">"))
+}
+
+pub fn single_element<'a>() -> impl Parser<'a, Element> {
+    left(
+        element_start(),
+        pair(zero_or_more_whitespaces(), match_literal("/>")),
+    )
+    .map(|(name, attrs)| Element::new(name, attrs))
 }
 
 #[cfg(test)]
