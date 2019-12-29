@@ -272,17 +272,75 @@ pub fn element_start<'a>() -> impl Parser<'a, (String, Vec<(String, String)>)> {
     pair(right(match_literal("<"), identifier), attributes())
 }
 
-/// Parses the end of an element: </identifier>
-pub fn element_end<'a>() -> impl Parser<'a, String> {
-    left(right(match_literal("</"), identifier), match_literal(">"))
-}
-
+/// Parses a single element without any children: <employee name="John", age="99"/>
 pub fn single_element<'a>() -> impl Parser<'a, Element> {
     left(
         element_start(),
         pair(zero_or_more_whitespaces(), match_literal("/>")),
     )
     .map(|(name, attrs)| Element::new(name, attrs))
+}
+
+/// Parses the open of an element that has children: <employee name="John", age="99">
+pub fn open_element<'a>() -> impl Parser<'a, Element> {
+    left(
+        element_start(),
+        pair(zero_or_more_whitespaces(), match_literal(">")),
+    )
+    .map(|(name, attrs)| Element::new(name, attrs))
+}
+
+/// Parses the end of an element: </identifier>
+pub fn close_element<'a>(expected_name: String) -> impl Parser<'a, String> {
+    left(right(match_literal("</"), identifier), match_literal(">"))
+        .predicate(move |name| name == &expected_name)
+}
+
+pub fn parent_element<'a>() -> impl Parser<'a, Element> {
+    and_then(open_element(), |elem| {
+        left(zero_or_more(element()), close_element(elem.name.clone())).map(move |children| {
+            let mut elem2 = elem.clone();
+            elem2.children = children;
+            elem2
+        })
+    })
+}
+
+pub fn either<'a, P1, P2, R>(parser1: P1, parser2: P2) -> impl Parser<'a, R>
+where
+    P1: Parser<'a, R>,
+    P2: Parser<'a, R>,
+{
+    move |input| match parser1.parse(input) {
+        ok @ Ok(_) => ok,
+        Err(_) => parser2.parse(input),
+    }
+}
+
+pub fn and_then<'a, P, F, A, B, NextP>(parser: P, f: F) -> impl Parser<'a, B>
+where
+    P: Parser<'a, A>,
+    NextP: Parser<'a, B>,
+    F: Fn(A) -> NextP,
+{
+    move |input| match parser.parse(input) {
+        Ok((next_input, a)) => f(a).parse(next_input),
+        Err(err) => Err(err),
+    }
+}
+
+fn element<'a>() -> impl Parser<'a, Element> {
+    whitespace_wrap(either(single_element(), parent_element()))
+}
+
+fn whitespace_wrap<'a, P, A>(parser: P) -> impl Parser<'a, A>
+where
+    P: Parser<'a, A>,
+{
+    right(
+        zero_or_more_whitespaces(),
+        left(parser, zero_or_more_whitespaces()),
+    )
 }
 
 #[cfg(test)]
@@ -445,6 +503,8 @@ mod tests {
             parser.parse(r#"name="John""#).unwrap().1
         );
     }
+
+    #[test]
     fn test_attributes() {
         let parser = attributes();
         assert_eq!(
@@ -466,5 +526,37 @@ mod tests {
             )),
             attributes().parse(r#" one="1" two="2""#)
         );
+    }
+
+    #[test]
+    fn xml_parser() {
+        let doc = r#"
+        <top label="Top">
+            <semi-bottom label="Bottom"/>
+            <middle>
+                <bottom label="Another bottom"/>
+            </middle>
+        </top>"#;
+        let parsed_doc = Element {
+            name: "top".to_string(),
+            attributes: vec![("label".to_string(), "Top".to_string())],
+            children: vec![
+                Element {
+                    name: "semi-bottom".to_string(),
+                    attributes: vec![("label".to_string(), "Bottom".to_string())],
+                    children: vec![],
+                },
+                Element {
+                    name: "middle".to_string(),
+                    attributes: vec![],
+                    children: vec![Element {
+                        name: "bottom".to_string(),
+                        attributes: vec![("label".to_string(), "Another bottom".to_string())],
+                        children: vec![],
+                    }],
+                },
+            ],
+        };
+        assert_eq!(Ok(("", parsed_doc)), element().parse(doc));
     }
 }
