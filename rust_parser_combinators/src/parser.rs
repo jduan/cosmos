@@ -7,7 +7,7 @@
 /// ```
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-struct Element {
+pub struct Element {
     name: String,
     attributes: Vec<(String, String)>,
     children: Vec<Element>,
@@ -24,11 +24,6 @@ impl Element {
 }
 
 pub type ParseResult<'a, Output> = Result<(&'a str, Output), &'a str>;
-
-enum List<A> {
-    Nil,
-    Cons(A, Box<List<A>>),
-}
 
 pub struct BoxedParser<'a, Output> {
     parser: Box<dyn Parser<'a, Output> + 'a>,
@@ -314,7 +309,7 @@ pub fn open_element<'a>() -> impl Parser<'a, Element> {
 /// Parses the end of an element: </identifier>
 pub fn close_element<'a>(expected_name: String) -> impl Parser<'a, String> {
     combine3(match_literal("</"), identifier, match_literal(">"))
-        .map(|(r1, r2, r3)| r2)
+        .map(|(_r1, r2, _r3)| r2)
         .predicate(move |name| name == &expected_name)
 }
 
