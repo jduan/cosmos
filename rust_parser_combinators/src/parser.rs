@@ -211,6 +211,27 @@ where
     }
 }
 
+/// This is a parser that combines 3 parsers and returns a tuple of (R1, R2, R3).
+pub fn combine3<'a, P1, P2, P3, R1, R2, R3>(
+    parser1: P1,
+    parser2: P2,
+    parser3: P3,
+) -> impl Parser<'a, (R1, R2, R3)>
+where
+    P1: Parser<'a, R1>,
+    P2: Parser<'a, R2>,
+    P3: Parser<'a, R3>,
+    P1: 'a,
+    P2: 'a,
+    P3: 'a,
+    R1: 'a,
+    R2: 'a,
+    R3: 'a,
+{
+    pair(parser1, pair(parser2, parser3))
+        .map(move |(result1, (result2, result3))| (result1, result2, result3))
+}
+
 /// This is a combinator that changes the type of the result of a parser by applying another function.
 pub fn map<'a, P, F, A, B>(parser: P, map_fn: F) -> impl Parser<'a, B>
 where
@@ -292,10 +313,12 @@ pub fn open_element<'a>() -> impl Parser<'a, Element> {
 
 /// Parses the end of an element: </identifier>
 pub fn close_element<'a>(expected_name: String) -> impl Parser<'a, String> {
-    left(right(match_literal("</"), identifier), match_literal(">"))
+    combine3(match_literal("</"), identifier, match_literal(">"))
+        .map(|(r1, r2, r3)| r2)
         .predicate(move |name| name == &expected_name)
 }
 
+/// Parses an element with children: <employee name="John", age="99"> ... </employee>
 pub fn parent_element<'a>() -> impl Parser<'a, Element> {
     and_then(open_element(), |elem| {
         left(zero_or_more(element()), close_element(elem.name.clone())).map(move |children| {
@@ -306,6 +329,8 @@ pub fn parent_element<'a>() -> impl Parser<'a, Element> {
     })
 }
 
+/// A parser that combines two parsers (that need to return the same result) and
+/// either of them works.
 pub fn either<'a, P1, P2, R>(parser1: P1, parser2: P2) -> impl Parser<'a, R>
 where
     P1: Parser<'a, R>,
