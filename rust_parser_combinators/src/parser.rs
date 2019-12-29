@@ -182,6 +182,21 @@ where
     map(pair(parser1, parser2), |(_r1, r2)| r2)
 }
 
+/// Returns a parser that parses a quoted string.
+pub fn quoted_string<'a>() -> impl Parser<'a, String> {
+    map(
+        left(
+            right(
+                match_literal("\""),
+                // This parser accepts anything but a quote
+                zero_or_more(predicate(any_char, |c| *c != '"')),
+            ),
+            match_literal("\""),
+        ),
+        |vec| vec.into_iter().collect(),
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -324,5 +339,13 @@ mod tests {
         assert_eq!(Ok(("hello", ' ')), parser.parse(" hello"));
         assert_eq!(Ok(("hello", '\t')), parser.parse("\thello"));
         assert_eq!(Err("!hello"), parser.parse("!hello"));
+    }
+
+    #[test]
+    fn test_quoted_string() {
+        let parser = quoted_string();
+        assert_eq!(String::from("hello"), parser.parse("\"hello\"").unwrap().1);
+        assert_eq!(String::from("45"), parser.parse("\"45\"").unwrap().1);
+        assert_eq!(Err("hello\""), parser.parse("hello\""));
     }
 }
