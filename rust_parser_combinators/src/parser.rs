@@ -342,6 +342,9 @@ where
     }
 }
 
+/// "and_then" is basically a monad! If you've got a thing Thing<A>, and you have an and_then
+/// function available that you can pass a function from A to Thing<B> into, so that now you have a
+/// new Thing<B> instead, that's a monad.
 pub fn and_then<'a, P, F, A, B, NextP>(parser: P, f: F) -> impl Parser<'a, B>
 where
     P: Parser<'a, A>,
