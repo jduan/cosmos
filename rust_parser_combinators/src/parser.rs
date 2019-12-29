@@ -202,6 +202,11 @@ pub fn attribute_pair<'a>() -> impl Parser<'a, (String, String)> {
     pair(left(identifier, match_literal("=")), quoted_string())
 }
 
+/// Parses all attribute pairs. It could be empty.
+pub fn attributes<'a>() -> impl Parser<'a, Vec<(String, String)>> {
+    zero_or_more(right(one_or_more_whitespaces(), attribute_pair()))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -360,6 +365,28 @@ mod tests {
         assert_eq!(
             (String::from("name"), String::from("John")),
             parser.parse(r#"name="John""#).unwrap().1
+        );
+    }
+    fn test_attributes() {
+        let parser = attributes();
+        assert_eq!(
+            vec![
+                (String::from("name"), String::from("John")),
+                (String::from("age"), String::from("99")),
+            ],
+            parser.parse(r#" name="John" age="99""#).unwrap().1
+        );
+        assert_eq!(Vec::<(String, String)>::new(), parser.parse(" ").unwrap().1);
+
+        assert_eq!(
+            Ok((
+                "",
+                vec![
+                    ("one".to_string(), "1".to_string()),
+                    ("two".to_string(), "2".to_string())
+                ]
+            )),
+            attributes().parse(r#" one="1" two="2""#)
         );
     }
 }
