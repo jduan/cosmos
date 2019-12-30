@@ -27,10 +27,22 @@ impl<'a> Lexer<'a> {
                 '}' => Token::Delimiter(Delimiter::RightBrace),
                 ')' => Token::Delimiter(Delimiter::RightParen),
                 ';' => Token::Delimiter(Delimiter::Semicolon),
-                '=' => Token::Operator(Operator::Assignment),
+                '=' => {
+                    if self.is_double_equal() {
+                        Token::Operator(Operator::Equal)
+                    } else {
+                        Token::Operator(Operator::Assignment)
+                    }
+                }
                 '+' => Token::Operator(Operator::PlusSign),
                 '-' => Token::Operator(Operator::MinusSign),
-                '!' => Token::Operator(Operator::Bang),
+                '!' => {
+                    if self.is_not_equal() {
+                        Token::Operator(Operator::NotEqual)
+                    } else {
+                        Token::Operator(Operator::Bang)
+                    }
+                }
                 '*' => Token::Operator(Operator::Asterisk),
                 '/' => Token::Operator(Operator::Slash),
                 '<' => Token::Operator(Operator::LessThan),
@@ -93,6 +105,27 @@ impl<'a> Lexer<'a> {
             }
         }
     }
+
+    fn is_double_equal(&mut self) -> bool {
+        self.is_next_equal_sign()
+    }
+
+    fn is_not_equal(&mut self) -> bool {
+        self.is_next_equal_sign()
+    }
+
+    fn is_next_equal_sign(&mut self) -> bool {
+        if let Some(ch) = self.iter.peek() {
+            if *ch == '=' {
+                self.iter.next();
+                true
+            } else {
+                false
+            }
+        } else {
+            false
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -128,6 +161,8 @@ pub enum Operator {
     Slash,
     LessThan,
     GreaterThan,
+    Equal,
+    NotEqual,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -181,10 +216,7 @@ mod tests {
         assert_eq!(Token::Delimiter(Delimiter::RightBrace), lexer.next_token());
         assert_eq!(Token::Delimiter(Delimiter::Comma), lexer.next_token());
         assert_eq!(Token::Delimiter(Delimiter::Semicolon), lexer.next_token());
-        assert_eq!(
-            Token::SpecialToken(SpecialToken::Illegal),
-            lexer.next_token()
-        );
+        assert_eq!(Token::Operator(Operator::Bang), lexer.next_token());
         assert_eq!(Token::SpecialToken(SpecialToken::EOF), lexer.next_token());
     }
 
@@ -278,6 +310,14 @@ if (5 < 10) {
             Token::Delimiter(Delimiter::Semicolon),
             Token::Delimiter(Delimiter::RightBrace),
             Token::Literal(Literal::Integer(10)),
+            Token::Operator(Operator::Equal),
+            Token::Literal(Literal::Integer(10)),
+            Token::Delimiter(Delimiter::Semicolon),
+            Token::Literal(Literal::Integer(10)),
+            Token::Operator(Operator::NotEqual),
+            Token::Literal(Literal::Integer(9)),
+            Token::Delimiter(Delimiter::Semicolon),
+            Token::SpecialToken(SpecialToken::EOF),
         ];
 
         for expected_token in expected_tokens {
