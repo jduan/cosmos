@@ -138,6 +138,12 @@ pub enum Token {
     Keyword(Keyword),
 }
 
+impl Token {
+    pub fn is_eof(&self) -> bool {
+        *self == Token::SpecialToken(SpecialToken::EOF)
+    }
+}
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum SpecialToken {
     EOF,
