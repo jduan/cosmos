@@ -27,11 +27,29 @@ impl<'a> Lexer<'a> {
                 '=' => Token::Operator(Operator::Assignment),
                 '+' => Token::Operator(Operator::PlusSign),
                 // TODO: handle other kinds of tokens, such as identifiers, keywords etc.
+                n if n.is_alphabetic() => Token::Identifier(self.read_identifier(ch)),
                 _ => Token::SpecialToken(SpecialToken::Illegal),
             }
         } else {
             Token::SpecialToken(SpecialToken::EOF)
         }
+    }
+
+    fn read_identifier(&mut self, ch: char) -> Identifier {
+        let mut buffer = vec![ch];
+        while let Some(ch) = self.iter.next() {
+            if Self::is_letter(ch) {
+                buffer.push(ch);
+            } else {
+                break;
+            }
+        }
+
+        buffer.into_iter().collect()
+    }
+
+    fn is_letter(ch: char) -> bool {
+        'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
     }
 }
 
@@ -98,5 +116,11 @@ mod tests {
             lexer.next_token()
         );
         assert_eq!(Token::SpecialToken(SpecialToken::EOF), lexer.next_token());
+    }
+
+    #[test]
+    fn test_read_identifier() {
+        let mut lexer = Lexer::new("hello world");
+        assert_eq!(Token::Identifier(String::from("hello")), lexer.next_token());
     }
 }
