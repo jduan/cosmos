@@ -402,6 +402,8 @@ impl Animal for Sheep {
 
 /// Returning Traits with "dyn"
 ///
+/// https://doc.rust-lang.org/edition-guide/rust-2018/trait-system/dyn-trait-for-trait-objects.html
+///
 /// The Rust compiler needs to know how much space every function's return type requires. This
 /// means all your functions have to return a concrete type. Unlike other languages, if you have a
 /// trait like Animal, you can't write a function that returns Animal, because its different
