@@ -6,8 +6,8 @@ use log::*;
 
 pub struct Parser<'a> {
     lexer: Lexer<'a>,
+    // The next token that is to be consumed
     peek_token: Option<Token>,
-    next_token_called: bool,
 }
 
 impl<'a> Parser<'a> {
@@ -15,7 +15,6 @@ impl<'a> Parser<'a> {
         Parser {
             lexer,
             peek_token: None,
-            next_token_called: false,
         }
     }
 
@@ -44,17 +43,14 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_let_statement(&mut self) -> LetStatement {
-        println!("Before parsing an identifier");
         let identifier = match self.next_token() {
             Some(Token::Identifier(identifier)) => identifier,
             token => panic!("Expected an identifier after let but got {:?}", token),
         };
-        println!("Found expected identifier {:?}", identifier);
 
         if !self.expect_peek(Token::Operator(Operator::Assignment)) {
             panic!("Expected = after let but got {:?}", self.peek_token());
         }
-        debug!("Found expected assignment =");
 
         // TODO: we're skipping the expressions until we encounter a semicolon
         loop {
@@ -78,7 +74,19 @@ impl<'a> Parser<'a> {
         }
     }
 
+    fn next_token(&mut self) -> Option<Token> {
+        let token = self.peek_token_helper(true);
+        debug!("Next token: {:?}", token);
+        token
+    }
+
     fn peek_token(&mut self) -> Option<Token> {
+        let token = self.peek_token_helper(false);
+        debug!("Peek token: {:?}", token);
+        token
+    }
+
+    fn peek_token_helper(&mut self, consume: bool) -> Option<Token> {
         let token = if self.peek_token.is_some() {
             self.peek_token.clone()
         } else {
@@ -91,18 +99,10 @@ impl<'a> Parser<'a> {
 
             self.peek_token.clone()
         };
-        println!("Peek token: {:?}", token);
-        if self.next_token_called {
+        debug!("Peek token: {:?}", token);
+        if consume {
             self.peek_token = None;
-            self.next_token_called = false;
         }
-        token
-    }
-
-    fn next_token(&mut self) -> Option<Token> {
-        self.next_token_called = true;
-        let token = self.peek_token();
-        println!("Next token: {:?}", token);
         token
     }
 }
