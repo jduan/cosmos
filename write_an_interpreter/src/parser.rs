@@ -1,4 +1,4 @@
-use crate::ast::{LetStatement, Program, Statement};
+use crate::ast::{LetStatement, Program, ReturnStatement, Statement};
 use crate::lexer::Delimiter;
 use crate::lexer::Operator;
 use crate::lexer::{Keyword, Lexer, Token};
@@ -38,6 +38,7 @@ impl<'a> Parser<'a> {
     fn parse_statement(&mut self) -> Option<Box<dyn Statement>> {
         match self.next_token() {
             Some(Token::Keyword(Keyword::Let)) => Some(Box::new(self.parse_let_statement())),
+            Some(Token::Keyword(Keyword::Return)) => Some(Box::new(self.parse_return_statement())),
             _ => None,
         }
     }
@@ -65,6 +66,20 @@ impl<'a> Parser<'a> {
         LetStatement {
             name: identifier, //            value: Expression,
         }
+    }
+
+    fn parse_return_statement(&mut self) -> ReturnStatement {
+        // TODO: we're skipping the expressions until we encounter a semicolon
+        loop {
+            let next_token = self.next_token();
+            if next_token.is_some() && next_token.unwrap() == Token::Delimiter(Delimiter::Semicolon)
+            {
+                break;
+            }
+        }
+        debug!("Done parsing a return statement");
+
+        ReturnStatement {}
     }
 
     fn expect_peek(&mut self, expected_token: Token) -> bool {
@@ -112,7 +127,7 @@ mod tests {
     use super::*;
 
     fn init() {
-        env_logger::builder().is_test(true).try_init().unwrap();
+        let _ = env_logger::builder().is_test(true).try_init();
     }
 
     #[test]
@@ -122,6 +137,21 @@ mod tests {
 let x = 5;
 let y = 10;
 let foobar = 838383;
+        "#;
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let program = parser.parse_program();
+        println!("program: {}", program);
+    }
+
+    #[test]
+    fn test_return_statements() {
+        init();
+        let input = r#"
+return 5;
+return 10;
+return 838383;
         "#;
 
         let lexer = Lexer::new(input);

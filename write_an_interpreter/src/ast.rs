@@ -1,10 +1,10 @@
 use std::fmt::{Display, Error, Formatter};
 
-pub trait Node {}
+pub trait Node: Display {}
 
-pub trait Statement: Node + Display {}
+pub trait Statement: Node {}
 
-pub trait Expression: Node + Display {}
+pub trait Expression: Node {}
 
 pub struct Program {
     pub statements: Vec<Box<dyn Statement>>,
@@ -41,6 +41,19 @@ impl Statement for LetStatement {}
 impl Display for LetStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "LetStatement({} = expr)", self.name)?;
+        Ok(())
+    }
+}
+
+pub struct ReturnStatement {
+    //    expr: Box<dyn Expression>,
+}
+
+impl Node for ReturnStatement {}
+impl Statement for ReturnStatement {}
+impl Display for ReturnStatement {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "ReturnStatement")?;
         Ok(())
     }
 }
