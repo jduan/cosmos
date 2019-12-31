@@ -1,12 +1,24 @@
+use std::fmt::{Display, Error, Formatter};
+
 pub trait Node {}
 
-pub trait Statement: Node {}
+pub trait Statement: Node + Display {}
 
-pub trait Expression: Node {}
+pub trait Expression: Node + Display {}
 
-#[derive(Debug)]
 pub struct Program {
     pub statements: Vec<Box<dyn Statement>>,
+}
+
+impl Display for Program {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        writeln!(f, "Program has the following statements:")?;
+        for stmt in &self.statements {
+            writeln!(f, "> {}", stmt)?;
+        }
+
+        Ok(())
+    }
 }
 
 impl Program {
@@ -26,6 +38,12 @@ pub struct LetStatement {
 
 impl Node for LetStatement {}
 impl Statement for LetStatement {}
+impl Display for LetStatement {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "LetStatement({} = expr)", self.name)?;
+        Ok(())
+    }
+}
 
 pub type Identifier = String;
 
