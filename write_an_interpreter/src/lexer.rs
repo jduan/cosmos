@@ -128,7 +128,7 @@ impl<'a> Lexer<'a> {
     }
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Token {
     SpecialToken(SpecialToken),
     Identifier(Identifier),
@@ -144,20 +144,20 @@ impl Token {
     }
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum SpecialToken {
     EOF,
     Illegal,
 }
 
-pub type Identifier = String;
-
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum Literal {
     Integer(i32),
 }
 
-#[derive(Debug, PartialEq, Eq)]
+type Identifier = String;
+
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum Operator {
     Assignment,
     PlusSign,
@@ -171,7 +171,7 @@ pub enum Operator {
     NotEqual,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum Delimiter {
     Comma,
     LeftBrace,
@@ -181,7 +181,7 @@ pub enum Delimiter {
     Semicolon,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum Keyword {
     Function,
     Let,
