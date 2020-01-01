@@ -1,6 +1,6 @@
 use crate::ast::{
     Expression, ExpressionStatement, IdentifierExpression, LetStatement, LiteralIntegerExpression,
-    Program, ReturnStatement, Statement,
+    PrefixExpression, Program, ReturnStatement, Statement,
 };
 use crate::lexer::{Delimiter, TokenType};
 use crate::lexer::{Keyword, Lexer, Token};
@@ -102,6 +102,7 @@ impl<'a> Parser<'a> {
             match peek_token.get_token_type() {
                 TokenType::Identifier => Box::new(self.parse_identifier_expression()),
                 TokenType::Literal => Box::new(self.parse_literal_expression()),
+                TokenType::Operator => Box::new(self.parse_prefix_operator_expression()),
                 _ => panic!("No parser found for token: {:?}", peek_token),
             }
         } else {
@@ -129,8 +130,8 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_literal_expression(&mut self) -> LiteralIntegerExpression {
-        let literal = self.next_token().unwrap();
-        if let Token::Literal(Literal::Integer(int)) = literal {
+        let token = self.next_token().unwrap();
+        if let Token::Literal(Literal::Integer(int)) = token {
             // TODO: Ignore things and find the next semilcolon.
             // This doesn't handle binary expressions like: a + b
             loop {
@@ -143,7 +144,17 @@ impl<'a> Parser<'a> {
             }
             LiteralIntegerExpression { literal: int }
         } else {
-            panic!("Expected an identifier, but got {:?}", literal);
+            panic!("Expected an literal, but got {:?}", token);
+        }
+    }
+
+    fn parse_prefix_operator_expression(&mut self) -> PrefixExpression {
+        let token = self.next_token().unwrap();
+        if let Token::Operator(operator) = token {
+            let expr = self.parse_expression();
+            PrefixExpression { operator, expr }
+        } else {
+            panic!("Expected an operator, but got {:?}", token);
         }
     }
 
@@ -202,6 +213,7 @@ mod tests {
 let x = 5;
 return 5;
 foobar;
+-50;
 5;
         "#;
 
@@ -271,5 +283,18 @@ foobar;
         let mut parser = Parser::new(lexer);
         let expr = parser.parse_literal_expression();
         assert_eq!(LiteralIntegerExpression { literal: 50 }, expr);
+    }
+
+    #[test]
+    fn test_prefix_operator_expression() {
+        init();
+        let input = r#"
+!50;
+        "#;
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let expr = parser.parse_prefix_operator_expression();
+        println!("Prefix operator expression: {}", expr);
     }
 }

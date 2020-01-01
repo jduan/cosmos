@@ -1,5 +1,6 @@
 use log::*;
 
+use crate::lexer::Operator;
 use std::fmt::{Display, Error, Formatter};
 
 pub trait Node: Display {}
@@ -104,6 +105,26 @@ impl Expression for LiteralIntegerExpression {}
 impl Display for LiteralIntegerExpression {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "LiteralExpression ({})", self.literal)?;
+        Ok(())
+    }
+}
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
+pub struct PrefixExpression {
+    pub operator: Operator,
+    pub expr: Box<dyn Expression>,
+}
+
+impl Node for PrefixExpression {}
+impl Expression for PrefixExpression {}
+
+impl Display for PrefixExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(
+            f,
+            "PrefixExpression (operator: {:?}, expr: {})",
+            self.operator, self.expr
+        )?;
         Ok(())
     }
 }
