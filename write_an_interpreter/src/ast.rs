@@ -59,7 +59,7 @@ impl Display for ReturnStatement {
 }
 
 pub struct ExpressionStatement {
-    expr: Box<dyn Expression>,
+    pub expr: Box<dyn Expression>,
 }
 
 impl Node for ExpressionStatement {}

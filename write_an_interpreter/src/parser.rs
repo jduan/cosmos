@@ -5,16 +5,17 @@ use crate::lexer::Operator;
 use crate::lexer::{Delimiter, TokenType};
 use crate::lexer::{Keyword, Lexer, Token};
 use log::*;
+use std::cell::{RefCell, RefMut};
 use std::collections::HashMap;
 
 pub trait PrefixParser<'a> {
-    fn parse(&self, parser: &mut Parser<'a>) -> Box<dyn Expression>;
+    fn parse(&self, parser: RefMut<&mut Parser<'a>>) -> Box<dyn Expression>;
 }
 
 struct IdentifierParser {}
 
 impl<'a> PrefixParser<'a> for IdentifierParser {
-    fn parse(&self, parser: &mut Parser<'a>) -> Box<dyn Expression> {
+    fn parse(&self, mut parser: RefMut<&mut Parser<'a>>) -> Box<dyn Expression> {
         let ident = parser.next_token().unwrap();
         if let Token::Identifier(id) = ident {
             Box::new(id)
@@ -117,8 +118,13 @@ impl<'a> Parser<'a> {
             let peek_token = peek_token.unwrap();
             match peek_token {
                 Token::Identifier(identifier) => {
-                    let parser = self.prefix_parser_map.get(&TokenType::Identifier).unwrap();
-                    parser.parse(self)
+                    let rc = RefCell::new(self);
+                    let parser = rc.borrow();
+                    let parser = parser
+                        .prefix_parser_map
+                        .get(&TokenType::Identifier)
+                        .unwrap();
+                    parser.parse(rc.borrow_mut())
                 }
                 //                _ => panic!("Not parser found for token: {:?}", peek_token),
                 _ => panic!("Not parser found for token"),
