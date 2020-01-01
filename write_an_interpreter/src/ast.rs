@@ -91,3 +91,19 @@ impl Display for IdentifierExpression {
         Ok(())
     }
 }
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
+#[derive(PartialEq, Eq, Debug)]
+pub struct LiteralIntegerExpression {
+    pub literal: i32,
+}
+
+impl Node for LiteralIntegerExpression {}
+impl Expression for LiteralIntegerExpression {}
+
+impl Display for LiteralIntegerExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "LiteralExpression ({})", self.literal)?;
+        Ok(())
+    }
+}

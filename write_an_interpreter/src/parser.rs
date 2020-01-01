@@ -1,10 +1,10 @@
 use crate::ast::{
-    Expression, ExpressionStatement, IdentifierExpression, LetStatement, Program, ReturnStatement,
-    Statement,
+    Expression, ExpressionStatement, IdentifierExpression, LetStatement, LiteralIntegerExpression,
+    Program, ReturnStatement, Statement,
 };
-use crate::lexer::Operator;
 use crate::lexer::{Delimiter, TokenType};
 use crate::lexer::{Keyword, Lexer, Token};
+use crate::lexer::{Literal, Operator};
 use log::*;
 
 pub struct Parser<'a> {
@@ -101,6 +101,7 @@ impl<'a> Parser<'a> {
             let peek_token = peek_token.unwrap();
             match peek_token.get_token_type() {
                 TokenType::Identifier => Box::new(self.parse_identifier_expression()),
+                TokenType::Literal => Box::new(self.parse_literal_expression()),
                 _ => panic!("No parser found for token: {:?}", peek_token),
             }
         } else {
@@ -124,6 +125,25 @@ impl<'a> Parser<'a> {
             IdentifierExpression { identifier: id }
         } else {
             panic!("Expected an identifier, but got {:?}", ident);
+        }
+    }
+
+    fn parse_literal_expression(&mut self) -> LiteralIntegerExpression {
+        let literal = self.next_token().unwrap();
+        if let Token::Literal(Literal::Integer(int)) = literal {
+            // TODO: Ignore things and find the next semilcolon.
+            // This doesn't handle binary expressions like: a + b
+            loop {
+                let next_token = self.next_token();
+                if next_token.is_some()
+                    && next_token.unwrap() == Token::Delimiter(Delimiter::Semicolon)
+                {
+                    break;
+                }
+            }
+            LiteralIntegerExpression { literal: int }
+        } else {
+            panic!("Expected an identifier, but got {:?}", literal);
         }
     }
 
@@ -176,6 +196,22 @@ mod tests {
     }
 
     #[test]
+    fn full_test() {
+        init();
+        let input = r#"
+let x = 5;
+return 5;
+foobar;
+5;
+        "#;
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let program = parser.parse_program();
+        println!("{}", program);
+    }
+
+    #[test]
     fn test_let_statements() {
         init();
         let input = r#"
@@ -222,5 +258,18 @@ foobar;
             },
             expr
         );
+    }
+
+    #[test]
+    fn test_literal_expression() {
+        init();
+        let input = r#"
+50;
+        "#;
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let expr = parser.parse_literal_expression();
+        assert_eq!(LiteralIntegerExpression { literal: 50 }, expr);
     }
 }
