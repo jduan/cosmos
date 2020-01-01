@@ -44,12 +44,12 @@ pub struct Parser<'a> {
 
 impl<'a> Parser<'a> {
     pub fn new(lexer: Lexer<'a>) -> Parser<'a> {
-        let mut prefix_parser_map = HashMap::new();
-        prefix_parser_map.insert(TokenType::Identifier, IdentifierParser {});
+        let mut prefix_parser_map: HashMap<TokenType, Box<dyn PrefixParser<'a>>> = HashMap::new();
+        prefix_parser_map.insert(TokenType::Identifier, Box::new(IdentifierParser {}));
         Parser {
             lexer,
             peek_token: None,
-            prefix_parser_map: HashMap::new(),
+            prefix_parser_map,
         }
     }
 
@@ -73,7 +73,7 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_statement(&mut self) -> Option<Box<dyn Statement>> {
-        match self.next_token() {
+        match self.peek_token() {
             Some(Token::Keyword(Keyword::Let)) => Some(Box::new(self.parse_let_statement())),
             Some(Token::Keyword(Keyword::Return)) => Some(Box::new(self.parse_return_statement())),
             _ => Some(Box::new(self.parse_expression_statement())),
@@ -81,6 +81,7 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_let_statement(&mut self) -> LetStatement {
+        self.next_token(); // consume the let itself
         let identifier = match self.next_token() {
             Some(Token::Identifier(identifier)) => identifier,
             token => panic!("Expected an identifier after let but got {:?}", token),
@@ -106,6 +107,8 @@ impl<'a> Parser<'a> {
     }
 
     fn parse_return_statement(&mut self) -> ReturnStatement {
+        self.next_token(); // consume the return itself
+
         // TODO: we're skipping the expressions until we encounter a semicolon
         loop {
             let next_token = self.next_token();
@@ -138,7 +141,7 @@ impl<'a> Parser<'a> {
                         .unwrap();
                     parser.parse(rc.borrow_mut())
                 }
-                _ => panic!("Not parser found for token: {:?}", peek_token),
+                _ => panic!("No parser found for token: {:?}", peek_token),
             }
         } else {
             panic!("Can't parse expression because there's no more tokens!");
