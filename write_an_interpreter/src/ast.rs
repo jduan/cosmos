@@ -34,6 +34,7 @@ impl Program {
     }
 }
 
+#[derive(PartialEq, Eq, Debug)]
 pub struct LetStatement {
     pub name: String,
     //    value: Box<dyn Expression>,
@@ -48,6 +49,7 @@ impl Display for LetStatement {
     }
 }
 
+#[derive(PartialEq, Eq, Debug)]
 pub struct ReturnStatement {
     //    expr: Box<dyn Expression>,
 }
@@ -75,6 +77,7 @@ impl Display for ExpressionStatement {
 }
 
 /// Identifers are the simplest expression. They evaluate to they value they are bound to.
+#[derive(PartialEq, Eq, Debug)]
 pub struct IdentifierExpression {
     pub identifier: String,
 }

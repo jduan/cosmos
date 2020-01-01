@@ -100,7 +100,7 @@ impl<'a> Parser<'a> {
         if peek_token.is_some() {
             let peek_token = peek_token.unwrap();
             match peek_token.get_token_type() {
-                TokenType::Identifier => self.parse_identifier_expression(),
+                TokenType::Identifier => Box::new(self.parse_identifier_expression()),
                 _ => panic!("No parser found for token: {:?}", peek_token),
             }
         } else {
@@ -108,7 +108,7 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn parse_identifier_expression(&mut self) -> Box<dyn Expression> {
+    fn parse_identifier_expression(&mut self) -> IdentifierExpression {
         let ident = self.next_token().unwrap();
         if let Token::Identifier(id) = ident {
             // TODO: Ignore things and find the next semilcolon.
@@ -121,7 +121,7 @@ impl<'a> Parser<'a> {
                     break;
                 }
             }
-            Box::new(IdentifierExpression { identifier: id })
+            IdentifierExpression { identifier: id }
         } else {
             panic!("Expected an identifier, but got {:?}", ident);
         }
@@ -180,14 +180,17 @@ mod tests {
         init();
         let input = r#"
 let x = 5;
-let y = 10;
-let foobar = 838383;
         "#;
 
         let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
-        let program = parser.parse_program();
-        println!("program: {}", program);
+        let stmt = parser.parse_let_statement();
+        assert_eq!(
+            LetStatement {
+                name: String::from("x")
+            },
+            stmt
+        );
     }
 
     #[test]
@@ -195,14 +198,12 @@ let foobar = 838383;
         init();
         let input = r#"
 return 5;
-return 10;
-return 838383;
         "#;
 
         let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
-        let program = parser.parse_program();
-        println!("program: {}", program);
+        let stmt = parser.parse_return_statement();
+        assert_eq!(ReturnStatement {}, stmt);
     }
 
     #[test]
@@ -214,7 +215,12 @@ foobar;
 
         let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
-        let program = parser.parse_program();
-        println!("program: {}", program);
+        let expr = parser.parse_identifier_expression();
+        assert_eq!(
+            IdentifierExpression {
+                identifier: String::from("foobar")
+            },
+            expr
+        );
     }
 }
