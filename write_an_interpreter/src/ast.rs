@@ -1,3 +1,5 @@
+use log::*;
+
 use std::fmt::{Display, Error, Formatter};
 
 pub trait Node: Display {}
@@ -27,6 +29,7 @@ impl Program {
     }
 
     pub fn add_statement(&mut self, statement: Box<dyn Statement>) {
+        debug!("Parsed one statement: {}", statement);
         self.statements.push(statement);
     }
 }

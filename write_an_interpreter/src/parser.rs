@@ -18,6 +18,16 @@ impl<'a> PrefixParser<'a> for IdentifierParser {
     fn parse(&self, mut parser: RefMut<&mut Parser<'a>>) -> Box<dyn Expression> {
         let ident = parser.next_token().unwrap();
         if let Token::Identifier(id) = ident {
+            // TODO: Ignore things and find the next semilcolon.
+            // This doesn't handle binary expressions like: a + b
+            loop {
+                let next_token = parser.next_token();
+                if next_token.is_some()
+                    && next_token.unwrap() == Token::Delimiter(Delimiter::Semicolon)
+                {
+                    break;
+                }
+            }
             Box::new(id)
         } else {
             panic!("Expected an identifier, but got {:?}", ident);
@@ -49,7 +59,9 @@ impl<'a> Parser<'a> {
             if self.peek_token().is_some() {
                 let stmt = self.parse_statement();
                 match stmt {
-                    Some(stmt) => program.add_statement(stmt),
+                    Some(stmt) => {
+                        program.add_statement(stmt);
+                    }
                     None => panic!("Failed to parse next statement!"),
                 }
             } else {
@@ -126,8 +138,7 @@ impl<'a> Parser<'a> {
                         .unwrap();
                     parser.parse(rc.borrow_mut())
                 }
-                //                _ => panic!("Not parser found for token: {:?}", peek_token),
-                _ => panic!("Not parser found for token"),
+                _ => panic!("Not parser found for token: {:?}", peek_token),
             }
         } else {
             panic!("Can't parse expression because there's no more tokens!");
@@ -204,6 +215,19 @@ let foobar = 838383;
 return 5;
 return 10;
 return 838383;
+        "#;
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let program = parser.parse_program();
+        println!("program: {}", program);
+    }
+
+    #[test]
+    fn test_identifier_expression() {
+        init();
+        let input = r#"
+foobar;
         "#;
 
         let lexer = Lexer::new(input);
