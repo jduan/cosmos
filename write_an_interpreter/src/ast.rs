@@ -35,7 +35,7 @@ impl Program {
 }
 
 pub struct LetStatement {
-    pub name: Identifier,
+    pub name: String,
     //    value: Box<dyn Expression>,
 }
 
@@ -69,13 +69,22 @@ impl Node for ExpressionStatement {}
 impl Statement for ExpressionStatement {}
 impl Display for ExpressionStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "ExpressionStatement (expr = )")?;
+        write!(f, "ExpressionStatement (expr = {})", self.expr)?;
         Ok(())
     }
 }
 
 /// Identifers are the simplest expression. They evaluate to they value they are bound to.
-pub type Identifier = String;
+pub struct IdentifierExpression {
+    pub identifier: String,
+}
 
-impl Node for Identifier {}
-impl Expression for Identifier {}
+impl Node for IdentifierExpression {}
+impl Expression for IdentifierExpression {}
+
+impl Display for IdentifierExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "IdentifierExpression (id = {})", self.identifier)?;
+        Ok(())
+    }
+}
