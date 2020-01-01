@@ -128,7 +128,17 @@ impl<'a> Lexer<'a> {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Hash, Eq, Clone)]
+pub enum TokenType {
+    SpecialToken,
+    Identifier,
+    Literal,
+    Operator,
+    Delimiter,
+    Keyword,
+}
+
+#[derive(Debug, PartialEq, Hash, Eq, Clone)]
 pub enum Token {
     SpecialToken(SpecialToken),
     Identifier(Identifier),
@@ -139,25 +149,38 @@ pub enum Token {
 }
 
 impl Token {
+    pub fn get_token_type(&self) -> TokenType {
+        match self {
+            Token::SpecialToken(_) => TokenType::SpecialToken,
+            Token::Identifier(_) => TokenType::Identifier,
+            Token::Literal(_) => TokenType::Literal,
+            Token::Operator(_) => TokenType::Operator,
+            Token::Delimiter(_) => TokenType::Delimiter,
+            Token::Keyword(_) => TokenType::Keyword,
+        }
+    }
+}
+
+impl Token {
     pub fn is_eof(&self) -> bool {
         *self == Token::SpecialToken(SpecialToken::EOF)
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Debug, PartialEq, Hash, Eq, Copy, Clone)]
 pub enum SpecialToken {
     EOF,
     Illegal,
 }
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Debug, PartialEq, Hash, Eq, Copy, Clone)]
 pub enum Literal {
     Integer(i32),
 }
 
 type Identifier = String;
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Debug, PartialEq, Hash, Eq, Copy, Clone)]
 pub enum Operator {
     Assignment,
     PlusSign,
@@ -171,7 +194,7 @@ pub enum Operator {
     NotEqual,
 }
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Debug, PartialEq, Hash, Eq, Copy, Clone)]
 pub enum Delimiter {
     Comma,
     LeftBrace,
@@ -181,7 +204,7 @@ pub enum Delimiter {
     Semicolon,
 }
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Debug, PartialEq, Hash, Eq, Copy, Clone)]
 pub enum Keyword {
     Function,
     Let,

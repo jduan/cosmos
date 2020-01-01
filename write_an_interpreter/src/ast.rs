@@ -58,6 +58,20 @@ impl Display for ReturnStatement {
     }
 }
 
+pub struct ExpressionStatement {
+    expr: Box<dyn Expression>,
+}
+
+impl Node for ExpressionStatement {}
+impl Statement for ExpressionStatement {}
+impl Display for ExpressionStatement {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "ExpressionStatement (expr = )")?;
+        Ok(())
+    }
+}
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub type Identifier = String;
 
 impl Node for Identifier {}
