@@ -1,6 +1,6 @@
 use crate::ast::{
-    Expression, ExpressionStatement, IdentifierExpression, LetStatement, LiteralIntegerExpression,
-    PrefixExpression, Program, ReturnStatement, Statement,
+    Expression, ExpressionStatement, IdentifierExpression, InfixExpression, LetStatement,
+    LiteralIntegerExpression, PrefixExpression, Program, ReturnStatement, Statement,
 };
 use crate::lexer::{Delimiter, TokenType};
 use crate::lexer::{Keyword, Lexer, Token};
@@ -158,6 +158,16 @@ impl<'a> Parser<'a> {
         }
     }
 
+    fn parse_infix_operator_expression(&mut self) -> InfixExpression {
+        let token = self.next_token().unwrap();
+        if let Token::Operator(operator) = token {
+            let expr = self.parse_expression();
+            PrefixExpression { operator, expr }
+        } else {
+            panic!("Expected an operator, but got {:?}", token);
+        }
+    }
+
     fn expect_peek(&mut self, expected_token: Token) -> bool {
         match self.peek_token() {
             Some(token) => token == expected_token,
@@ -295,6 +305,19 @@ foobar;
         let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
         let expr = parser.parse_prefix_operator_expression();
+        println!("Prefix operator expression: {}", expr);
+    }
+
+    #[test]
+    fn test_infix_operator_expression() {
+        init();
+        let input = r#"
+5 + 5;
+        "#;
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let expr = parser.parse_infix_operator_expression();
         println!("Prefix operator expression: {}", expr);
     }
 }

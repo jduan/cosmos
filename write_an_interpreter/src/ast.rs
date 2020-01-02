@@ -128,3 +128,24 @@ impl Display for PrefixExpression {
         Ok(())
     }
 }
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
+pub struct InfixExpression {
+    pub left_expr: Box<dyn Expression>,
+    pub operator: Operator,
+    pub right_expr: Box<dyn Expression>,
+}
+
+impl Node for InfixExpression {}
+impl Expression for InfixExpression {}
+
+impl Display for InfixExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(
+            f,
+            "InfixExpression (operator: {:?}, left_expr: {}, right_expr: {})",
+            self.operator, self.left_expr, self.right_expr
+        )?;
+        Ok(())
+    }
+}

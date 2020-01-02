@@ -194,6 +194,32 @@ pub enum Operator {
     NotEqual,
 }
 
+pub enum Precedence {
+    Equals,
+    LessGreater,
+    Sum,
+    Product,
+}
+
+impl Precedence {
+    pub fn from_operator(op: Operator) -> Precedence {
+        match op {
+            Operator::Assignment => {
+                panic!("We don't need to know the precedence of the assignment operator")
+            }
+            Operator::PlusSign => Self::Sum,
+            Operator::MinusSign => Self::Sum,
+            Operator::Bang => panic!("We don't need to know the precedence of the bang operator"),
+            Operator::Asterisk => Self::Product,
+            Operator::Slash => Self::Product,
+            Operator::LessThan => Self::LessGreater,
+            Operator::GreaterThan => Self::LessGreater,
+            Operator::Equal => Self::Equals,
+            Operator::NotEqual => Self::Equals,
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Hash, Eq, Copy, Clone)]
 pub enum Delimiter {
     Comma,
