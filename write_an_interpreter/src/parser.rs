@@ -26,6 +26,7 @@ impl<'a> Parser<'a> {
         loop {
             if self.peek_token().is_some() {
                 let stmt = self.parse_statement();
+                debug!("Parsed one statement");
                 match stmt {
                     Some(stmt) => {
                         program.add_statement(stmt);
@@ -101,11 +102,14 @@ impl<'a> Parser<'a> {
         let peek_token = self.peek_token();
         if peek_token.is_some() {
             let peek_token = peek_token.unwrap();
+            debug!("before parsing prefix expression");
             let mut left_expr = self.parse_prefix_expression(peek_token);
+            debug!("done parsing prefix expression");
             while self.peek_token().is_some()
                 && self.peek_token().unwrap() != Token::Delimiter(Delimiter::Semicolon)
                 && precedence < self.peek_precedence()
             {
+                debug!("going to parse an infix expr");
                 let next_token = self.next_token().unwrap();
                 match next_token {
                     Token::Operator(op) => {
@@ -123,6 +127,12 @@ impl<'a> Parser<'a> {
                 }
             }
 
+            if self.peek_token().is_some()
+                && self.peek_token().unwrap() == Token::Delimiter(Delimiter::Semicolon)
+            {
+                self.next_token();
+            }
+
             return left_expr;
         } else {
             panic!("Can't parse expression because there's no more tokens!");
@@ -135,7 +145,7 @@ impl<'a> Parser<'a> {
         operator: Operator,
     ) -> Box<dyn Expression> {
         // TODO: use current precedence
-        let right_expr = self.parse_expression(Precedence::Lowest);
+        let right_expr = self.parse_expression(Precedence::from_token(Token::Operator(operator)));
         Box::new(InfixExpression {
             left_expr,
             operator,
@@ -176,16 +186,6 @@ impl<'a> Parser<'a> {
     fn parse_literal_expression(&mut self) -> LiteralIntegerExpression {
         let token = self.next_token().unwrap();
         if let Token::Literal(Literal::Integer(int)) = token {
-            // TODO: Ignore things and find the next semilcolon.
-            // This doesn't handle binary expressions like: a + b
-            loop {
-                let next_token = self.next_token();
-                if next_token.is_some()
-                    && next_token.unwrap() == Token::Delimiter(Delimiter::Semicolon)
-                {
-                    break;
-                }
-            }
             LiteralIntegerExpression { literal: int }
         } else {
             panic!("Expected an literal, but got {:?}", token);
@@ -357,16 +357,17 @@ foobar;
         println!("Prefix operator expression: {}", expr);
     }
 
-    //    #[test]
-    //    fn test_infix_operator_expression() {
-    //        init();
-    //        let input = r#"
-    //5 + 5;
-    //        "#;
-    //
-    //        let lexer = Lexer::new(input);
-    //        let mut parser = Parser::new(lexer);
-    //        let expr = parser.parse_infix_operator_expression();
-    //        println!("Prefix operator expression: {}", expr);
-    //    }
+    #[test]
+    fn test_infix_operator_expression() {
+        init();
+        let input = r#"
+    5 + 6 + 7;
+    5 + 6 + 7;
+            "#;
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let program = parser.parse_program();
+        println!("Infix operator expression: {}", program);
+    }
 }
