@@ -2,7 +2,7 @@ use crate::ast::{
     Expression, ExpressionStatement, IdentifierExpression, InfixExpression, LetStatement,
     LiteralIntegerExpression, PrefixExpression, Program, ReturnStatement, Statement,
 };
-use crate::lexer::{Delimiter, TokenType};
+use crate::lexer::{Delimiter, Precedence, TokenType};
 use crate::lexer::{Keyword, Lexer, Token};
 use crate::lexer::{Literal, Operator};
 use log::*;
@@ -44,7 +44,9 @@ impl<'a> Parser<'a> {
         match self.peek_token() {
             Some(Token::Keyword(Keyword::Let)) => Some(Box::new(self.parse_let_statement())),
             Some(Token::Keyword(Keyword::Return)) => Some(Box::new(self.parse_return_statement())),
-            _ => Some(Box::new(self.parse_expression_statement())),
+            _ => Some(Box::new(
+                self.parse_expression_statement(Precedence::Lowest),
+            )),
         }
     }
 
@@ -90,12 +92,12 @@ impl<'a> Parser<'a> {
         ReturnStatement {}
     }
 
-    fn parse_expression_statement(&mut self) -> ExpressionStatement {
-        let expr = self.parse_expression();
+    fn parse_expression_statement(&mut self, precedence: Precedence) -> ExpressionStatement {
+        let expr = self.parse_expression(precedence);
         ExpressionStatement { expr }
     }
 
-    fn parse_expression(&mut self) -> Box<dyn Expression> {
+    fn parse_expression(&mut self, precedence: Precedence) -> Box<dyn Expression> {
         let peek_token = self.peek_token();
         if peek_token.is_some() {
             let peek_token = peek_token.unwrap();
@@ -151,23 +153,23 @@ impl<'a> Parser<'a> {
     fn parse_prefix_operator_expression(&mut self) -> PrefixExpression {
         let token = self.next_token().unwrap();
         if let Token::Operator(operator) = token {
-            let expr = self.parse_expression();
+            let expr = self.parse_expression(Precedence::Lowest);
             PrefixExpression { operator, expr }
         } else {
             panic!("Expected an operator, but got {:?}", token);
         }
     }
 
-    fn parse_infix_operator_expression(&mut self) -> InfixExpression {
-        let token = self.next_token().unwrap();
-        if let Token::Operator(operator) = token {
-            let expr = self.parse_expression();
-            PrefixExpression { operator, expr }
-        } else {
-            panic!("Expected an operator, but got {:?}", token);
-        }
-    }
-
+    //    fn parse_infix_operator_expression(&mut self) -> InfixExpression {
+    //        let token = self.next_token().unwrap();
+    //        if let Token::Operator(operator) = token {
+    //            let expr = self.parse_expression();
+    //            InfixExpression { operator, expr }
+    //        } else {
+    //            panic!("Expected an operator, but got {:?}", token);
+    //        }
+    //    }
+    //
     fn expect_peek(&mut self, expected_token: Token) -> bool {
         match self.peek_token() {
             Some(token) => token == expected_token,
@@ -308,16 +310,16 @@ foobar;
         println!("Prefix operator expression: {}", expr);
     }
 
-    #[test]
-    fn test_infix_operator_expression() {
-        init();
-        let input = r#"
-5 + 5;
-        "#;
-
-        let lexer = Lexer::new(input);
-        let mut parser = Parser::new(lexer);
-        let expr = parser.parse_infix_operator_expression();
-        println!("Prefix operator expression: {}", expr);
-    }
+    //    #[test]
+    //    fn test_infix_operator_expression() {
+    //        init();
+    //        let input = r#"
+    //5 + 5;
+    //        "#;
+    //
+    //        let lexer = Lexer::new(input);
+    //        let mut parser = Parser::new(lexer);
+    //        let expr = parser.parse_infix_operator_expression();
+    //        println!("Prefix operator expression: {}", expr);
+    //    }
 }

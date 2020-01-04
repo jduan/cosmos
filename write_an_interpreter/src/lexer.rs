@@ -194,7 +194,10 @@ pub enum Operator {
     NotEqual,
 }
 
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+/// https://doc.rust-lang.org/rust-by-example/custom_types/enum/c_like.html
 pub enum Precedence {
+    Lowest,
     Equals,
     LessGreater,
     Sum,
@@ -392,5 +395,11 @@ if (5 < 10) {
         assert_eq!('h', iter.next().unwrap());
         assert_eq!('e', iter.next().unwrap());
         assert_eq!(10, "10".parse::<i32>().unwrap());
+    }
+
+    #[test]
+    fn test_precedence() {
+        assert!(Precedence::Sum < Precedence::Product);
+        assert!(Precedence::Lowest < Precedence::Sum);
     }
 }
