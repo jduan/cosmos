@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 // Car has an Engine field.
 data class Car(val color: String, val type: String, val engine: Engine)
 
-data class Engine(val power: Int)
+data class Engine(val power: Int, val metadata: Map<String, String>)
 
 fun main(args: Array<String>) {
     objectToJSON()
@@ -19,7 +19,8 @@ fun main(args: Array<String>) {
 
 private fun objectToJSON() {
     val objectMapper = ObjectMapper()
-    val car = Car("yellow", "renault", Engine(300))
+    val car = Car("yellow", "renault",
+        Engine(300, mapOf("name" to "Forester", "make" to "Subaru")))
     // objectMapper.writeValue(System.out, car)
     // or
     println("json string: ${objectMapper.writeValueAsString(car)}")
@@ -32,7 +33,11 @@ private fun jsonToObject() {
           "color": "Black",
           "type": "BMW",
           "engine": {
-            "power": 300
+            "power": 300,
+            "metadata": {
+                "name": "Forester",
+                "make": "Subaru"
+            }
           }
         }
     """.trimIndent()
