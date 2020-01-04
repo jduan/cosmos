@@ -2,7 +2,7 @@ use crate::ast::{
     Expression, ExpressionStatement, IdentifierExpression, InfixExpression, LetStatement,
     LiteralIntegerExpression, PrefixExpression, Program, ReturnStatement, Statement,
 };
-use crate::lexer::{Delimiter, Precedence, TokenType};
+use crate::lexer::{Delimiter, Precedence};
 use crate::lexer::{Keyword, Lexer, Token};
 use crate::lexer::{Literal, Operator};
 use log::*;
@@ -101,14 +101,56 @@ impl<'a> Parser<'a> {
         let peek_token = self.peek_token();
         if peek_token.is_some() {
             let peek_token = peek_token.unwrap();
-            match peek_token.get_token_type() {
-                TokenType::Identifier => Box::new(self.parse_identifier_expression()),
-                TokenType::Literal => Box::new(self.parse_literal_expression()),
-                TokenType::Operator => Box::new(self.parse_prefix_operator_expression()),
-                _ => panic!("No parser found for token: {:?}", peek_token),
+            let mut left_expr = self.parse_prefix_expression(peek_token);
+            while self.peek_token().is_some()
+                && self.peek_token().unwrap() != Token::Delimiter(Delimiter::Semicolon)
+                && precedence < self.peek_precedence()
+            {
+                let next_token = self.next_token().unwrap();
+                match next_token {
+                    Token::Operator(op) => {
+                        //                        Operator::Asterisk => true,
+                        //                        Operator::Slash => true,
+                        //                        Operator::LessThan => true,
+                        //                        Operator::GreaterThan => true,
+                        //                        Operator::Equal => true,
+                        //                        Operator::NotEqual => true,
+                        if op == Operator::PlusSign || op == Operator::MinusSign {
+                            left_expr = self.parse_infix_expression(left_expr, op);
+                        }
+                    }
+                    _ => info!("Token isn't an infix operator: {:?}", next_token),
+                }
             }
+
+            return left_expr;
         } else {
             panic!("Can't parse expression because there's no more tokens!");
+        }
+    }
+
+    fn parse_infix_expression(
+        &mut self,
+        left_expr: Box<dyn Expression>,
+        operator: Operator,
+    ) -> Box<dyn Expression> {
+        // TODO: use current precedence
+        let right_expr = self.parse_expression(Precedence::Lowest);
+        Box::new(InfixExpression {
+            left_expr,
+            operator,
+            right_expr,
+        })
+    }
+
+    fn parse_prefix_expression(&mut self, token: Token) -> Box<dyn Expression> {
+        match token {
+            Token::Identifier(_id) => Box::new(self.parse_identifier_expression()),
+            Token::Literal(_litearl) => Box::new(self.parse_literal_expression()),
+            _ => panic!(
+                "Don't know how to parse prefix expression for token: {:?}",
+                token
+            ),
         }
     }
 
@@ -187,6 +229,11 @@ impl<'a> Parser<'a> {
         let token = self.peek_token_helper(false);
         debug!("Peek token: {:?}", token);
         token
+    }
+
+    fn peek_precedence(&mut self) -> Precedence {
+        let token = self.peek_token_helper(false);
+        Precedence::from_token(token.unwrap())
     }
 
     fn peek_token_helper(&mut self, consume: bool) -> Option<Token> {

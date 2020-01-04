@@ -165,6 +165,23 @@ impl Token {
     pub fn is_eof(&self) -> bool {
         *self == Token::SpecialToken(SpecialToken::EOF)
     }
+
+    pub fn is_infix_operator(&self) -> bool {
+        match *self {
+            Token::Operator(op) => match op {
+                Operator::PlusSign => true,
+                Operator::MinusSign => true,
+                Operator::Asterisk => true,
+                Operator::Slash => true,
+                Operator::LessThan => true,
+                Operator::GreaterThan => true,
+                Operator::Equal => true,
+                Operator::NotEqual => true,
+                _ => false,
+            },
+            _ => false,
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Hash, Eq, Copy, Clone)]
@@ -205,20 +222,25 @@ pub enum Precedence {
 }
 
 impl Precedence {
-    pub fn from_operator(op: Operator) -> Precedence {
-        match op {
-            Operator::Assignment => {
-                panic!("We don't need to know the precedence of the assignment operator")
-            }
-            Operator::PlusSign => Self::Sum,
-            Operator::MinusSign => Self::Sum,
-            Operator::Bang => panic!("We don't need to know the precedence of the bang operator"),
-            Operator::Asterisk => Self::Product,
-            Operator::Slash => Self::Product,
-            Operator::LessThan => Self::LessGreater,
-            Operator::GreaterThan => Self::LessGreater,
-            Operator::Equal => Self::Equals,
-            Operator::NotEqual => Self::Equals,
+    pub fn from_token(token: Token) -> Precedence {
+        match token {
+            Token::Operator(op) => match op {
+                Operator::Assignment => {
+                    panic!("We don't need to know the precedence of the assignment operator")
+                }
+                Operator::PlusSign => Self::Sum,
+                Operator::MinusSign => Self::Sum,
+                Operator::Bang => {
+                    panic!("We don't need to know the precedence of the bang operator")
+                }
+                Operator::Asterisk => Self::Product,
+                Operator::Slash => Self::Product,
+                Operator::LessThan => Self::LessGreater,
+                Operator::GreaterThan => Self::LessGreater,
+                Operator::Equal => Self::Equals,
+                Operator::NotEqual => Self::Equals,
+            },
+            _ => Self::Lowest,
         }
     }
 }
