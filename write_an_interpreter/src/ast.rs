@@ -44,7 +44,7 @@ impl Node for LetStatement {}
 impl Statement for LetStatement {}
 impl Display for LetStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "LetStatement({} = expr)", self.name)
+        write!(f, "LetStatement({} = {})", self.name, self.expr)
     }
 }
 
@@ -56,7 +56,7 @@ impl Node for ReturnStatement {}
 impl Statement for ReturnStatement {}
 impl Display for ReturnStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "ReturnStatement")
+        write!(f, "ReturnStatement({})", self.expr)
     }
 }
 
@@ -68,7 +68,7 @@ impl Node for ExpressionStatement {}
 impl Statement for ExpressionStatement {}
 impl Display for ExpressionStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "ExpressionStatement (expr = {})", self.expr)
+        write!(f, "ExpressionStatement({})", self.expr)
     }
 }
 

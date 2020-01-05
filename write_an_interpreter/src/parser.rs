@@ -81,6 +81,7 @@ impl<'a> Parser<'a> {
 
     fn parse_expression_statement(&mut self, precedence: Precedence) -> ExpressionStatement {
         let expr = self.parse_expression(precedence);
+        debug!("Done parsing an expression statement");
         ExpressionStatement { expr }
     }
 
@@ -301,23 +302,6 @@ mod tests {
     }
 
     #[test]
-    fn full_test() {
-        init();
-        let input = r#"
-let x = 5;
-return 5;
-foobar;
--50;
-5;
-        "#;
-
-        let lexer = Lexer::new(input);
-        let mut parser = Parser::new(lexer);
-        let program = parser.parse_program();
-        println!("{}", program);
-    }
-
-    #[test]
     fn test_let_statements() {
         init();
         let data = vec![
@@ -351,45 +335,53 @@ foobar;
     }
 
     #[test]
+    fn test_expression_statements() {
+        init();
+        let data = vec![
+            ("foobar;", "ExpressionStatement(foobar)"),
+            ("5;", "ExpressionStatement(5)"),
+            ("-50;", "ExpressionStatement((-50))"),
+        ];
+        for (input, expr) in data {
+            let lexer = Lexer::new(input);
+            let mut parser = Parser::new(lexer);
+            let stmt = parser.parse_expression_statement(Precedence::Lowest);
+            debug!("test_expression_statements got: {}", stmt);
+            assert_eq!(stmt.to_string(), String::from(expr));
+        }
+    }
+
+    #[test]
     fn test_identifier_expression() {
         init();
-        let input = r#"
-foobar;
-        "#;
+        let input = " foobar; ";
 
         let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
         let expr = parser.parse_identifier_expression();
-        println!("Identifier expression: {}", expr);
+        assert_eq!("foobar", expr.to_string());
+    }
+
+    #[test]
+    fn test_call_expression() {
+        init();
+        let input = " foobar(a + b); ";
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let expr = parser.parse_identifier_expression();
+        assert_eq!("foobar((a + b))", expr.to_string());
     }
 
     #[test]
     fn test_literal_expression() {
         init();
-        let input = r#"
-50;
-        "#;
+        let input = " 50; ";
 
         let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
         let expr = parser.parse_literal_expression();
         assert_eq!(LiteralIntegerExpression { literal: 50 }, expr);
-    }
-
-    #[test]
-    fn test_infix_operator_expression() {
-        init();
-        let input = r#"
-    5 + 6 + 7;
-    5 - 6 + 7;
-    5 - 6 * 7;
-    5 - 6 * 7 + 3 / 4;
-            "#;
-
-        let lexer = Lexer::new(input);
-        let mut parser = Parser::new(lexer);
-        let program = parser.parse_program();
-        println!("Infix operator expression: {}", program);
     }
 
     #[test]
