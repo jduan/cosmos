@@ -231,7 +231,7 @@ impl Display for Operator {
     }
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 /// https://doc.rust-lang.org/rust-by-example/custom_types/enum/c_like.html
 pub enum Precedence {
     Lowest,

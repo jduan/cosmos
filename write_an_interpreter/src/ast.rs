@@ -74,7 +74,6 @@ impl Display for ExpressionStatement {
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 #[derive(PartialEq, Eq, Debug)]
 pub struct IdentifierExpression {
     pub identifier: String,
@@ -89,10 +88,9 @@ impl Display for IdentifierExpression {
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub struct CallExpression {
     pub name: String,
-    pub expr: Box<dyn Expression>,
+    pub exprs: Vec<Box<dyn Expression>>,
 }
 
 impl Node for CallExpression {}
@@ -100,11 +98,18 @@ impl Expression for CallExpression {}
 
 impl Display for CallExpression {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "{}({})", self.name, self.expr)
+        write!(f, "{}(", self.name)?;
+        let len = self.exprs.len();
+        for i in 0..len {
+            write!(f, "{}", self.exprs[i])?;
+            if i != len - 1 {
+                write!(f, ", ")?;
+            }
+        }
+        write!(f, ")")
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 #[derive(PartialEq, Eq, Debug)]
 pub struct BoolLiteralExpression {
     pub literal: bool,
@@ -119,7 +124,6 @@ impl Display for BoolLiteralExpression {
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub struct GroupedExpression {
     pub expr: Box<dyn Expression>,
 }
@@ -133,7 +137,6 @@ impl Display for GroupedExpression {
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 #[derive(PartialEq, Eq, Debug)]
 pub struct LiteralIntegerExpression {
     pub literal: i32,
@@ -148,7 +151,6 @@ impl Display for LiteralIntegerExpression {
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub struct MinusUnaryExpression {
     pub expr: Box<dyn Expression>,
 }
@@ -162,7 +164,6 @@ impl Display for MinusUnaryExpression {
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub struct BangUnaryExpression {
     pub expr: Box<dyn Expression>,
 }
@@ -176,7 +177,6 @@ impl Display for BangUnaryExpression {
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub struct PrefixExpression {
     pub operator: Operator,
     pub expr: Box<dyn Expression>,
@@ -195,7 +195,6 @@ impl Display for PrefixExpression {
     }
 }
 
-/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub struct InfixExpression {
     pub left_expr: Box<dyn Expression>,
     pub operator: Operator,

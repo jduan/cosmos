@@ -100,6 +100,30 @@ impl<'a> Parser<'a> {
         ExpressionStatement { expr }
     }
 
+    /// Parse a list of expressions, such as when calling a function. The list can be empty.
+    fn parse_expressions(&mut self, precedence: Precedence) -> Vec<Box<dyn Expression>> {
+        let peek_token = self.peek_token();
+        if peek_token.is_none() {
+            panic!("Expected more tokens when parsing a list of expressions but got a None");
+        }
+
+        return if peek_token == Some(Token::Delimiter(Delimiter::RightParen)) {
+            self.next_token();
+            vec![]
+        } else {
+            let expr = self.parse_expression(precedence);
+            //            add(b * c)
+            debug!("Parsed one argument of a function call: {}", expr);
+            // Consume the next comma if there's one
+            if let Some(Token::Delimiter(Delimiter::Comma)) = self.peek_token() {
+                self.next_token();
+            }
+            let mut rest_exprs = self.parse_expressions(precedence);
+            rest_exprs.push(expr);
+            rest_exprs
+        };
+    }
+
     fn parse_expression(&mut self, precedence: Precedence) -> Box<dyn Expression> {
         let peek_token = self.peek_token();
         if peek_token.is_some() {
@@ -197,18 +221,12 @@ impl<'a> Parser<'a> {
         let ident = self.next_token().unwrap();
         if let Token::Identifier(id) = ident {
             if let Some(Token::Delimiter(Delimiter::LeftParen)) = self.peek_token() {
+                debug!("Going to parse a call expression");
                 self.next_token();
-                let expr = self.parse_expression(Precedence::Lowest);
-                debug!("Parsed a call expression: {}", expr);
-                let next_token = self.next_token();
-                if let Some(Token::Delimiter(Delimiter::RightParen)) = next_token {
-                    Box::new(CallExpression { name: id, expr })
-                } else {
-                    panic!(
-                        "Expect a closing parent ) for a call expression but got: {:?}",
-                        next_token
-                    );
-                }
+                let mut exprs = self.parse_expressions(Precedence::Lowest);
+                exprs.reverse();
+                debug!("Parsed a call expression");
+                Box::new(CallExpression { name: id, exprs })
             } else {
                 Box::new(IdentifierExpression { identifier: id })
             }
@@ -457,22 +475,17 @@ foobar;
             ("(5 + 5) * 2 * (5 + 5)", "(((5 + 5) * 2) * (5 + 5))"),
             ("-(5 + 5)", "(-(5 + 5))"),
             ("!(true == true)", "(!(true == true))"),
+            ("add(b * c)", "add((b * c))"),
             ("a + add(b * c) + d", "((a + add((b * c))) + d)"),
+            (
+                "add(a + b + c * d / f + g)",
+                "add((((a + b) + ((c * d) / f)) + g))",
+            ),
+            (
+                "add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))",
+                "add(a, b, 1, (2 * 3), (4 + 5), add(6, (7 * 8)))",
+            ),
         ];
-        //        map.insert;
-        //        map.insert;
-        //        map.insert;
-        //        map.insert;
-        //        map.insert;
-        //        map.insert;
-        //        map.insert(
-        //            "add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))",
-        //            "add(a, b, 1, (2 * 3), (4 + 5), add(6, (7 * 8)))",
-        //        );
-        //        map.insert(
-        //            "add(a + b + c * d / f + g)",
-        //            "add((((a + b) + ((c * d) / f)) + g))",
-        //        );
 
         for (input, repr) in pairs {
             let lexer = Lexer::new(input);
