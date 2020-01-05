@@ -393,6 +393,16 @@ mod tests {
     }
 
     #[test]
+    fn test_unary_expression() {
+        init();
+        test_expression_helper(vec![
+            ("-50;", "(-50)"),
+            ("!true;", "(!true)"),
+            ("!false", "(!false)"),
+        ]);
+    }
+
+    #[test]
     fn test_grouped_expression() {
         init();
         test_expression_helper(vec![
