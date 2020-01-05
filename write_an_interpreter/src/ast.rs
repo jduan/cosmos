@@ -122,19 +122,6 @@ impl Display for BoolLiteralExpression {
     }
 }
 
-pub struct GroupedExpression {
-    pub expr: Box<dyn Expression>,
-}
-
-impl Node for GroupedExpression {}
-impl Expression for GroupedExpression {}
-
-impl Display for GroupedExpression {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "{}", self.expr)
-    }
-}
-
 #[derive(PartialEq, Eq, Debug)]
 pub struct LiteralIntegerExpression {
     pub literal: i32,

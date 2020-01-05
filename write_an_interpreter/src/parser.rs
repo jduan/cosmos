@@ -1,7 +1,7 @@
 use crate::ast::{
     BangUnaryExpression, BoolLiteralExpression, CallExpression, Expression, ExpressionStatement,
-    GroupedExpression, IdentifierExpression, InfixExpression, LetStatement,
-    LiteralIntegerExpression, MinusUnaryExpression, Program, ReturnStatement, Statement,
+    IdentifierExpression, InfixExpression, LetStatement, LiteralIntegerExpression,
+    MinusUnaryExpression, Program, ReturnStatement, Statement,
 };
 use crate::lexer::{Delimiter, Precedence};
 use crate::lexer::{Keyword, Lexer, Token};
@@ -169,7 +169,7 @@ impl<'a> Parser<'a> {
 
     fn parse_prefix_expression(&mut self, token: Token) -> Box<dyn Expression> {
         match token {
-            Token::Delimiter(Delimiter::LeftParen) => Box::new(self.parse_grouped_expression()),
+            Token::Delimiter(Delimiter::LeftParen) => self.parse_grouped_expression(),
             Token::Keyword(Keyword::True) => Box::new(self.parse_bool_literal_expression(true)),
             Token::Keyword(Keyword::False) => Box::new(self.parse_bool_literal_expression(false)),
             Token::Identifier(_id) => self.parse_identifier_expression(),
@@ -183,13 +183,13 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn parse_grouped_expression(&mut self) -> GroupedExpression {
+    fn parse_grouped_expression(&mut self) -> Box<dyn Expression> {
         self.next_token();
         let expr = self.parse_expression(Precedence::Lowest);
         debug!("Parsed a grouped expression: {}", expr);
         let next_token = self.next_token();
         if let Some(Token::Delimiter(Delimiter::RightParen)) = next_token {
-            GroupedExpression { expr }
+            expr
         } else {
             panic!(
                 "Expect a closing parent ) for a grouped expression but got: {:?}",
@@ -411,7 +411,9 @@ mod tests {
         init();
         test_expression_helper(vec![
             ("(5 + 5) * 2", "((5 + 5) * 2)"),
+            ("(5 + (5 + (6 + 7))) * 2", "((5 + (5 + (6 + 7))) * 2)"),
             ("2 / (5 + 5)", "(2 / (5 + 5))"),
+            ("2 / (5 + (5 * 2))", "(2 / (5 + (5 * 2)))"),
         ]);
     }
 
