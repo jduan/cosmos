@@ -62,6 +62,7 @@ impl<'a> Parser<'a> {
         self.expect_next(Token::Operator(Operator::Assignment));
         let expr = self.parse_expression(Precedence::Lowest);
         debug!("Done parsing a let statement");
+        self.consume_semicolon();
 
         LetStatement {
             name: identifier,
@@ -144,12 +145,7 @@ impl<'a> Parser<'a> {
                     _ => info!("Token isn't an infix operator: {:?}", next_token),
                 }
             }
-
-            if self.peek_token().is_some()
-                && self.peek_token().unwrap() == Token::Delimiter(Delimiter::Semicolon)
-            {
-                self.next_token();
-            }
+            self.consume_semicolon();
 
             return left_expr;
         } else {
@@ -255,6 +251,16 @@ impl<'a> Parser<'a> {
         }
     }
 
+    /// If there's a semicolon, consume it. This method is useful at the end of
+    /// parsing a statement, such as a let statement.
+    fn consume_semicolon(&mut self) {
+        if let Some(token) = self.peek_token() {
+            if token == Token::Delimiter(Delimiter::Semicolon) {
+                self.next_token();
+            }
+        }
+    }
+
     fn next_token(&mut self) -> Option<Token> {
         let token = self.peek_token_helper(true);
         debug!("Next token: {:?}", token);
@@ -322,7 +328,7 @@ foobar;
     fn test_let_statements() {
         init();
         let data = vec![
-            ("let x = 5", "x", "5"),
+            ("let x = 5;", "x", "5"),
             ("let x = 5 + 6", "x", "(5 + 6)"),
             ("let x = call(5, 6 + 7)", "x", "call(5, (6 + 7))"),
         ];
