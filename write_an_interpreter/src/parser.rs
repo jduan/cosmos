@@ -1,5 +1,5 @@
 use crate::ast::{
-    BangUnaryExpression, BoolLiteralExpression, Expression, ExpressionStatement,
+    BangUnaryExpression, BoolLiteralExpression, Expression, ExpressionStatement, GroupedExpression,
     IdentifierExpression, InfixExpression, LetStatement, LiteralIntegerExpression,
     MinusUnaryExpression, PrefixExpression, Program, ReturnStatement, Statement,
 };
@@ -158,6 +158,7 @@ impl<'a> Parser<'a> {
 
     fn parse_prefix_expression(&mut self, token: Token) -> Box<dyn Expression> {
         match token {
+            Token::Delimiter(Delimiter::LeftParen) => Box::new(self.parse_grouped_expression()),
             Token::Keyword(Keyword::True) => Box::new(self.parse_bool_literal_expression(true)),
             Token::Keyword(Keyword::False) => Box::new(self.parse_bool_literal_expression(false)),
             Token::Identifier(_id) => Box::new(self.parse_identifier_expression()),
@@ -168,6 +169,21 @@ impl<'a> Parser<'a> {
                 "Don't know how to parse prefix expression for token: {:?}",
                 token
             ),
+        }
+    }
+
+    fn parse_grouped_expression(&mut self) -> GroupedExpression {
+        self.next_token();
+        let expr = self.parse_expression(Precedence::Lowest);
+        debug!("Parsed a grouped expression: {}", expr);
+        let next_token = self.next_token();
+        if let Some(Token::Delimiter(Delimiter::RightParen)) = next_token {
+            GroupedExpression { expr }
+        } else {
+            panic!(
+                "Expect a closing parent ) for a grouped expression but got: {:?}",
+                next_token
+            );
         }
     }
 
@@ -424,14 +440,20 @@ foobar;
             ("false", "false"),
             ("3 > 5 == false", "((3 > 5) == false)"),
             ("3 < 5 == true", "((3 < 5) == true)"),
-            //            ("1 + (2 + 3) + 4", "((1 + (2 + 3)) + 4)"),
+            ("1 + (2 + 3) + 4", "((1 + (2 + 3)) + 4)"),
+            ("(5 + 5) * 2", "((5 + 5) * 2)"),
+            ("2 / (5 + 5)", "(2 / (5 + 5))"),
+            ("(5 + 5) * 2 * (5 + 5)", "(((5 + 5) * 2) * (5 + 5))"),
+            ("-(5 + 5)", "(-(5 + 5))"),
+            ("!(true == true)", "(!(true == true))"),
+            //            ("a + add(b * c) + d", "((a + add((b * c))) + d)"),
         ];
-        //        map.insert("(5 + 5) * 2", "((5 + 5) * 2)");
-        //        map.insert("2 / (5 + 5)", "(2 / (5 + 5))");
-        //        map.insert("(5 + 5) * 2 * (5 + 5)", "(((5 + 5) * 2) * (5 + 5))");
-        //        map.insert("-(5 + 5)", "(-(5 + 5))");
-        //        map.insert("!(true == true)", "(!(true == true))");
-        //        map.insert("a + add(b * c) + d", "((a + add((b * c))) + d)");
+        //        map.insert;
+        //        map.insert;
+        //        map.insert;
+        //        map.insert;
+        //        map.insert;
+        //        map.insert;
         //        map.insert(
         //            "add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))",
         //            "add(a, b, 1, (2 * 3), (4 + 5), add(6, (7 * 8)))",
@@ -445,7 +467,7 @@ foobar;
             let lexer = Lexer::new(input);
             let mut parser = Parser::new(lexer);
             let expr = parser.parse_expression(Precedence::Lowest);
-            assert_eq!(repr, expr.to_string());
+            assert_eq!(expr.to_string(), repr);
         }
     }
 }

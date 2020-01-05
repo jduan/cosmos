@@ -105,6 +105,20 @@ impl Display for BoolLiteralExpression {
 }
 
 /// Identifers are the simplest expression. They evaluate to they value they are bound to.
+pub struct GroupedExpression {
+    pub expr: Box<dyn Expression>,
+}
+
+impl Node for GroupedExpression {}
+impl Expression for GroupedExpression {}
+
+impl Display for GroupedExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "{}", self.expr)
+    }
+}
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 #[derive(PartialEq, Eq, Debug)]
 pub struct LiteralIntegerExpression {
     pub literal: i32,
