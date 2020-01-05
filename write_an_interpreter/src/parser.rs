@@ -1,7 +1,7 @@
 use crate::ast::{
-    BangUnaryExpression, Expression, ExpressionStatement, IdentifierExpression, InfixExpression,
-    LetStatement, LiteralIntegerExpression, MinusUnaryExpression, PrefixExpression, Program,
-    ReturnStatement, Statement,
+    BangUnaryExpression, BoolLiteralExpression, Expression, ExpressionStatement,
+    IdentifierExpression, InfixExpression, LetStatement, LiteralIntegerExpression,
+    MinusUnaryExpression, PrefixExpression, Program, ReturnStatement, Statement,
 };
 use crate::lexer::{Delimiter, Precedence};
 use crate::lexer::{Keyword, Lexer, Token};
@@ -158,6 +158,8 @@ impl<'a> Parser<'a> {
 
     fn parse_prefix_expression(&mut self, token: Token) -> Box<dyn Expression> {
         match token {
+            Token::Keyword(Keyword::True) => Box::new(self.parse_bool_literal_expression(true)),
+            Token::Keyword(Keyword::False) => Box::new(self.parse_bool_literal_expression(false)),
             Token::Identifier(_id) => Box::new(self.parse_identifier_expression()),
             Token::Literal(_litearl) => Box::new(self.parse_literal_expression()),
             Token::Operator(Operator::MinusSign) => Box::new(self.parse_minus_unary_expression()),
@@ -167,6 +169,11 @@ impl<'a> Parser<'a> {
                 token
             ),
         }
+    }
+
+    fn parse_bool_literal_expression(&mut self, b: bool) -> BoolLiteralExpression {
+        self.next_token();
+        BoolLiteralExpression { literal: b }
     }
 
     fn parse_identifier_expression(&mut self) -> IdentifierExpression {
@@ -413,12 +420,12 @@ foobar;
                 "((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
             ),
             ("5 < 4 != 3 > 4", "((5 < 4) != (3 > 4))"),
+            ("true", "true"),
+            ("false", "false"),
+            ("3 > 5 == false", "((3 > 5) == false)"),
+            ("3 < 5 == true", "((3 < 5) == true)"),
+            //            ("1 + (2 + 3) + 4", "((1 + (2 + 3)) + 4)"),
         ];
-        //        map.insert("true", "true");
-        //        map.insert("false", "false");
-        //        map.insert("3 > 5 == false", "((3 > 5) == false)");
-        //        map.insert("3 < 5 == true", "((3 < 5) == true)");
-        //        map.insert("1 + (2 + 3) + 4", "((1 + (2 + 3)) + 4)");
         //        map.insert("(5 + 5) * 2", "((5 + 5) * 2)");
         //        map.insert("2 / (5 + 5)", "(2 / (5 + 5))");
         //        map.insert("(5 + 5) * 2 * (5 + 5)", "(((5 + 5) * 2) * (5 + 5))");

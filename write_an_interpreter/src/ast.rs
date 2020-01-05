@@ -91,6 +91,21 @@ impl Display for IdentifierExpression {
 
 /// Identifers are the simplest expression. They evaluate to they value they are bound to.
 #[derive(PartialEq, Eq, Debug)]
+pub struct BoolLiteralExpression {
+    pub literal: bool,
+}
+
+impl Node for BoolLiteralExpression {}
+impl Expression for BoolLiteralExpression {}
+
+impl Display for BoolLiteralExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "{}", self.literal)
+    }
+}
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
+#[derive(PartialEq, Eq, Debug)]
 pub struct LiteralIntegerExpression {
     pub literal: i32,
 }
