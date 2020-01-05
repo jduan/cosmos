@@ -387,6 +387,12 @@ mod tests {
     }
 
     #[test]
+    fn test_bool_expression() {
+        init();
+        test_expression_helper(vec![("true;", "true"), ("false;", "false")]);
+    }
+
+    #[test]
     fn test_grouped_expression() {
         init();
         test_expression_helper(vec![
