@@ -113,13 +113,15 @@ impl<'a> Parser<'a> {
                 let next_token = self.next_token().unwrap();
                 match next_token {
                     Token::Operator(op) => {
-                        //                        Operator::Asterisk => true,
-                        //                        Operator::Slash => true,
-                        //                        Operator::LessThan => true,
-                        //                        Operator::GreaterThan => true,
-                        //                        Operator::Equal => true,
-                        //                        Operator::NotEqual => true,
-                        if op == Operator::PlusSign || op == Operator::MinusSign {
+                        if op == Operator::PlusSign
+                            || op == Operator::MinusSign
+                            || op == Operator::Asterisk
+                            || op == Operator::Slash
+                            || op == Operator::LessThan
+                            || op == Operator::GreaterThan
+                            || op == Operator::Equal
+                            || op == Operator::NotEqual
+                        {
                             left_expr = self.parse_infix_expression(left_expr, op);
                         }
                     }
@@ -260,6 +262,7 @@ impl<'a> Parser<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashMap;
 
     fn init() {
         let _ = env_logger::builder().is_test(true).try_init();
@@ -363,11 +366,30 @@ foobar;
         let input = r#"
     5 + 6 + 7;
     5 - 6 + 7;
+    5 - 6 * 7;
+    5 - 6 * 7 + 3 / 4;
             "#;
 
         let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
         let program = parser.parse_program();
         println!("Infix operator expression: {}", program);
+    }
+
+    #[test]
+    fn test_infix_operator_expression2() {
+        init();
+        let mut map = HashMap::new();
+        map.insert("5 + 6 + 7;", "((5 + 6) + 7)");
+        map.insert("5 - 6 + 7;", "((5 - 6) + 7)");
+        map.insert("5 - 6 * 7;", "(5 - (6 * 7))");
+        map.insert("5 - 6 * 7 + 3 / 4;", "((5 - (6 * 7)) + (3 / 4))");
+
+        for (input, repr) in map {
+            let lexer = Lexer::new(input);
+            let mut parser = Parser::new(lexer);
+            let expr = parser.parse_expression(Precedence::Lowest);
+            assert_eq!(repr, expr.to_string());
+        }
     }
 }
