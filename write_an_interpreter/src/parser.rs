@@ -1,7 +1,7 @@
 use crate::ast::{
-    Expression, ExpressionStatement, IdentifierExpression, InfixExpression, LetStatement,
-    LiteralIntegerExpression, MinusUnaryExpression, PrefixExpression, Program, ReturnStatement,
-    Statement,
+    BangUnaryExpression, Expression, ExpressionStatement, IdentifierExpression, InfixExpression,
+    LetStatement, LiteralIntegerExpression, MinusUnaryExpression, PrefixExpression, Program,
+    ReturnStatement, Statement,
 };
 use crate::lexer::{Delimiter, Precedence};
 use crate::lexer::{Keyword, Lexer, Token};
@@ -161,6 +161,7 @@ impl<'a> Parser<'a> {
             Token::Identifier(_id) => Box::new(self.parse_identifier_expression()),
             Token::Literal(_litearl) => Box::new(self.parse_literal_expression()),
             Token::Operator(Operator::MinusSign) => Box::new(self.parse_minus_unary_expression()),
+            Token::Operator(Operator::Bang) => Box::new(self.parse_bang_unary_expression()),
             _ => panic!(
                 "Don't know how to parse prefix expression for token: {:?}",
                 token
@@ -189,6 +190,13 @@ impl<'a> Parser<'a> {
     fn parse_minus_unary_expression(&mut self) -> MinusUnaryExpression {
         self.next_token();
         MinusUnaryExpression {
+            expr: self.parse_expression(Precedence::Prefix),
+        }
+    }
+
+    fn parse_bang_unary_expression(&mut self) -> BangUnaryExpression {
+        self.next_token();
+        BangUnaryExpression {
             expr: self.parse_expression(Precedence::Prefix),
         }
     }
@@ -376,7 +384,7 @@ foobar;
     }
 
     #[test]
-    fn test_infix_operator_expression2() {
+    fn test_parse_expression() {
         init();
         let mut map = HashMap::new();
         map.insert("5 + 6 + 7;", "((5 + 6) + 7)");
@@ -388,6 +396,8 @@ foobar;
             "3 + 4 * 5 == 3 * 1 + 4 * 5",
             "((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
         );
+        map.insert("-5 + 10 * 3", "(-(5) + (10 * 3))");
+        map.insert("!5 + 10 * 3", "(!(5) + (10 * 3))");
 
         for (input, repr) in map {
             let lexer = Lexer::new(input);

@@ -119,6 +119,20 @@ impl Display for MinusUnaryExpression {
 }
 
 /// Identifers are the simplest expression. They evaluate to they value they are bound to.
+pub struct BangUnaryExpression {
+    pub expr: Box<dyn Expression>,
+}
+
+impl Node for BangUnaryExpression {}
+impl Expression for BangUnaryExpression {}
+
+impl Display for BangUnaryExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "!({})", self.expr)
+    }
+}
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub struct PrefixExpression {
     pub operator: Operator,
     pub expr: Box<dyn Expression>,
