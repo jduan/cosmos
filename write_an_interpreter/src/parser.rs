@@ -1,7 +1,8 @@
 use crate::ast::{
-    BangUnaryExpression, BoolLiteralExpression, Expression, ExpressionStatement, GroupedExpression,
-    IdentifierExpression, InfixExpression, LetStatement, LiteralIntegerExpression,
-    MinusUnaryExpression, PrefixExpression, Program, ReturnStatement, Statement,
+    BangUnaryExpression, BoolLiteralExpression, CallExpression, Expression, ExpressionStatement,
+    GroupedExpression, IdentifierExpression, InfixExpression, LetStatement,
+    LiteralIntegerExpression, MinusUnaryExpression, PrefixExpression, Program, ReturnStatement,
+    Statement,
 };
 use crate::lexer::{Delimiter, Precedence};
 use crate::lexer::{Keyword, Lexer, Token};
@@ -161,7 +162,7 @@ impl<'a> Parser<'a> {
             Token::Delimiter(Delimiter::LeftParen) => Box::new(self.parse_grouped_expression()),
             Token::Keyword(Keyword::True) => Box::new(self.parse_bool_literal_expression(true)),
             Token::Keyword(Keyword::False) => Box::new(self.parse_bool_literal_expression(false)),
-            Token::Identifier(_id) => Box::new(self.parse_identifier_expression()),
+            Token::Identifier(_id) => self.parse_identifier_expression(),
             Token::Literal(_litearl) => Box::new(self.parse_literal_expression()),
             Token::Operator(Operator::MinusSign) => Box::new(self.parse_minus_unary_expression()),
             Token::Operator(Operator::Bang) => Box::new(self.parse_bang_unary_expression()),
@@ -192,10 +193,25 @@ impl<'a> Parser<'a> {
         BoolLiteralExpression { literal: b }
     }
 
-    fn parse_identifier_expression(&mut self) -> IdentifierExpression {
+    fn parse_identifier_expression(&mut self) -> Box<dyn Expression> {
         let ident = self.next_token().unwrap();
         if let Token::Identifier(id) = ident {
-            IdentifierExpression { identifier: id }
+            if let Some(Token::Delimiter(Delimiter::LeftParen)) = self.peek_token() {
+                self.next_token();
+                let expr = self.parse_expression(Precedence::Lowest);
+                debug!("Parsed a call expression: {}", expr);
+                let next_token = self.next_token();
+                if let Some(Token::Delimiter(Delimiter::RightParen)) = next_token {
+                    Box::new(CallExpression { name: id, expr })
+                } else {
+                    panic!(
+                        "Expect a closing parent ) for a call expression but got: {:?}",
+                        next_token
+                    );
+                }
+            } else {
+                Box::new(IdentifierExpression { identifier: id })
+            }
         } else {
             panic!("Expected an identifier, but got {:?}", ident);
         }
@@ -355,12 +371,7 @@ foobar;
         let lexer = Lexer::new(input);
         let mut parser = Parser::new(lexer);
         let expr = parser.parse_identifier_expression();
-        assert_eq!(
-            IdentifierExpression {
-                identifier: String::from("foobar")
-            },
-            expr
-        );
+        println!("Identifier expression: {}", expr);
     }
 
     #[test]
@@ -446,7 +457,7 @@ foobar;
             ("(5 + 5) * 2 * (5 + 5)", "(((5 + 5) * 2) * (5 + 5))"),
             ("-(5 + 5)", "(-(5 + 5))"),
             ("!(true == true)", "(!(true == true))"),
-            //            ("a + add(b * c) + d", "((a + add((b * c))) + d)"),
+            ("a + add(b * c) + d", "((a + add((b * c))) + d)"),
         ];
         //        map.insert;
         //        map.insert;

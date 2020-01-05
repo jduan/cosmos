@@ -90,6 +90,21 @@ impl Display for IdentifierExpression {
 }
 
 /// Identifers are the simplest expression. They evaluate to they value they are bound to.
+pub struct CallExpression {
+    pub name: String,
+    pub expr: Box<dyn Expression>,
+}
+
+impl Node for CallExpression {}
+impl Expression for CallExpression {}
+
+impl Display for CallExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "{}({})", self.name, self.expr)
+    }
+}
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 #[derive(PartialEq, Eq, Debug)]
 pub struct BoolLiteralExpression {
     pub literal: bool,
