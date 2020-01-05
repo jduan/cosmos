@@ -1,8 +1,7 @@
 use crate::ast::{
     BangUnaryExpression, BoolLiteralExpression, CallExpression, Expression, ExpressionStatement,
     GroupedExpression, IdentifierExpression, InfixExpression, LetStatement,
-    LiteralIntegerExpression, MinusUnaryExpression, PrefixExpression, Program, ReturnStatement,
-    Statement,
+    LiteralIntegerExpression, MinusUnaryExpression, Program, ReturnStatement, Statement,
 };
 use crate::lexer::{Delimiter, Precedence};
 use crate::lexer::{Keyword, Lexer, Token};
@@ -258,16 +257,6 @@ impl<'a> Parser<'a> {
         }
     }
 
-    fn parse_prefix_operator_expression(&mut self) -> PrefixExpression {
-        let token = self.next_token().unwrap();
-        if let Token::Operator(operator) = token {
-            let expr = self.parse_expression(Precedence::Lowest);
-            PrefixExpression { operator, expr }
-        } else {
-            panic!("Expected an operator, but got {:?}", token);
-        }
-    }
-
     //    fn parse_infix_operator_expression(&mut self) -> InfixExpression {
     //        let token = self.next_token().unwrap();
     //        if let Token::Operator(operator) = token {
@@ -403,19 +392,6 @@ foobar;
         let mut parser = Parser::new(lexer);
         let expr = parser.parse_literal_expression();
         assert_eq!(LiteralIntegerExpression { literal: 50 }, expr);
-    }
-
-    #[test]
-    fn test_prefix_operator_expression() {
-        init();
-        let input = r#"
-!50;
-        "#;
-
-        let lexer = Lexer::new(input);
-        let mut parser = Parser::new(lexer);
-        let expr = parser.parse_prefix_operator_expression();
-        println!("Prefix operator expression: {}", expr);
     }
 
     #[test]
