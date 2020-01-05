@@ -109,6 +109,8 @@ impl<'a> Parser<'a> {
         };
     }
 
+    /// This is the core of the parser. It uses the Pratt parser.
+    /// See https://en.wikipedia.org/wiki/Pratt_parser
     fn parse_expression(&mut self, precedence: Precedence) -> Box<dyn Expression> {
         let peek_token = self.peek_token();
         if peek_token.is_some() {
@@ -385,6 +387,15 @@ mod tests {
     }
 
     #[test]
+    fn test_grouped_expression() {
+        init();
+        test_expression_helper(vec![
+            ("(5 + 5) * 2", "((5 + 5) * 2)"),
+            ("2 / (5 + 5)", "(2 / (5 + 5))"),
+        ]);
+    }
+
+    #[test]
     fn test_parse_expression() {
         init();
         let pairs = vec![
@@ -437,6 +448,12 @@ mod tests {
             ),
         ];
 
+        test_expression_helper(pairs);
+    }
+
+    /// This helper takes a vector of pairs of strings. It parses each input as an expression
+    /// and checks the expression's string representation.
+    fn test_expression_helper(pairs: Vec<(&str, &str)>) {
         for (input, repr) in pairs {
             let lexer = Lexer::new(input);
             let mut parser = Parser::new(lexer);
