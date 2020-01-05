@@ -48,9 +48,8 @@ impl Display for LetStatement {
     }
 }
 
-#[derive(PartialEq, Eq, Debug)]
 pub struct ReturnStatement {
-    //    expr: Box<dyn Expression>,
+    pub expr: Box<dyn Expression>,
 }
 
 impl Node for ReturnStatement {}

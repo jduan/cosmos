@@ -72,18 +72,11 @@ impl<'a> Parser<'a> {
 
     fn parse_return_statement(&mut self) -> ReturnStatement {
         self.next_token(); // consume the return itself
-
-        // TODO: we're skipping the expressions until we encounter a semicolon
-        loop {
-            let next_token = self.next_token();
-            if next_token.is_some() && next_token.unwrap() == Token::Delimiter(Delimiter::Semicolon)
-            {
-                break;
-            }
-        }
+        let expr = self.parse_expression(Precedence::Lowest);
+        self.consume_semicolon();
         debug!("Done parsing a return statement");
 
-        ReturnStatement {}
+        ReturnStatement { expr }
     }
 
     fn parse_expression_statement(&mut self, precedence: Precedence) -> ExpressionStatement {
@@ -344,14 +337,17 @@ foobar;
     #[test]
     fn test_return_statements() {
         init();
-        let input = r#"
-return 5;
-        "#;
-
-        let lexer = Lexer::new(input);
-        let mut parser = Parser::new(lexer);
-        let stmt = parser.parse_return_statement();
-        assert_eq!(ReturnStatement {}, stmt);
+        let data = vec![
+            ("return x;", "x"),
+            ("return 5 + 6", "(5 + 6)"),
+            ("return call(5, 6 + 7)", "call(5, (6 + 7))"),
+        ];
+        for (input, expr) in data {
+            let lexer = Lexer::new(input);
+            let mut parser = Parser::new(lexer);
+            let stmt = parser.parse_return_statement();
+            assert_eq!(stmt.expr.to_string(), String::from(expr));
+        }
     }
 
     #[test]
