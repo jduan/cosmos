@@ -1,6 +1,6 @@
 use crate::ast::{
     BangUnaryExpression, BoolLiteralExpression, CallExpression, Expression, ExpressionStatement,
-    IdentifierExpression, InfixExpression, LetStatement, LiteralIntegerExpression,
+    IdentifierExpression, IfExpression, InfixExpression, LetStatement, LiteralIntegerExpression,
     MinusUnaryExpression, Program, ReturnStatement, Statement,
 };
 use crate::lexer::{Delimiter, Precedence};
@@ -42,10 +42,41 @@ impl<'a> Parser<'a> {
         program
     }
 
+    pub fn parse_block_of_statements(&mut self) -> Vec<Box<dyn Statement>> {
+        let mut statements = vec![];
+        self.expect_next(Token::Delimiter(Delimiter::LeftBrace));
+        loop {
+            if self.peek_token().is_some() {
+                if self.expect_peek(Token::Delimiter(Delimiter::RightBrace)) {
+                    self.next_token();
+                    break;
+                }
+                let stmt = self.parse_statement();
+                debug!("Parsed one statement");
+                match stmt {
+                    Some(stmt) => {
+                        statements.push(stmt);
+                    }
+                    None => panic!("Failed to parse next statement!"),
+                }
+            } else {
+                break;
+            }
+        }
+
+        statements
+    }
+
     fn parse_statement(&mut self) -> Option<Box<dyn Statement>> {
         match self.peek_token() {
             Some(Token::Keyword(Keyword::Let)) => Some(Box::new(self.parse_let_statement())),
             Some(Token::Keyword(Keyword::Return)) => Some(Box::new(self.parse_return_statement())),
+            Some(Token::Keyword(Keyword::If)) => {
+                let if_expr = self.parse_if_expression();
+                Some(Box::new(ExpressionStatement {
+                    expr: Box::new(if_expr),
+                }))
+            }
             _ => Some(Box::new(
                 self.parse_expression_statement(Precedence::Lowest),
             )),
@@ -67,6 +98,31 @@ impl<'a> Parser<'a> {
         LetStatement {
             name: identifier,
             expr,
+        }
+    }
+
+    fn parse_if_expression(&mut self) -> IfExpression {
+        self.next_token(); // consume if itself
+        self.expect_next(Token::Delimiter(Delimiter::LeftParen));
+        let condition = self.parse_expression(Precedence::Lowest);
+        self.expect_next(Token::Delimiter(Delimiter::RightParen));
+
+        let consequence = self.parse_block_of_statements();
+
+        let alternative = if self.expect_peek(Token::Keyword(Keyword::Else)) {
+            self.next_token();
+            let stmts = self.parse_block_of_statements();
+            Some(stmts)
+        } else {
+            None
+        };
+
+        debug!("Done parsing an if expression");
+
+        IfExpression {
+            condition,
+            consequence,
+            alternative,
         }
     }
 
@@ -120,6 +176,7 @@ impl<'a> Parser<'a> {
             debug!("done parsing prefix expression");
             while self.peek_token().is_some()
                 && self.peek_token().unwrap() != Token::Delimiter(Delimiter::Semicolon)
+                && self.peek_token().unwrap() != Token::Delimiter(Delimiter::RightBrace)
                 && precedence < self.peek_precedence()
             {
                 debug!("going to parse an infix expr");
@@ -241,6 +298,13 @@ impl<'a> Parser<'a> {
         self.next_token();
         BangUnaryExpression {
             expr: self.parse_expression(Precedence::Prefix),
+        }
+    }
+
+    fn expect_peek(&mut self, expected_token: Token) -> bool {
+        match self.peek_token() {
+            Some(token) if token == expected_token => true,
+            _ => false,
         }
     }
 
@@ -415,6 +479,25 @@ mod tests {
             ("2 / (5 + 5)", "(2 / (5 + 5))"),
             ("2 / (5 + (5 * 2))", "(2 / (5 + (5 * 2)))"),
         ]);
+    }
+
+    #[test]
+    fn test_if_expression() {
+        init();
+        // Even nested if expressions work.
+        let input = "if (x < y) { 5; a + b; } else { 6; if (true) { foo } else { bar} };";
+
+        let lexer = Lexer::new(input);
+        let mut parser = Parser::new(lexer);
+        let expr = parser.parse_if_expression();
+        assert_eq!("(x < y)", expr.condition.to_string());
+        assert_eq!(
+            "(if ((x < y)) then [ExpressionStatement(5), ExpressionStatement((a + b))] \
+            else [ExpressionStatement(6), \
+            ExpressionStatement(\
+            (if (true) then [ExpressionStatement(foo)] else [ExpressionStatement(bar)]))])",
+            expr.to_string()
+        );
     }
 
     #[test]

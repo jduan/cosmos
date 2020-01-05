@@ -1,11 +1,9 @@
-use log::*;
-
 use crate::lexer::Operator;
-use std::fmt::{Display, Error, Formatter};
+use std::fmt::{Debug, Display, Error, Formatter};
 
 pub trait Node: Display {}
 
-pub trait Statement: Node {}
+pub trait Statement: Node + Debug {}
 
 pub trait Expression: Node {}
 
@@ -30,7 +28,6 @@ impl Program {
     }
 
     pub fn add_statement(&mut self, statement: Box<dyn Statement>) {
-        debug!("Parsed one statement: {}", statement);
         self.statements.push(statement);
     }
 }
@@ -42,6 +39,12 @@ pub struct LetStatement {
 
 impl Node for LetStatement {}
 impl Statement for LetStatement {}
+impl Debug for LetStatement {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        Display::fmt(self, f)
+    }
+}
+
 impl Display for LetStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "LetStatement({} = {})", self.name, self.expr)
@@ -54,6 +57,11 @@ pub struct ReturnStatement {
 
 impl Node for ReturnStatement {}
 impl Statement for ReturnStatement {}
+impl Debug for ReturnStatement {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        Display::fmt(self, f)
+    }
+}
 impl Display for ReturnStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "ReturnStatement({})", self.expr)
@@ -66,6 +74,11 @@ pub struct ExpressionStatement {
 
 impl Node for ExpressionStatement {}
 impl Statement for ExpressionStatement {}
+impl Debug for ExpressionStatement {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        Display::fmt(self, f)
+    }
+}
 impl Display for ExpressionStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "ExpressionStatement({})", self.expr)
@@ -196,5 +209,30 @@ impl Display for InfixExpression {
             "({} {} {})",
             self.left_expr, self.operator, self.right_expr
         )
+    }
+}
+
+pub struct IfExpression {
+    pub condition: Box<dyn Expression>,
+    pub consequence: Vec<Box<dyn Statement>>,
+    pub alternative: Option<Vec<Box<dyn Statement>>>,
+}
+impl Node for IfExpression {}
+impl Expression for IfExpression {}
+impl Debug for IfExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        Display::fmt(self, f)
+    }
+}
+impl Display for IfExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        match &self.alternative {
+            Some(alter) => write!(
+                f,
+                "(if ({}) then {:?} else {:?})",
+                self.condition, self.consequence, alter
+            ),
+            None => write!(f, "(if ({}) then {:?}", self.condition, self.consequence),
+        }
     }
 }
