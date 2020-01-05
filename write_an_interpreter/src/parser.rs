@@ -362,7 +362,7 @@ foobar;
         init();
         let input = r#"
     5 + 6 + 7;
-    5 + 6 + 7;
+    5 - 6 + 7;
             "#;
 
         let lexer = Lexer::new(input);

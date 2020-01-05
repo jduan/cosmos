@@ -1,3 +1,4 @@
+use std::fmt::{Display, Error, Formatter};
 use std::iter::Peekable;
 use std::str::Chars;
 
@@ -209,6 +210,25 @@ pub enum Operator {
     GreaterThan,
     Equal,
     NotEqual,
+}
+
+impl Display for Operator {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        let repr = match self {
+            Operator::Assignment => "=",
+            Operator::PlusSign => "+",
+            Operator::MinusSign => "-",
+            Operator::Bang => "!",
+            Operator::Asterisk => "*",
+            Operator::Slash => "/",
+            Operator::LessThan => "<=",
+            Operator::GreaterThan => ">=",
+            Operator::Equal => "==",
+            Operator::NotEqual => "!=",
+        };
+
+        write!(f, "{}", repr)
+    }
 }
 
 #[derive(PartialEq, Eq, PartialOrd, Ord)]

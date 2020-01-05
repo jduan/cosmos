@@ -104,8 +104,7 @@ impl Expression for LiteralIntegerExpression {}
 
 impl Display for LiteralIntegerExpression {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "LiteralExpression ({})", self.literal)?;
-        Ok(())
+        write!(f, "{}", self.literal)
     }
 }
 
@@ -143,8 +142,9 @@ impl Display for InfixExpression {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(
             f,
-            "InfixExpression (operator: {:?}, left_expr: {}, right_expr: {})",
-            self.operator, self.left_expr, self.right_expr
+//            "InfixExpression (operator: {:?}, left_expr: {}, right_expr: {})",
+            "({} {} {})",
+            self.left_expr, self.operator, self.right_expr
         )?;
         Ok(())
     }
