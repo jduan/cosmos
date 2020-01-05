@@ -221,8 +221,8 @@ impl Display for Operator {
             Operator::Bang => "!",
             Operator::Asterisk => "*",
             Operator::Slash => "/",
-            Operator::LessThan => "<=",
-            Operator::GreaterThan => ">=",
+            Operator::LessThan => "<",
+            Operator::GreaterThan => ">",
             Operator::Equal => "==",
             Operator::NotEqual => "!=",
         };

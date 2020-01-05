@@ -269,7 +269,6 @@ impl<'a> Parser<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::collections::HashMap;
 
     fn init() {
         let _ = env_logger::builder().is_test(true).try_init();
@@ -386,20 +385,56 @@ foobar;
     #[test]
     fn test_parse_expression() {
         init();
-        let mut map = HashMap::new();
-        map.insert("5 + 6 + 7;", "((5 + 6) + 7)");
-        map.insert("5 - 6 + 7;", "((5 - 6) + 7)");
-        map.insert("5 - 6 * 7;", "(5 - (6 * 7))");
-        map.insert("5 - 6 * 7 + 3 / 4;", "((5 - (6 * 7)) + (3 / 4))");
-        map.insert("a + b * c + d / e - f;", "(((a + (b * c)) + (d / e)) - f)");
-        map.insert(
-            "3 + 4 * 5 == 3 * 1 + 4 * 5",
-            "((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
-        );
-        map.insert("-5 + 10 * 3", "(-(5) + (10 * 3))");
-        map.insert("!5 + 10 * 3", "(!(5) + (10 * 3))");
+        let pairs = vec![
+            ("5 + 6 + 7;", "((5 + 6) + 7)"),
+            ("5 - 6 + 7;", "((5 - 6) + 7)"),
+            ("5 - 6 * 7;", "(5 - (6 * 7))"),
+            ("5 - 6 * 7 + 3 / 4;", "((5 - (6 * 7)) + (3 / 4))"),
+            ("a + b * c + d / e - f;", "(((a + (b * c)) + (d / e)) - f)"),
+            (
+                "3 + 4 * 5 == 3 * 1 + 4 * 5",
+                "((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
+            ),
+            ("-5 + 10 * 3", "((-5) + (10 * 3))"),
+            ("!5 + 10 * 3", "((!5) + (10 * 3))"),
+            ("-a * b", "((-a) * b)"),
+            ("!-a", "(!(-a))"),
+            ("a + b + c", "((a + b) + c)"),
+            ("a + b - c", "((a + b) - c)"),
+            ("a * b * c", "((a * b) * c)"),
+            ("a * b / c", "((a * b) / c)"),
+            ("a + b / c", "(a + (b / c))"),
+            ("a + b * c + d / e - f", "(((a + (b * c)) + (d / e)) - f)"),
+            ("3 + 4;", "(3 + 4)"),
+            ("-5 * 5", "((-5) * 5)"),
+            ("5 > 4 == 3 < 4", "((5 > 4) == (3 < 4))"),
+            (
+                "3 + 4 * 5 == 3 * 1 + 4 * 5",
+                "((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
+            ),
+            ("5 < 4 != 3 > 4", "((5 < 4) != (3 > 4))"),
+        ];
+        //        map.insert("true", "true");
+        //        map.insert("false", "false");
+        //        map.insert("3 > 5 == false", "((3 > 5) == false)");
+        //        map.insert("3 < 5 == true", "((3 < 5) == true)");
+        //        map.insert("1 + (2 + 3) + 4", "((1 + (2 + 3)) + 4)");
+        //        map.insert("(5 + 5) * 2", "((5 + 5) * 2)");
+        //        map.insert("2 / (5 + 5)", "(2 / (5 + 5))");
+        //        map.insert("(5 + 5) * 2 * (5 + 5)", "(((5 + 5) * 2) * (5 + 5))");
+        //        map.insert("-(5 + 5)", "(-(5 + 5))");
+        //        map.insert("!(true == true)", "(!(true == true))");
+        //        map.insert("a + add(b * c) + d", "((a + add((b * c))) + d)");
+        //        map.insert(
+        //            "add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))",
+        //            "add(a, b, 1, (2 * 3), (4 + 5), add(6, (7 * 8)))",
+        //        );
+        //        map.insert(
+        //            "add(a + b + c * d / f + g)",
+        //            "add((((a + b) + ((c * d) / f)) + g))",
+        //        );
 
-        for (input, repr) in map {
+        for (input, repr) in pairs {
             let lexer = Lexer::new(input);
             let mut parser = Parser::new(lexer);
             let expr = parser.parse_expression(Precedence::Lowest);

@@ -114,7 +114,7 @@ impl Expression for MinusUnaryExpression {}
 
 impl Display for MinusUnaryExpression {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "-({})", self.expr)
+        write!(f, "(-{})", self.expr)
     }
 }
 
@@ -128,7 +128,7 @@ impl Expression for BangUnaryExpression {}
 
 impl Display for BangUnaryExpression {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "!({})", self.expr)
+        write!(f, "(!{})", self.expr)
     }
 }
 
