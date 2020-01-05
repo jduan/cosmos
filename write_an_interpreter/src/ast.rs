@@ -105,6 +105,20 @@ impl Display for LiteralIntegerExpression {
 }
 
 /// Identifers are the simplest expression. They evaluate to they value they are bound to.
+pub struct MinusUnaryExpression {
+    pub expr: Box<dyn Expression>,
+}
+
+impl Node for MinusUnaryExpression {}
+impl Expression for MinusUnaryExpression {}
+
+impl Display for MinusUnaryExpression {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "-({})", self.expr)
+    }
+}
+
+/// Identifers are the simplest expression. They evaluate to they value they are bound to.
 pub struct PrefixExpression {
     pub operator: Operator,
     pub expr: Box<dyn Expression>,

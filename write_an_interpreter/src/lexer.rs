@@ -235,10 +235,12 @@ impl Display for Operator {
 /// https://doc.rust-lang.org/rust-by-example/custom_types/enum/c_like.html
 pub enum Precedence {
     Lowest,
-    Equals,
-    LessGreater,
-    Sum,
-    Product,
+    Equals,      // a == b
+    LessGreater, // a <= b, a >= b
+    Sum,         // 2 * 3
+    Product,     // 2 + 3
+    Prefix,      // -X or !X
+    Call,        // my_function(x)
 }
 
 impl Precedence {

@@ -1,6 +1,7 @@
 use crate::ast::{
     Expression, ExpressionStatement, IdentifierExpression, InfixExpression, LetStatement,
-    LiteralIntegerExpression, PrefixExpression, Program, ReturnStatement, Statement,
+    LiteralIntegerExpression, MinusUnaryExpression, PrefixExpression, Program, ReturnStatement,
+    Statement,
 };
 use crate::lexer::{Delimiter, Precedence};
 use crate::lexer::{Keyword, Lexer, Token};
@@ -159,6 +160,7 @@ impl<'a> Parser<'a> {
         match token {
             Token::Identifier(_id) => Box::new(self.parse_identifier_expression()),
             Token::Literal(_litearl) => Box::new(self.parse_literal_expression()),
+            Token::Operator(Operator::MinusSign) => Box::new(self.parse_minus_unary_expression()),
             _ => panic!(
                 "Don't know how to parse prefix expression for token: {:?}",
                 token
@@ -181,6 +183,13 @@ impl<'a> Parser<'a> {
             LiteralIntegerExpression { literal: int }
         } else {
             panic!("Expected an literal, but got {:?}", token);
+        }
+    }
+
+    fn parse_minus_unary_expression(&mut self) -> MinusUnaryExpression {
+        self.next_token();
+        MinusUnaryExpression {
+            expr: self.parse_expression(Precedence::Prefix),
         }
     }
 
