@@ -166,23 +166,6 @@ impl Token {
     pub fn is_eof(&self) -> bool {
         *self == Token::SpecialToken(SpecialToken::EOF)
     }
-
-    pub fn is_infix_operator(&self) -> bool {
-        match *self {
-            Token::Operator(op) => match op {
-                Operator::PlusSign => true,
-                Operator::MinusSign => true,
-                Operator::Asterisk => true,
-                Operator::Slash => true,
-                Operator::LessThan => true,
-                Operator::GreaterThan => true,
-                Operator::Equal => true,
-                Operator::NotEqual => true,
-                _ => false,
-            },
-            _ => false,
-        }
-    }
 }
 
 #[derive(Debug, PartialEq, Hash, Eq, Copy, Clone)]
@@ -210,6 +193,22 @@ pub enum Operator {
     GreaterThan,
     Equal,
     NotEqual,
+}
+
+impl Operator {
+    pub fn is_infix_operator(&self) -> bool {
+        match *self {
+            Operator::PlusSign => true,
+            Operator::MinusSign => true,
+            Operator::Asterisk => true,
+            Operator::Slash => true,
+            Operator::LessThan => true,
+            Operator::GreaterThan => true,
+            Operator::Equal => true,
+            Operator::NotEqual => true,
+            _ => false,
+        }
+    }
 }
 
 impl Display for Operator {

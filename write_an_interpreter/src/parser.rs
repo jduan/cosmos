@@ -154,13 +154,17 @@ impl<'a> Parser<'a> {
         left_expr: Box<dyn Expression>,
         operator: Operator,
     ) -> Box<dyn Expression> {
-        // TODO: use current precedence
-        let right_expr = self.parse_expression(Precedence::from_token(Token::Operator(operator)));
-        Box::new(InfixExpression {
-            left_expr,
-            operator,
-            right_expr,
-        })
+        if operator.is_infix_operator() {
+            let right_expr =
+                self.parse_expression(Precedence::from_token(Token::Operator(operator)));
+            Box::new(InfixExpression {
+                left_expr,
+                operator,
+                right_expr,
+            })
+        } else {
+            panic!("Operator isn't an infix operator: {}", operator);
+        }
     }
 
     fn parse_prefix_expression(&mut self, token: Token) -> Box<dyn Expression> {
