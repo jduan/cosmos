@@ -169,16 +169,6 @@ impl<'a> Parser<'a> {
     fn parse_identifier_expression(&mut self) -> IdentifierExpression {
         let ident = self.next_token().unwrap();
         if let Token::Identifier(id) = ident {
-            // TODO: Ignore things and find the next semilcolon.
-            // This doesn't handle binary expressions like: a + b
-            loop {
-                let next_token = self.next_token();
-                if next_token.is_some()
-                    && next_token.unwrap() == Token::Delimiter(Delimiter::Semicolon)
-                {
-                    break;
-                }
-            }
             IdentifierExpression { identifier: id }
         } else {
             panic!("Expected an identifier, but got {:?}", ident);
@@ -384,6 +374,11 @@ foobar;
         map.insert("5 - 6 + 7;", "((5 - 6) + 7)");
         map.insert("5 - 6 * 7;", "(5 - (6 * 7))");
         map.insert("5 - 6 * 7 + 3 / 4;", "((5 - (6 * 7)) + (3 / 4))");
+        map.insert("a + b * c + d / e - f;", "(((a + (b * c)) + (d / e)) - f)");
+        map.insert(
+            "3 + 4 * 5 == 3 * 1 + 4 * 5",
+            "((3 + (4 * 5)) == ((3 * 1) + (4 * 5)))",
+        );
 
         for (input, repr) in map {
             let lexer = Lexer::new(input);

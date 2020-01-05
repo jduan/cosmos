@@ -45,8 +45,7 @@ impl Node for LetStatement {}
 impl Statement for LetStatement {}
 impl Display for LetStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "LetStatement({} = expr)", self.name)?;
-        Ok(())
+        write!(f, "LetStatement({} = expr)", self.name)
     }
 }
 
@@ -59,8 +58,7 @@ impl Node for ReturnStatement {}
 impl Statement for ReturnStatement {}
 impl Display for ReturnStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "ReturnStatement")?;
-        Ok(())
+        write!(f, "ReturnStatement")
     }
 }
 
@@ -72,8 +70,7 @@ impl Node for ExpressionStatement {}
 impl Statement for ExpressionStatement {}
 impl Display for ExpressionStatement {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "ExpressionStatement (expr = {})", self.expr)?;
-        Ok(())
+        write!(f, "ExpressionStatement (expr = {})", self.expr)
     }
 }
 
@@ -88,8 +85,7 @@ impl Expression for IdentifierExpression {}
 
 impl Display for IdentifierExpression {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "IdentifierExpression (id = {})", self.identifier)?;
-        Ok(())
+        write!(f, "{}", self.identifier)
     }
 }
 
@@ -123,8 +119,7 @@ impl Display for PrefixExpression {
             f,
             "PrefixExpression (operator: {:?}, expr: {})",
             self.operator, self.expr
-        )?;
-        Ok(())
+        )
     }
 }
 
@@ -142,10 +137,8 @@ impl Display for InfixExpression {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(
             f,
-//            "InfixExpression (operator: {:?}, left_expr: {}, right_expr: {})",
             "({} {} {})",
             self.left_expr, self.operator, self.right_expr
-        )?;
-        Ok(())
+        )
     }
 }
