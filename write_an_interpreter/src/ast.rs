@@ -35,10 +35,9 @@ impl Program {
     }
 }
 
-#[derive(PartialEq, Eq, Debug)]
 pub struct LetStatement {
     pub name: String,
-    //    value: Box<dyn Expression>,
+    pub expr: Box<dyn Expression>,
 }
 
 impl Node for LetStatement {}

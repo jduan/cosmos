@@ -59,22 +59,13 @@ impl<'a> Parser<'a> {
             token => panic!("Expected an identifier after let but got {:?}", token),
         };
 
-        if !self.expect_peek(Token::Operator(Operator::Assignment)) {
-            panic!("Expected = after let but got {:?}", self.peek_token());
-        }
-
-        // TODO: we're skipping the expressions until we encounter a semicolon
-        loop {
-            let next_token = self.next_token();
-            if next_token.is_some() && next_token.unwrap() == Token::Delimiter(Delimiter::Semicolon)
-            {
-                break;
-            }
-        }
+        self.expect_next(Token::Operator(Operator::Assignment));
+        let expr = self.parse_expression(Precedence::Lowest);
         debug!("Done parsing a let statement");
 
         LetStatement {
-            name: identifier, //            value: Expression,
+            name: identifier,
+            expr,
         }
     }
 
@@ -257,20 +248,10 @@ impl<'a> Parser<'a> {
         }
     }
 
-    //    fn parse_infix_operator_expression(&mut self) -> InfixExpression {
-    //        let token = self.next_token().unwrap();
-    //        if let Token::Operator(operator) = token {
-    //            let expr = self.parse_expression();
-    //            InfixExpression { operator, expr }
-    //        } else {
-    //            panic!("Expected an operator, but got {:?}", token);
-    //        }
-    //    }
-    //
-    fn expect_peek(&mut self, expected_token: Token) -> bool {
-        match self.peek_token() {
-            Some(token) => token == expected_token,
-            None => false,
+    fn expect_next(&mut self, expected_token: Token) {
+        match self.next_token() {
+            Some(token) if token == expected_token => {}
+            _ => panic!("Expect a = after the let keyword"),
         }
     }
 
@@ -340,19 +321,18 @@ foobar;
     #[test]
     fn test_let_statements() {
         init();
-        let input = r#"
-let x = 5;
-        "#;
-
-        let lexer = Lexer::new(input);
-        let mut parser = Parser::new(lexer);
-        let stmt = parser.parse_let_statement();
-        assert_eq!(
-            LetStatement {
-                name: String::from("x")
-            },
-            stmt
-        );
+        let data = vec![
+            ("let x = 5", "x", "5"),
+            ("let x = 5 + 6", "x", "(5 + 6)"),
+            ("let x = call(5, 6 + 7)", "x", "call(5, (6 + 7))"),
+        ];
+        for (input, identifier, expr) in data {
+            let lexer = Lexer::new(input);
+            let mut parser = Parser::new(lexer);
+            let stmt = parser.parse_let_statement();
+            assert_eq!(stmt.name, String::from(identifier));
+            assert_eq!(stmt.expr.to_string(), String::from(expr));
+        }
     }
 
     #[test]
