@@ -2,6 +2,7 @@ package jduan.jackson
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -15,6 +16,27 @@ fun main(args: Array<String>) {
     objectToJSON()
     jsonToObject()
     jsonToObject2()
+    yamlExample()
+}
+
+private fun yamlExample() {
+    val yamlObjectMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
+    val items = listOf(
+        mapOf(
+            "price" to 99,
+            "name" to "apple"
+        ),
+        mapOf(
+            "price" to 88,
+            "name" to "orange"
+        )
+    )
+    println("items:")
+    val comment = """
+        # This is a comment.
+        # This is another comment.
+    """.trimIndent()
+    println(comment + "\n" + yamlObjectMapper.writeValueAsString(items))
 }
 
 private fun objectToJSON() {
