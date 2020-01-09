@@ -40,6 +40,7 @@ pub mod print_things;
 pub mod processes;
 pub mod references;
 pub mod sandbox;
+pub mod serde_examples;
 pub mod slice_type;
 pub mod smart_pointers;
 pub mod strings;
