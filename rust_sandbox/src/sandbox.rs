@@ -1,5 +1,5 @@
 #[derive(Debug, Clone)]
-struct Name {
+pub struct Name {
     first: String,
     last: String,
 }
@@ -17,7 +17,7 @@ impl Name {
     }
 }
 
-struct Person {
+pub struct Person {
     name: Name,
     age: u8,
 }

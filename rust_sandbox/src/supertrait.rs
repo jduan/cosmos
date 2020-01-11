@@ -2,27 +2,27 @@
 /// another trait.
 /// Note that "super" here means superset. It doesn't mean "parent" as in superclass in Java!
 
-trait Person {
+pub trait Person {
     fn name(&self) -> String;
 }
 
-trait Race {
+pub trait Race {
     fn name(&self) -> String;
 }
 
-trait Student: Person {
+pub trait Student: Person {
     fn university(&self) -> String;
 }
 
-trait Programmer {
+pub trait Programmer {
     fn fav_language(&self) -> String;
 }
 
-trait CompSciStudent: Programmer + Student {
+pub trait CompSciStudent: Programmer + Student {
     fn git_username(&self) -> String;
 }
 
-struct CornellStudent {}
+pub struct CornellStudent {}
 
 impl Programmer for CornellStudent {
     fn fav_language(&self) -> String {
@@ -63,7 +63,7 @@ impl CompSciStudent for CornellStudent {
     }
 }
 
-fn comp_sci_student_greeting(student: &dyn CompSciStudent) -> String {
+pub fn comp_sci_student_greeting(student: &dyn CompSciStudent) -> String {
     format!(
         "My name is {} and I attend {}. My Git username is {}",
         student.name(),

@@ -1,21 +1,21 @@
 use crate::type_alias::add_or_subtract;
 
 /// Diverging functions never return. They are marked using !, which is an empty type.
-fn foo() -> ! {
+pub fn foo() -> ! {
     panic!("This can never returns!");
 }
 
 /// As opposed to all the other types, the "empty type" cannot be instantiated, because the
 /// set of all possible values this type can have is empty. Note that, it is
 /// different from the () type, which has exactly one possible value.
-fn some_fn() {
+pub fn some_fn() {
     ()
 }
 
 /// Although this might seem like an abstract concept, it is in fact very useful
 /// and often handy. The main advantage of this type is that "it can be cast to any
 /// other one" and therefore used at places where an exact type is required.
-fn sum_odd_numbers(upto: u32) -> u32 {
+pub fn sum_odd_numbers(upto: u32) -> u32 {
     let mut sum = 0;
     for i in 1..upto {
         let additional = match i % 2 == 1 {

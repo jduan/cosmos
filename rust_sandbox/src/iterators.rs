@@ -4,7 +4,7 @@
 /// into_iter: consumes each element of the collection through each iteration
 use std::iter::Iterator;
 
-struct Counter {
+pub struct Counter {
     count: u32,
 }
 
@@ -27,7 +27,7 @@ impl Iterator for Counter {
     }
 }
 
-struct Fibonacci {
+pub struct Fibonacci {
     curr: u32,
     next: u32,
 }

@@ -22,7 +22,7 @@ pub fn run() {
 //     println!("r is {}", r);
 // }
 
-fn this_works() {
+pub fn this_works() {
     let x = 5;
     let r = &x;
     println!("r: {}", r);
@@ -40,7 +40,7 @@ fn this_works() {
 // don’t adhere to these constraints. Note that the longest function doesn’t need to know exactly
 // how long x and y will live, only that some scope can be substituted for 'a that will satisfy
 // this signature.
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+pub fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     if x.len() > y.len() {
         x
     } else {
@@ -51,7 +51,7 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 // We specify a lifetime parameter 'a for the parameter x and the return type,
 // but not for the parameter y, because of the lifetime of y doesn't have any
 // relationship with the lifetime of x or the return value.
-fn longest2<'a>(x: &'a str, y: &str) -> &'a str {
+pub fn longest2<'a>(x: &'a str, y: &str) -> &'a str {
     x
 }
 
@@ -71,7 +71,7 @@ fn longest2<'a>(x: &'a str, y: &str) -> &'a str {
 // }
 
 // This function compiles.
-fn calling_longest1() {
+pub fn calling_longest1() {
     let s1 = String::from("long string is long");
     {
         let s2 = String::from("short string");
@@ -99,7 +99,7 @@ fn calling_longest1() {
 #[derive(Debug)]
 // This lifetype annotation means an instance of `Excerpt` can't outlive the
 // reference it holds in its "part" field.
-struct Excerpt<'a> {
+pub struct Excerpt<'a> {
     part: &'a str,
 }
 
@@ -119,7 +119,7 @@ impl<'a> Excerpt<'a> {
 // This function has generic type parameter T, trait bounds (T: Display), and lifetimes.
 // Because lifetimes are a type of generic, the declarations of the lifetime parameter 'a and the
 // generic type parameter T go in the same list inside the angle brackets after the function name.
-fn longest_with_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
+pub fn longest_with_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
 where
     T: Display,
 {
@@ -134,18 +134,18 @@ where
 // Note that the lifetime annotations 'a and 'b can be inferred by Rust
 // based on the elision rules: each parameter that is a reference gets its
 // own lifetime parameter.
-fn print_refs<'a, 'b>(x: &'a i32, y: &'b i32) {
+pub fn print_refs<'a, 'b>(x: &'a i32, y: &'b i32) {
     println!("x is {} and y is {}", x, y);
 }
 
-fn failed_borrow<'a>() {
+pub fn failed_borrow<'a>() {
     let x = 12;
     // This line doesn't compile because "borrowed value doesn't live long enough".
     // The lifetime 'a can be anything while x only lives as long as this function lives.
     //    let y: &'a i32 = &x;
 }
 
-fn pass_x<'a, 'b>(x: &'a i32, y: &'b i32) -> &'a i32 {
+pub fn pass_x<'a, 'b>(x: &'a i32, y: &'b i32) -> &'a i32 {
     x
 }
 
@@ -158,7 +158,7 @@ fn pass_x<'a, 'b>(x: &'a i32, y: &'b i32) -> &'a i32 {
 //}
 
 /// Methods are annotated similarly to functions.
-struct Owner(i32);
+pub struct Owner(i32);
 
 impl Owner {
     // Explicitly annotate lifetimes. This isn't needed due to elision rules.
@@ -172,7 +172,7 @@ impl Owner {
     }
 }
 
-struct Borrowed<'a> {
+pub struct Borrowed<'a> {
     x: &'a i32,
 }
 
@@ -184,13 +184,13 @@ impl<'a> Default for Borrowed<'a> {
 }
 
 /// A longer lifetime can be coerced into a shorter one so that it works inside a scope it normally wouldn't work in.
-fn multiply<'a>(first: &'a i32, second: &'a i32) -> i32 {
+pub fn multiply<'a>(first: &'a i32, second: &'a i32) -> i32 {
     first * second
 }
 
 /// <'a: 'b, 'b>` reads as lifetime `'a` is at least as long as `'b`.
 /// Here, we take in an `&'a i32` and return a `&'b i32` as a result of coercion.
-fn choose_first<'a: 'b, 'b>(first: &'a i32, second: &'b i32) -> &'b i32 {
+pub fn choose_first<'a: 'b, 'b>(first: &'a i32, second: &'b i32) -> &'b i32 {
     first
 }
 
@@ -204,7 +204,7 @@ fn choose_first<'a: 'b, 'b>(first: &'a i32, second: &'b i32) -> &'b i32 {
 static NUM: i32 = 18;
 
 /// Returns a reference to `NUM` where its `'static` lifetime is coerced to that of the input argument.
-fn coerce_static<'a>(_: &'a i32) -> &'a i32 {
+pub fn coerce_static<'a>(_: &'a i32) -> &'a i32 {
     &NUM
 }
 

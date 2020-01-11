@@ -4,7 +4,7 @@ use regex::Regex;
 /// Prefer to return &str than String from functions.
 
 #[allow(dead_code)]
-fn print_me(msg: &str) {
+pub fn print_me(msg: &str) {
     println!("msg is {}", msg);
 }
 
@@ -45,7 +45,7 @@ pub fn run() {
     iterate_string();
 }
 
-fn create_strings() {
+pub fn create_strings() {
     // this creates an empty string
     let mut s = String::new();
     println!("string is: {}", s);
@@ -63,7 +63,7 @@ fn create_strings() {
     println!("string is: {}", hello);
 }
 
-fn update_strings() {
+pub fn update_strings() {
     let mut s = String::from("foo");
 
     // grow a string
@@ -106,13 +106,13 @@ fn update_strings() {
 // A String is a wrapper over a Vec<u8>. Strings are encoded in UTF-8 format.
 // Indexing into a UTF-8 encoded string doesn't really make sense because
 // the "byte" for a given index may not make sense at all.
-fn access_string() {
+pub fn access_string() {
     let s = String::from("hello");
     // the line below won't compile!
     // let h = s[0];
 }
 
-fn iterate_string() {
+pub fn iterate_string() {
     // If you need to perform operations on individual Unicode scalar values,
     // the best way to do so is to use the chars method.
     let s = String::from("你好");

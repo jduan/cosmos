@@ -1,4 +1,4 @@
-fn sum(n: u32) -> u32 {
+pub fn sum(n: u32) -> u32 {
     let mut total = 0;
     let mut count = Some(0);
 

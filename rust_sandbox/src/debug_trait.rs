@@ -9,7 +9,7 @@ use std::fmt::{Display, Error, Formatter};
 /// There are other traits in "std::fmt", such fmt::Binary which is used for {:b}
 
 #[derive(Debug)]
-struct Person {
+pub struct Person {
     name: String,
     age: u8,
 }
@@ -22,7 +22,7 @@ impl fmt::Display for Person {
     }
 }
 
-struct List(Vec<i32>);
+pub struct List(Vec<i32>);
 
 impl fmt::Display for List {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -38,7 +38,7 @@ impl fmt::Display for List {
     }
 }
 
-struct City {
+pub struct City {
     name: &'static str,
     lat: f32, // latitude
     lon: f32, // longitude

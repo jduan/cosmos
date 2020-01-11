@@ -1,4 +1,4 @@
-struct Point<T> {
+pub struct Point<T> {
     x: T,
     y: T,
 }
@@ -20,7 +20,7 @@ impl Point<f32> {
 // few makes your code hard to read. When you need lots of generic types in your code, it could
 // indicate that your code needs restructuring into smaller pieces.
 #[derive(Debug)]
-struct Point2<T, U> {
+pub struct Point2<T, U> {
     x: T,
     y: U,
 }
@@ -37,18 +37,18 @@ impl<T, U> Point2<T, U> {
 }
 
 // redefinition of std Option
-enum MyOption<T> {
+pub enum MyOption<T> {
     Some(T),
     None,
 }
 
 // redefinition of std Result
-enum MyResult<T, U> {
+pub enum MyResult<T, U> {
     Ok(T),
     Err(U),
 }
 
-fn find_largest_number(numbers: &[i32]) -> i32 {
+pub fn find_largest_number(numbers: &[i32]) -> i32 {
     let mut largest = numbers[0];
     for &num in numbers.iter() {
         if num > largest {
@@ -59,7 +59,7 @@ fn find_largest_number(numbers: &[i32]) -> i32 {
     largest
 }
 
-fn find_largest_number_generic<T: PartialOrd + Copy>(list: &[T]) -> T {
+pub fn find_largest_number_generic<T: PartialOrd + Copy>(list: &[T]) -> T {
     let mut largest = list[0];
     for &item in list.iter() {
         if item > largest {

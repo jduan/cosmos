@@ -28,7 +28,7 @@ pub fn run() {
 // type alias
 type Table = HashMap<String, Vec<String>>;
 
-fn create_table() -> Table {
+pub fn create_table() -> Table {
     let mut table = Table::new();
     table.insert(
         "Gesualdo".to_string(),
@@ -56,7 +56,7 @@ fn create_table() -> Table {
 }
 
 // Immutable Reference
-fn show_table(table: &Table) {
+pub fn show_table(table: &Table) {
     for (artist, works) in table {
         println!("works by {}", artist);
         for work in works {
@@ -66,7 +66,7 @@ fn show_table(table: &Table) {
 }
 
 // Mutable Reference
-fn sort_works(table: &mut Table) {
+pub fn sort_works(table: &mut Table) {
     for (_, works) in table {
         works.sort();
     }
@@ -74,7 +74,7 @@ fn sort_works(table: &mut Table) {
 
 // In Rust, references are created explicitly with the & operator, and dereferenced explicitly with
 // the * operator.
-fn references_are_explicit() {
+pub fn references_are_explicit() {
     // immutable reference
     let x = 10;
     let r = &x;
@@ -98,7 +98,7 @@ fn references_are_explicit() {
 //    implicit dereference as well.
 // 2. A "for" loop also expands to code that uses the dot operator. That's why you can iterate over
 //    a reference to a collection without dereferencing it.
-fn dot_operator() {
+pub fn dot_operator() {
     struct Anime {
         name: &'static str,
         bechdel_pass: bool,
@@ -119,7 +119,7 @@ fn dot_operator() {
 
 // The . operator can also implicitly borrow a reference (immutable & mutable) to its left operand,
 // if needed for a method call.
-fn dot_operator2() {
+pub fn dot_operator2() {
     let mut v = vec![1973, 1968];
     v.sort();
     // same as above but much uglier
@@ -127,12 +127,12 @@ fn dot_operator2() {
     assert_eq!(v, vec![1968, 1973]);
 }
 
-struct Point {
+pub struct Point {
     x: i32,
     y: i32,
 }
 
-fn reference_to_reference() {
+pub fn reference_to_reference() {
     let point = Point { x: 1000, y: 729 };
     let r: &Point = &point;
     let rr: &&Point = &r;
@@ -144,7 +144,7 @@ fn reference_to_reference() {
     assert_eq!(729, rrr.y);
 }
 
-fn compare_references() {
+pub fn compare_references() {
     let x = 10;
     let y = 10;
 
@@ -183,7 +183,7 @@ fn compare_references() {
 // * Otherwise, the anonymous variable lives to the end of the enclosing statement. In our
 // example, the anonymous variable created to hold 1009 lasts only to the end of the
 // assert_eq! statement.
-fn borrow_ref_of_any_expr() {
+pub fn borrow_ref_of_any_expr() {
     fn factorial(n: usize) -> usize {
         (1..(n + 1)).fold(1, |acc, c| acc * c)
     }
@@ -230,7 +230,7 @@ static mut STASH: &i32 = &128;
 // will outlive the call. There’s no need to look into g’s definition; the signature alone tells us
 // what g can and can’t do with its argument. This fact ends up being very useful when you’re
 // trying to establish the safety of a call to the function.
-fn update_globa_var2(p: &'static i32) {
+pub fn update_globa_var2(p: &'static i32) {
     // Mutable statics are inherently not thread-safe (after all, any thread can access a static at
     // any time), and even in single-threaded programs, they can fall prey to other sorts of
     // reentrancy problems. For these reasons, you may access a mutable static only within an
@@ -240,7 +240,7 @@ fn update_globa_var2(p: &'static i32) {
     }
 }
 
-fn ref_in_struct() {
+pub fn ref_in_struct() {
     // This says: the lifetime of any reference you store in r had better enclose 'a, and
     // 'a must outlast the lifetime of whatever you store the S.
     struct S<'a> {
@@ -266,7 +266,7 @@ fn ref_in_struct() {
 }
 
 // This isn't much different from the function above.
-fn struct_inside_struct() {
+pub fn struct_inside_struct() {
     struct S {
         name: String,
     }
@@ -290,7 +290,7 @@ fn struct_inside_struct() {
 //
 // Tactic: try the simplest possible definition first, and then loosen restrictions until the code
 // compiles
-fn distinct_lifetimes() {
+pub fn distinct_lifetimes() {
     // If you change x and y to have the same lifetime 'a, the code wouldn't compile.
     struct S<'a, 'b> {
         x: &'a i32,
@@ -313,7 +313,7 @@ fn distinct_lifetimes() {
 
 // Throughout its lifetime, a shared reference makes its referent read-only: you may not assign to
 // the referent or move its value elsewhere.
-fn share_vs_mutate() {
+pub fn share_vs_mutate() {
     let v = vec![1, 2, 3, 4, 5];
     let r = &v;
 
@@ -325,7 +325,7 @@ fn share_vs_mutate() {
 }
 
 // Extend a vector with elements of a slice
-fn extend(vec: &mut Vec<i32>, slice: &[i32]) {
+pub fn extend(vec: &mut Vec<i32>, slice: &[i32]) {
     for elt in slice {
         vec.push(*elt);
     }
@@ -343,7 +343,7 @@ fn extend(vec: &mut Vec<i32>, slice: &[i32]) {
 // usable path to its referent, or to any value reachable from there. The only references whose
 // lifetimes may overlap with a mutable reference are those you borrow from the mutable reference
 // itself.
-fn share_vs_mutate2() {
+pub fn share_vs_mutate2() {
     let mut wave = Vec::new();
     let head = vec![1, 2];
     let tail = [3, 4];

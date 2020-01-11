@@ -54,6 +54,6 @@ pub mod variables;
 pub mod vectors;
 pub mod while_let;
 
-fn main() {
+pub fn main() {
     println!("Hello World from Rust!");
 }

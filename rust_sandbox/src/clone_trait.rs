@@ -2,7 +2,7 @@
 ///
 /// The Clone trait helps us do exactly this. Most commonly, we can use the .clone() method defined by the Clone trait.
 #[derive(Debug, Clone)]
-struct Pair(Box<i32>, Box<i32>);
+pub struct Pair(Box<i32>, Box<i32>);
 
 #[cfg(test)]
 mod tests {

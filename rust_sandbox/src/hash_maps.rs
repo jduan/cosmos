@@ -8,7 +8,7 @@ pub fn run() {
     update_map();
 }
 
-fn create_maps() {
+pub fn create_maps() {
     let mut scores = HashMap::new();
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Yellow"), 50);
@@ -23,7 +23,7 @@ fn create_maps() {
     let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
 }
 
-fn ownership() {
+pub fn ownership() {
     let field_name = String::from("Favorite color");
     let field_value = String::from("Blue");
 
@@ -35,7 +35,7 @@ fn ownership() {
     // println!("field_name is {}", field_name);
 }
 
-fn access_values() {
+pub fn access_values() {
     let scores = get_map();
 
     let score = scores.get(&String::from("Blue"));
@@ -45,7 +45,7 @@ fn access_values() {
     }
 }
 
-fn iterate_values() {
+pub fn iterate_values() {
     let scores = get_map();
 
     for (key, value) in &scores {
@@ -53,7 +53,7 @@ fn iterate_values() {
     }
 }
 
-fn update_map() {
+pub fn update_map() {
     let mut scores = HashMap::new();
     scores.insert(String::from("Blue"), 10);
     // this overrides the previous value since the key is the same
@@ -81,7 +81,7 @@ fn update_map() {
 }
 
 // create a example map
-fn get_map() -> HashMap<String, i32> {
+pub fn get_map() -> HashMap<String, i32> {
     let mut scores = HashMap::new();
     scores.insert(String::from("Blue"), 10);
     scores.insert(String::from("Yellow"), 50);
@@ -99,12 +99,12 @@ fn get_map() -> HashMap<String, i32> {
 /// All collection classes implement Eq and Hash if their contained type also respectively
 /// implements Eq and Hash. For example, Vec<T> will implement Hash if T implements Hash.
 #[derive(PartialEq, Eq, Hash, Clone, Copy)]
-struct Account<'a> {
+pub struct Account<'a> {
     username: &'a str,
     password: &'a str,
 }
 
-fn deposit<'a>(account: Account<'a>, amount: f64, map: &mut HashMap<Account<'a>, f64>) {
+pub fn deposit<'a>(account: Account<'a>, amount: f64, map: &mut HashMap<Account<'a>, f64>) {
     let mut balance = map.entry(account).or_insert(0.0);
     *balance += amount;
 }

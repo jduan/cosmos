@@ -3,7 +3,7 @@ mod nested;
 mod privated_nested;
 
 // Items in modules default to private visibility.
-fn private_function() {
+pub fn private_function() {
     println!("called `modules::private_function()`");
 }
 

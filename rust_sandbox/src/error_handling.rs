@@ -187,7 +187,7 @@ pub fn run() {
     the_question_operator3();
 }
 
-fn open_file() {
+pub fn open_file() {
     let f = File::open("/tmp/fjdksljfdfd");
 
     let f = match f {
@@ -196,7 +196,7 @@ fn open_file() {
     };
 }
 
-fn open_or_create_file() {
+pub fn open_or_create_file() {
     let s = "/tmp/hello.txt";
     let f = File::open(s);
 
@@ -213,7 +213,7 @@ fn open_or_create_file() {
 }
 
 // This version is better than the one above.
-fn open_or_create_file2() {
+pub fn open_or_create_file2() {
     let s = "/tmp/hello2.txt";
 
     let f = File::open(s).unwrap_or_else(|error| {
@@ -227,13 +227,13 @@ fn open_or_create_file2() {
     });
 }
 
-fn unwrap_or_expect() {
+pub fn unwrap_or_expect() {
     let f = File::open("/tmp/hello.txt").unwrap();
     let f = File::open("/tmp/world.txt").expect("Failed to open file /tmp/world.txt");
 }
 
 // Read the username from the file. Return an error if something bad happens.
-fn propagate_errors() -> Result<String, io::Error> {
+pub fn propagate_errors() -> Result<String, io::Error> {
     let f = File::open("/tmp/hello.txt");
 
     let mut f = match f {
@@ -255,7 +255,7 @@ fn propagate_errors() -> Result<String, io::Error> {
 //    expression, and the program will continue.
 // 2. If the value is an Err, the Err will be returned from the whole function as if we had used
 //    the "return" keyword so the error gets propagated to the calling code.
-fn the_question_operator() -> Result<String, io::Error> {
+pub fn the_question_operator() -> Result<String, io::Error> {
     let mut f = File::open("/tmp/hello.txt")?;
     let mut s = String::new();
     f.read_to_string(&mut s)?;
@@ -263,7 +263,7 @@ fn the_question_operator() -> Result<String, io::Error> {
 }
 
 // chaining
-fn the_question_operator2() -> Result<String, io::Error> {
+pub fn the_question_operator2() -> Result<String, io::Error> {
     let mut s = String::new();
     File::open("/tmp/hello.txt")?.read_to_string(&mut s)?;
     Ok(s)
@@ -272,7 +272,7 @@ fn the_question_operator2() -> Result<String, io::Error> {
 // the shortest
 // "fs::read_to_string" is a function that opens the file, creates a new String, reads the contents
 // of the file, puts the contents into that String, and returns it.
-fn the_question_operator3() -> Result<String, io::Error> {
+pub fn the_question_operator3() -> Result<String, io::Error> {
     fs::read_to_string("hello.txt")
 }
 
@@ -312,7 +312,7 @@ impl std::error::Error for JsonError {
 type AliasedResult<T> = Result<T, ParseIntError>;
 
 /// The Result type has various combinators: map, and_then.
-fn multiply(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
+pub fn multiply(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
     first_number_str.parse::<i32>().and_then(|first_number| {
         second_number_str
             .parse::<i32>()
@@ -321,7 +321,7 @@ fn multiply(first_number_str: &str, second_number_str: &str) -> AliasedResult<i3
 }
 
 /// The ? operator allows you to return a Err from a function instead of panicking!
-fn multiply2(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
+pub fn multiply2(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
     let first_number = first_number_str.parse::<i32>()?;
     let second_number = second_number_str.parse::<i32>()?;
     Ok(first_number * second_number)
@@ -332,14 +332,14 @@ fn multiply2(first_number_str: &str, second_number_str: &str) -> AliasedResult<i
 /// Sometimes an Option needs to interact with a Result, or a Result<T, Error1> needs
 /// to interact with a Result<T, Error2>. In those cases, we want to manage our
 /// different error types in a way that makes them composable and easy to interact with.
-fn double_first(vec: Vec<&str>) -> Option<Result<i32, ParseIntError>> {
+pub fn double_first(vec: Vec<&str>) -> Option<Result<i32, ParseIntError>> {
     vec.first().map(|first| first.parse::<i32>().map(|i| i * 2))
 }
 
 /// There are times when we'll want to stop processing on errors (like with ?) but keep
 /// going when the Option is None. A couple of combinators come in handy to swap the
 /// Result and Option.
-fn double_first2(vec: Vec<&str>) -> Result<Option<i32>, ParseIntError> {
+pub fn double_first2(vec: Vec<&str>) -> Result<Option<i32>, ParseIntError> {
     let opt = vec.first().map(|first| first.parse::<i32>().map(|i| i * 2));
     let opt = opt.map_or(Ok(None), |r| r.map(Some))?;
     Ok(opt)
@@ -348,7 +348,7 @@ fn double_first2(vec: Vec<&str>) -> Result<Option<i32>, ParseIntError> {
 /// Sometimes it simplifies the code to mask all of the different errors with a
 /// single type of error you define.
 #[derive(Debug, Clone, PartialEq)]
-struct DoubleError;
+pub struct DoubleError;
 type DoubleErrorResult<T> = std::result::Result<T, DoubleError>;
 impl Display for DoubleError {
     // Note that we don't store any extra info about the errors. This means we can't state
@@ -366,7 +366,7 @@ impl std::error::Error for DoubleError {
     }
 }
 
-fn double_first3(vec: Vec<&str>) -> DoubleErrorResult<i32> {
+pub fn double_first3(vec: Vec<&str>) -> DoubleErrorResult<i32> {
     vec.first()
         // DoubleError is a unit struct. A unit struct is a type as well as an
         // instance of that type.
@@ -379,7 +379,7 @@ fn double_first3(vec: Vec<&str>) -> DoubleErrorResult<i32> {
 /// statically determined.
 /// The stdlib helps in boxing our errors by having Box implement conversion from
 /// any type that implements the Error trait into the trait object Box<Error>, via From.
-fn double_first4(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
+pub fn double_first4(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
     vec.first()
         .ok_or_else(|| DoubleError.into())
         .and_then(|s| s.parse::<i32>().map_err(|e| e.into()))
@@ -391,14 +391,14 @@ fn double_first4(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
 /// From::from is a conversion utility between different types, this means that
 /// if you ? where the error is convertible to the return type, it will convert
 /// automatically.
-fn double_first5(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
+pub fn double_first5(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
     let first = vec.first().ok_or(DoubleError)?;
     let parsed = first.parse::<i32>()?;
     Ok(parsed * 2)
 }
 
 #[derive(Debug)]
-enum MyError {
+pub enum MyError {
     EmptyVec,
     ParseError(ParseIntError),
 }
@@ -435,7 +435,7 @@ impl From<ParseIntError> for MyError {
 /// This also returns a single error type (defined by us) and it's an enum of different types.
 /// This adds a bit more boilerplate for handling errors and might not be needed in all
 /// applications. There are some libraries that can take care of the boilerplate for you.
-fn double_first6(vec: Vec<&str>) -> Result<i32, MyError> {
+pub fn double_first6(vec: Vec<&str>) -> Result<i32, MyError> {
     let first = vec.first().ok_or(MyError::EmptyVec)?;
     // ? converts ParseIntError into MyError
     let parsed = first.parse::<i32>()?;

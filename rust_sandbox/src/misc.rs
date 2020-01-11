@@ -1,5 +1,5 @@
 #[derive(Debug)]
-struct Rectangle {
+pub struct Rectangle {
     width: u32,
     height: u32,
 }
@@ -10,15 +10,15 @@ impl Rectangle {
     }
 }
 
-fn add_two(a: i32) -> i32 {
+pub fn add_two(a: i32) -> i32 {
     a + 2
 }
 
-fn greeting(name: &str) -> String {
+pub fn greeting(name: &str) -> String {
     format!("Hello {}!", name)
 }
 
-fn might_panic(value: i32) -> i32 {
+pub fn might_panic(value: i32) -> i32 {
     if value < 1 || value > 100 {
         panic!("input value must be between 1 and 100");
     } else {

@@ -19,7 +19,7 @@ pub fn run() {
     loops();
 }
 
-fn loops() {
+pub fn loops() {
     // loop {
     //     // this loops forever until you call "break"
     //     println!("again!");

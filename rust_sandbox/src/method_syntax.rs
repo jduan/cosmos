@@ -21,7 +21,7 @@ pub fn run() {
 }
 
 #[derive(Debug)]
-struct Rectangle {
+pub struct Rectangle {
     width: u32,
     height: u32,
 }
@@ -57,7 +57,7 @@ impl Rectangle {
 
 // Pair owns resources: two heap allocated integers.
 #[derive(Debug)]
-struct Pair(Box<i32>, Box<i32>);
+pub struct Pair(Box<i32>, Box<i32>);
 
 impl Pair {
     // This method "consumes" the resources of the caller object

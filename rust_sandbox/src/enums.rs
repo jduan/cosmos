@@ -55,31 +55,31 @@ pub fn run() {
     msg4.call();
 }
 
-enum IpAddrKind {
+pub enum IpAddrKind {
     V4,
     V6,
 }
 
-struct IpAddr {
+pub struct IpAddr {
     kind: IpAddrKind,
     address: String,
 }
 
 // this is better than the above
-enum IpAddr2 {
+pub enum IpAddr2 {
     V4(String),
     V6(String),
 }
 
 // Each variant can have different types
-enum IpAddr3 {
+pub enum IpAddr3 {
     V4(u8, u8, u8, u8),
     V6(String),
 }
 
 // This enum has a wide variety of types embedded in its variants.
 #[derive(Debug)]
-enum Message {
+pub enum Message {
     Quit,
     // This uses an anonymous struct
     Move { x: i32, y: i32 },
@@ -102,13 +102,13 @@ impl Message {
 }
 
 #[derive(Debug, PartialEq)]
-enum Ordering {
+pub enum Ordering {
     Less,
     Equal,
     Greater,
 }
 
-fn compare(n: i32, m: i32) -> Ordering {
+pub fn compare(n: i32, m: i32) -> Ordering {
     if n < m {
         Ordering::Less
     } else if n > m {
@@ -121,14 +121,14 @@ fn compare(n: i32, m: i32) -> Ordering {
 // By default, Rust stores C-style enums using the smallest built-in integer type that an
 // accommodate them. Most fit in a single byte. Occasionally, it's useful to tell Rust which
 // integers to use.
-enum HttpStatus {
+pub enum HttpStatus {
     Ok = 200,
     NotModified = 304,
     NotFound = 404,
 }
 
 #[derive(Debug)]
-enum TimeUnit {
+pub enum TimeUnit {
     Seconds,
     Minutes,
     Hours,
@@ -155,7 +155,7 @@ impl TimeUnit {
 }
 
 #[derive(Debug)]
-enum RoughTime {
+pub enum RoughTime {
     // This is called a "tuple variant", like "tuple structs".
     InThePast(TimeUnit, u32),
     JustNow,
@@ -174,13 +174,13 @@ impl RoughTime {
     }
 }
 
-struct Point {
+pub struct Point {
     x: f32,
     y: f32,
     z: f32,
 }
 
-enum Shape {
+pub enum Shape {
     // These are called "struct variants", similar to "named-field" structs.
     Sphere { center: Point, radius: f32 },
     Cuboid { corner1: Point, corner2: Point },
@@ -198,7 +198,7 @@ enum Shape {
 // Enums are useful for quickly implementing tree-like data structures (recursive), like JSON.
 // In memory, any JSON object can be represented as a value of this Rust type:
 use std::collections::HashMap;
-enum Json {
+pub enum Json {
     Null,
     Boolean(bool),
     Number(f64),
@@ -212,24 +212,24 @@ enum Json {
 
 // Generic Enums
 // Enums can be generic, such as Option<T> and Result<T, E> from the stdlib.
-struct TreeNode<T> {
+pub struct TreeNode<T> {
     element: T,
     left: BinaryTree<T>,
     right: BinaryTree<T>,
 }
 
-enum BinaryTree<T> {
+pub enum BinaryTree<T> {
     Empty,
     NonEmpty(Box<TreeNode<T>>),
 }
 
-struct TreeNode2<T> {
+pub struct TreeNode2<T> {
     element: T,
     left: Option<Box<TreeNode2<T>>>,
     right: Option<Box<TreeNode2<T>>>,
 }
 
-struct Account {
+pub struct Account {
     name: String,
     language: String,
 }

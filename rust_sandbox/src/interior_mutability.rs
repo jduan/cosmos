@@ -35,7 +35,7 @@ use std::cell::{Cell, RefCell};
 use std::fs::File;
 use std::io::Write;
 
-struct SpiderRobot {
+pub struct SpiderRobot {
     species: String,
     web_enabled: bool,
     hardware_error_count: Cell<u32>,

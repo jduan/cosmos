@@ -34,7 +34,7 @@ pub fn run() {
     let a_slice: &[i32] = &a[1..3];
 }
 // Return the index of the end of the first word.
-fn first_word(s: &String) -> usize {
+pub fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
@@ -47,7 +47,7 @@ fn first_word(s: &String) -> usize {
 }
 
 // Return a string slice "&str"
-fn string_slice(s: &String) -> &str {
+pub fn string_slice(s: &String) -> &str {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
@@ -61,7 +61,7 @@ fn string_slice(s: &String) -> &str {
 
 // When passing strings to a function, favor "string slices"
 // This function is identical to first_word except the function signature.
-fn pass_string_slice(s: &str) -> &str {
+pub fn pass_string_slice(s: &str) -> &str {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
@@ -75,7 +75,7 @@ fn pass_string_slice(s: &str) -> &str {
 
 // Because this function takes a slice reference as an argument, you can apply it to either a
 // vector or an array.
-fn iterate_slices(n: &[f64]) {
+pub fn iterate_slices(n: &[f64]) {
     for elt in n {
         println!("element is {}", elt);
     }

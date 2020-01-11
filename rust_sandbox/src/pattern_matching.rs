@@ -10,21 +10,21 @@ pub fn run() {
 }
 
 #[derive(Debug)]
-enum UsState {
+pub enum UsState {
     Alabama,
     Alaska,
     California,
     Washington,
 }
 
-enum Coin {
+pub enum Coin {
     Penny,
     Nickel,
     Dime,
     Quarter(UsState),
 }
 
-fn value_in_cents(coin: Coin) -> u8 {
+pub fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => {
             println!("Lucky penny!");
@@ -39,7 +39,7 @@ fn value_in_cents(coin: Coin) -> u8 {
     }
 }
 
-fn get_number_value(n: u32) -> &'static str {
+pub fn get_number_value(n: u32) -> &'static str {
     match n {
         1 => "One",
         2 | 3 | 5 | 7 | 11 => "Prime",
@@ -48,7 +48,7 @@ fn get_number_value(n: u32) -> &'static str {
     }
 }
 
-fn destruct_tuples(pair: (i32, i32)) -> String {
+pub fn destruct_tuples(pair: (i32, i32)) -> String {
     match pair {
         (0, y) => format!("First is 0 and y is {}", y),
         (x, 0) => format!("x is {} and last is 0", x),
@@ -56,14 +56,14 @@ fn destruct_tuples(pair: (i32, i32)) -> String {
     }
 }
 
-enum Color {
+pub enum Color {
     Red,
     Blue,
     Green,
     RGB(u32, u32, u32),
 }
 
-fn destruct_enums(color: Color) -> String {
+pub fn destruct_enums(color: Color) -> String {
     match color {
         Red => String::from("Red"),
         Blue => String::from("Blue"),
@@ -72,12 +72,12 @@ fn destruct_enums(color: Color) -> String {
     }
 }
 
-struct Foo {
+pub struct Foo {
     x: (u32, u32),
     y: u32,
 }
 
-fn destruct_structs(foo: Foo) -> String {
+pub fn destruct_structs(foo: Foo) -> String {
     match foo {
         Foo { x: (1, b), y } => format!("First of x is 1, b = {}, y = {}", b, y),
         Foo { y: 2, x: x } => format!("y is 2, x = {:?}", x),
@@ -87,7 +87,7 @@ fn destruct_structs(foo: Foo) -> String {
 }
 
 // A match guard can be added to filter the arm.
-fn use_guard(pair: (i32, i32)) -> &'static str {
+pub fn use_guard(pair: (i32, i32)) -> &'static str {
     match pair {
         (x, y) if x == y => "These are twins",
         (x, y) if x + y == 0 => "Antimatter, kaboom!",
@@ -97,7 +97,7 @@ fn use_guard(pair: (i32, i32)) -> &'static str {
 }
 
 // Binding: use @ sigil to bind values to names
-fn report_age(age: u32) -> String {
+pub fn report_age(age: u32) -> String {
     match age {
         0 => String::from("I'm not born yet I guess"),
         n @ 1..=12 => format!("I'm a child of age {}", n),
@@ -106,7 +106,7 @@ fn report_age(age: u32) -> String {
     }
 }
 
-fn use_binding(number: Option<u32>) -> String {
+pub fn use_binding(number: Option<u32>) -> String {
     match number {
         Some(n @ 42) => format!("The answer is {}", n),
         Some(n) => format!("Not interesting {}", n),

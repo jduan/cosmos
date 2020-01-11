@@ -1,6 +1,6 @@
-struct Container(i32, i32);
+pub struct Container(i32, i32);
 
-trait Contains<A, B> {
+pub trait Contains<A, B> {
     fn contains(&self, _: A, _: B) -> bool;
     fn first(&self) -> i32;
     fn last(&self) -> i32;
@@ -19,7 +19,7 @@ impl Contains<i32, i32> for Container {
     }
 }
 
-fn difference<A, B, C>(container: &C) -> i32
+pub fn difference<A, B, C>(container: &C) -> i32
 where
     C: Contains<A, B>,
 {
@@ -29,9 +29,9 @@ where
 /// The use of "Associated types" improves the overall readability of code by moving
 /// inner types locally into a trait as output types.
 
-struct Container2(i32, i32);
+pub struct Container2(i32, i32);
 
-trait Contains2 {
+pub trait Contains2 {
     // Define generic types here which methods will be able to utilize.
     type A;
     type B;
@@ -61,7 +61,7 @@ impl Contains2 for Container2 {
     }
 }
 
-fn difference2<C: Contains2>(c: &C) -> i32 {
+pub fn difference2<C: Contains2>(c: &C) -> i32 {
     c.last() - c.first()
 }
 

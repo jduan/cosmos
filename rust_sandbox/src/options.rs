@@ -1,21 +1,21 @@
 /// You can use the ? operator on Options.  If x is an Option, then evaluating x? will
 /// 1. return the underlying value if x is Some,
 /// 2. otherwise it will terminate whatever function is being executed and return None.
-fn next_birthday(current_age: Option<u8>) -> Option<String> {
+pub fn next_birthday(current_age: Option<u8>) -> Option<String> {
     let next_age: u8 = current_age?;
     Some(format!("Next year I will be {}", next_age))
 }
 
 /// You can chain many ?s together to make your code much more readable.
-struct Person {
+pub struct Person {
     job: Option<Job>,
 }
 
-struct Job {
+pub struct Job {
     phone_number: Option<PhoneNumber>,
 }
 
-struct PhoneNumber {
+pub struct PhoneNumber {
     area_code: Option<u8>,
     number: u32,
 }
@@ -39,21 +39,21 @@ impl Person {
 /// Some -> Some and None -> None. Multiple map() calls can be chained together for even
 /// more flexibility.
 #[derive(Debug)]
-enum Food {
+pub enum Food {
     Apple,
     Carrot,
     Potato,
 }
 
 #[derive(Debug)]
-struct Peeled(Food);
+pub struct Peeled(Food);
 #[derive(Debug)]
-struct Chopped(Food);
+pub struct Chopped(Food);
 #[derive(Debug)]
-struct Cooked(Food);
+pub struct Cooked(Food);
 
 // Peeling food. If there isn't any, then return `None`. Otherwise, return the peeled food.
-fn peel(food: Option<Food>) -> Option<Peeled> {
+pub fn peel(food: Option<Food>) -> Option<Peeled> {
     match food {
         Some(food) => Some(Peeled(food)),
         None => None,
@@ -61,7 +61,7 @@ fn peel(food: Option<Food>) -> Option<Peeled> {
 }
 
 // Peeling food. If there isn't any, then return `None`. Otherwise, return the peeled food.
-fn chop(food: Option<Peeled>) -> Option<Chopped> {
+pub fn chop(food: Option<Peeled>) -> Option<Chopped> {
     match food {
         Some(Peeled(food)) => Some(Chopped(food)),
         None => None,
@@ -69,7 +69,7 @@ fn chop(food: Option<Peeled>) -> Option<Chopped> {
 }
 
 // Peeling food. If there isn't any, then return `None`. Otherwise, return the peeled food.
-fn cook(food: Option<Chopped>) -> Option<Cooked> {
+pub fn cook(food: Option<Chopped>) -> Option<Cooked> {
     match food {
         Some(Chopped(food)) => Some(Cooked(food)),
         None => None,
@@ -78,13 +78,13 @@ fn cook(food: Option<Chopped>) -> Option<Cooked> {
 
 // A function to peel, chop, and cook food all in sequence.
 // We chain multiple uses of `map()` to simplify the code.
-fn process(food: Option<Food>) -> Option<Cooked> {
+pub fn process(food: Option<Food>) -> Option<Cooked> {
     food.map(|food| Peeled(food))
         .map(|Peeled(food)| Chopped(food))
         .map(|Chopped(food)| Cooked(food))
 }
 
-fn eat(food: Option<Cooked>) {
+pub fn eat(food: Option<Cooked>) {
     match food {
         Some(Cooked(food)) => println!("Mmm. I love {:?}", food),
         None => println!("Oh no! It wasn't edible."),
@@ -96,29 +96,29 @@ fn eat(food: Option<Cooked>) {
 /// Option<Option<T>>. Chaining multiple calls together can then become confusing.
 /// That's where another combinator called and_then(), known in some languages as
 /// flatmap, comes in.
-fn get_shortest(names: Vec<&str>) -> Option<&str> {
+pub fn get_shortest(names: Vec<&str>) -> Option<&str> {
     unimplemented!()
 }
 
-struct JSON {}
-struct User {}
+pub struct JSON {}
+pub struct User {}
 
-fn find_user_by_name(name: &str) -> Option<JSON> {
+pub fn find_user_by_name(name: &str) -> Option<JSON> {
     unimplemented!()
 }
 
-fn json_to_user(json: JSON) -> Option<User> {
+pub fn json_to_user(json: JSON) -> Option<User> {
     unimplemented!()
 }
 
-fn get_user_with_shortest_name(names: Vec<&str>) -> Option<User> {
+pub fn get_user_with_shortest_name(names: Vec<&str>) -> Option<User> {
     get_shortest(names)
         .and_then(|shortest| find_user_by_name(shortest))
         .and_then(|user| json_to_user(user))
 }
 
 // This is equivalent to the function above but much more verbose!
-fn get_user_with_shortest_name2(names: Vec<&str>) -> Option<User> {
+pub fn get_user_with_shortest_name2(names: Vec<&str>) -> Option<User> {
     match get_shortest(names) {
         None => None,
         Some(name) => match find_user_by_name(name) {
@@ -151,14 +151,14 @@ pub fn run() {
     placeholder(30);
 }
 
-fn plus_one(x: Option<i32>) -> Option<i32> {
+pub fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
         Some(i) => Some(i + 1),
         None => None,
     }
 }
 
-fn placeholder(num: u8) {
+pub fn placeholder(num: u8) {
     match num {
         1 => println!("one"),
         3 => println!("three"),

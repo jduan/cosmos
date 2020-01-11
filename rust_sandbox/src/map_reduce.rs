@@ -4,7 +4,7 @@ use std::thread;
 /// do this by parcelling out chunks of the block into different threads. Each thread will
 /// sum its tiny block of digits, and subsequently we will sum the intermediate sums produced
 /// by each thread.
-fn sum_all_digits(digits: &str) -> u32 {
+pub fn sum_all_digits(digits: &str) -> u32 {
     let mut children = vec![];
     for (idx, data) in digits.split_whitespace().into_iter().enumerate() {
         // We need to make a copy of the chunk here, otherwise the chunk won't live
@@ -23,7 +23,7 @@ fn sum_all_digits(digits: &str) -> u32 {
     sum
 }
 
-fn sum_digits(digits: &str) -> u32 {
+pub fn sum_digits(digits: &str) -> u32 {
     digits
         .chars()
         .map(|ch| ch.to_digit(10).expect("Expect a digit!"))

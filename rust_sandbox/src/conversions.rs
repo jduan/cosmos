@@ -12,7 +12,7 @@ use std::str::FromStr;
 /// be able to convert type B to type A.
 
 #[derive(Debug)]
-struct Number {
+pub struct Number {
     value: i32,
 }
 
@@ -26,7 +26,7 @@ impl From<i32> for Number {
 /// "TryFrom" and "TryInto" are generic traits for converting between types. Unlike From/Into,
 /// the TryFrom/TryInto traits are used for fallible conversions, and as such, return "Result"s.
 #[derive(Debug, PartialEq)]
-struct EvenNumber(i32);
+pub struct EvenNumber(i32);
 
 impl TryFrom<i32> for EvenNumber {
     type Error = ();
@@ -44,7 +44,7 @@ impl TryFrom<i32> for EvenNumber {
 /// To convert any type to a String is as simple as implementing the ToString trait for the type.
 /// Rather than doing so directly, you should implement the fmt::Display trait which automagically
 /// provides ToString and also allows printing the type.
-struct Circle {
+pub struct Circle {
     radius: u32,
 }
 

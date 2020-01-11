@@ -6,10 +6,10 @@
 use std::marker::PhantomData;
 
 #[derive(PartialEq, Debug)]
-struct PhantomTuple<A, B>(A, PhantomData<B>);
+pub struct PhantomTuple<A, B>(A, PhantomData<B>);
 
 #[derive(PartialEq, Debug)]
-struct PhantomStruct<A, B> {
+pub struct PhantomStruct<A, B> {
     first: A,
     phantom: PhantomData<B>,
 }

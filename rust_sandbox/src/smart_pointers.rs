@@ -19,7 +19,7 @@ pub fn run() {
     rc_and_refcell();
 }
 
-fn box_simple_example() {
+pub fn box_simple_example() {
     let b = Box::new(5);
     println!("b = {}", b);
     // When b goes out of scope at the end of the function, it will be deallocated.
@@ -27,16 +27,16 @@ fn box_simple_example() {
     // points to (stored on the heap);
 }
 
-enum List {
+pub enum List {
     Nil,
     Cons(i32, Box<List>),
 }
 
-fn create_list() -> List {
+pub fn create_list() -> List {
     Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))))
 }
 
-fn print_list(lst: List) {
+pub fn print_list(lst: List) {
     match lst {
         Nil => println!("End of list"),
         Cons(head, tail) => {
@@ -46,7 +46,7 @@ fn print_list(lst: List) {
     }
 }
 
-fn dereference_operator() {
+pub fn dereference_operator() {
     let x = 5;
     // y is a reference to x
     let y = &x;
@@ -62,7 +62,7 @@ fn dereference_operator() {
 }
 
 // define our own Box type
-struct MyBox<T>(T);
+pub struct MyBox<T>(T);
 
 impl<T> MyBox<T> {
     fn new(x: T) -> MyBox<T> {
@@ -82,7 +82,7 @@ impl<T> Deref for MyBox<T> {
     }
 }
 
-fn use_mybox() {
+pub fn use_mybox() {
     let x = 5;
     let y = MyBox::new(x);
 
@@ -95,11 +95,11 @@ fn use_mybox() {
     assert_eq!(5, *y);
 }
 
-fn hello(name: &str) {
+pub fn hello(name: &str) {
     println!("Hello, {}!", name);
 }
 
-fn deref_coercion() {
+pub fn deref_coercion() {
     hello("Rust");
     let m = MyBox::new(String::from("Rust"));
 
@@ -122,7 +122,7 @@ fn deref_coercion() {
     // compile time, so there is no runtime penalty for taking advantage of deref coercion!
 }
 
-struct CustomSmartPointer {
+pub struct CustomSmartPointer {
     data: String,
 }
 
@@ -141,7 +141,7 @@ impl Drop for CustomSmartPointer {
     }
 }
 
-fn drop_trait() {
+pub fn drop_trait() {
     // Variables are dropped in the reverse order of their creation, so 'd' gets dropped before
     // 'c'.
     let c = CustomSmartPointer {
@@ -153,7 +153,7 @@ fn drop_trait() {
     println!("CustomSmartPointer created.");
 }
 
-fn drop_early() {
+pub fn drop_early() {
     let c = CustomSmartPointer {
         data: String::from("some data"),
     };
@@ -171,12 +171,12 @@ fn drop_early() {
     println!("CustomSmartPointer dropped before the end of the function.");
 }
 
-enum List2 {
+pub enum List2 {
     Cons(i32, Rc<List2>),
     Nil,
 }
 
-fn reference_counting() {
+pub fn reference_counting() {
     let a = Rc::new(Cons2(5, Rc::new(Cons2(10, Rc::new(Nil2)))));
     // The initial reference count is 1
     assert_eq!(1, Rc::strong_count(&a));
@@ -238,12 +238,12 @@ where
 }
 
 #[derive(Debug)]
-enum List3 {
+pub enum List3 {
     Cons3(Rc<RefCell<i32>>, Rc<List3>),
     Nil3,
 }
 
-fn rc_and_refcell() {
+pub fn rc_and_refcell() {
     let value = Rc::new(RefCell::new(5));
     let a = Rc::new(Cons3(Rc::clone(&value), Rc::new(Nil3)));
 

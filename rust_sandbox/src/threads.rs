@@ -15,7 +15,7 @@ pub fn run() {
     share_mutex_between_threads();
 }
 
-fn create_thread() {
+pub fn create_thread() {
     println!("===== create_thread =====");
     let handle = thread::spawn(|| {
         for i in 1..10 {
@@ -33,7 +33,7 @@ fn create_thread() {
     handle.join().unwrap();
 }
 
-fn move_ownership() {
+pub fn move_ownership() {
     println!("===== move_ownership =====");
     let v = vec![1, 2, 3];
     // "move" says the spawned thread will own all the variables in the closure that are referenced
@@ -49,7 +49,7 @@ fn move_ownership() {
     handle.join().unwrap();
 }
 
-fn message_passing() {
+pub fn message_passing() {
     println!("===== message_passing =====");
     let (tx, rx) = mpsc::channel();
 
@@ -72,7 +72,7 @@ fn message_passing() {
     println!("Got: {}", received);
 }
 
-fn message_passing2() {
+pub fn message_passing2() {
     println!("===== message_passing2 =====");
     let (tx, rx) = mpsc::channel();
 
@@ -96,7 +96,7 @@ fn message_passing2() {
     }
 }
 
-fn multiple_producers() {
+pub fn multiple_producers() {
     println!("===== multiple_producers =====");
     let (tx, rx) = mpsc::channel();
     let tx1 = mpsc::Sender::clone(&tx);
@@ -135,7 +135,7 @@ fn multiple_producers() {
     }
 }
 
-fn use_mutex() {
+pub fn use_mutex() {
     println!("===== use_mutex =====");
     let m = Mutex::new(5);
     {
@@ -151,7 +151,7 @@ fn use_mutex() {
     println!("m = {:?}", m);
 }
 
-fn share_mutex_between_threads() {
+pub fn share_mutex_between_threads() {
     println!("===== share_mutex_between_threads =====");
     let counter = Arc::new(Mutex::new(0));
     let mut handles = vec![];

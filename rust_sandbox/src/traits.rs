@@ -183,29 +183,29 @@ impl Summary for Tweet {
 
 // traits as parameters
 // this function can be called with any type that implements Summary
-fn notify(item: impl Summary) {
+pub fn notify(item: impl Summary) {
     println!("Breaking news! {}", item.summarize());
 }
 
 // "trait bound"
 // this is equivalent to the function above, which is actually syntax sugar
-fn notify2<T: Summary>(item: T) {
+pub fn notify2<T: Summary>(item: T) {
     println!("Breaking news! {}", item.summarize());
 }
 
-trait Display {
+pub trait Display {
     fn show(&self) -> String;
 }
 
 // specify multiple traits using +
-fn notify3<T: Summary + Display>(item: T) {
+pub fn notify3<T: Summary + Display>(item: T) {
     println!("Breaking news! {}", item.summarize());
     println!("Show me the item: {}", item.show());
 }
 
 // "trait bound" using "where" clause between return type and open curly brace
 // this is easier to read when you have many trait bounds
-fn some_function<T, U>(t: T, u: U) -> i32
+pub fn some_function<T, U>(t: T, u: U) -> i32
 where
     T: Display + Clone,
     U: Clone + Summary,
@@ -214,7 +214,7 @@ where
 }
 
 // returning types that implement traits
-fn returns_summarizable() -> impl Summary {
+pub fn returns_summarizable() -> impl Summary {
     Tweet {
         username: String::from("horse_ebooks"),
         content: String::from("of course, as you probably already know, people"),
@@ -224,20 +224,20 @@ fn returns_summarizable() -> impl Summary {
 }
 
 // This is a plain function that takes a "trait object".
-fn say_hello(out: &mut Write) -> std::io::Result<()> {
+pub fn say_hello(out: &mut Write) -> std::io::Result<()> {
     out.write_all(b"hello world\n")?;
     out.flush()
 }
 
 // In contrast, this is a generic function whose type parameter W is bound by "Write" trait.
-fn say_hello2<W: Write>(out: &mut W) -> std::io::Result<()> {
+pub fn say_hello2<W: Write>(out: &mut W) -> std::io::Result<()> {
     out.write_all(b"hello world\n");
     out.flush()
 }
 
 // Find the top occurring elements from a vector.
 // This is how to special a type parameter that implements multiple traits.
-fn top_ten<T>(values: &Vec<T>) -> Vec<&T>
+pub fn top_ten<T>(values: &Vec<T>) -> Vec<&T>
 where
     T: Debug + Hash + Eq,
 {
@@ -252,17 +252,17 @@ where
     map_vec.into_iter().map(|a| a.0).take(10).collect()
 }
 
-trait Mapper {}
-trait Reducer {}
-trait Serialize {}
-struct DataSet {}
+pub trait Mapper {}
+pub trait Reducer {}
+pub trait Serialize {}
+pub struct DataSet {}
 // Generic functions can have multiple type parameters: M and R.
-fn run_query<M: Mapper + Serialize, R: Reducer + Serialize>(data: &DataSet, map: M, reduce: R) {
+pub fn run_query<M: Mapper + Serialize, R: Reducer + Serialize>(data: &DataSet, map: M, reduce: R) {
     unimplemented!()
 }
 
 // Alternative syntax: bounds can be specified in the where clause
-fn run_query2<M, R>(data: &DataSet, map: M, reduce: R)
+pub fn run_query2<M, R>(data: &DataSet, map: M, reduce: R)
 where
     M: Mapper + Serialize,
     R: Reducer + Serialize,
@@ -270,10 +270,10 @@ where
     unimplemented!()
 }
 
-trait MeasureDistance {}
+pub trait MeasureDistance {}
 // A generic function can have both lifetime parameters and type parameters. Lifetime parameters
 // come first.
-fn nearest<'t, 'c, P>(target: &'t P, candidates: &'c [P]) -> &'c P
+pub fn nearest<'t, 'c, P>(target: &'t P, candidates: &'c [P]) -> &'c P
 where
     P: MeasureDistance,
 {
@@ -282,7 +282,7 @@ where
 
 /// This is a generic function. It works with parameters that implement the "Ord" trait.
 /// The compiler generates custom machine code for each type T that you actually use.
-fn min<T: Ord>(m: T, n: T) -> T {
+pub fn min<T: Ord>(m: T, n: T) -> T {
     if m < n {
         m
     } else {
@@ -293,7 +293,7 @@ fn min<T: Ord>(m: T, n: T) -> T {
 /// Rust lets you implement any trait on any type, as long as either the trait or the type is
 /// introduced in the current crate. This means that any time you want to add a method to any type,
 /// you can use a trait to do it. This is called an "extension trait".
-trait IsEmoji {
+pub trait IsEmoji {
     fn is_emoji(&self) -> bool;
 }
 
@@ -311,8 +311,8 @@ impl IsEmoji for char {
 /// decide which implementation to use for a given method call.
 
 ///You can even use a generic impl block to add an extension trait to a whole family of types at once.
-struct HtmlDocument {}
-trait WriteHtml {
+pub struct HtmlDocument {}
+pub trait WriteHtml {
     fn write_html(&mut self, html: &HtmlDocument) -> io::Result<()>;
 }
 
@@ -326,19 +326,19 @@ impl<W: Write> WriteHtml for W {
 /// Self in traits
 ///
 /// A trait can use the keyword Self as a type. It represents the trait itself.
-trait MyClone {
+pub trait MyClone {
     fn clone(&self) -> Self;
 }
 
 /// Subtraits: we can define a trait is an extension of another trait
 /// This means that every type that implements Creature must also implement the Display trait.
-trait Creature: Display {
+pub trait Creature: Display {
     fn position(&self) -> (i32, i32);
 }
 // impl Display for Broom {}
 // impl Creature for Broom {}
 
-trait Animal {
+pub trait Animal {
     // Instance methods
     fn name(&self) -> &'static str;
     fn noise(&self) -> &'static str;
@@ -349,7 +349,7 @@ trait Animal {
     }
 }
 
-struct Sheep {
+pub struct Sheep {
     naked: bool,
     name: &'static str,
 }
@@ -418,7 +418,7 @@ impl Animal for Sheep {
 /// function returns a pointer-to-trait-on-heap in this way, you need to write the return type with
 /// the dyn keyword, e.g. Box<dyn Animal>.
 
-struct Cow {}
+pub struct Cow {}
 
 impl Animal for Cow {
     fn name(&self) -> &'static str {
@@ -430,7 +430,7 @@ impl Animal for Cow {
     }
 }
 
-fn random_animal(random_number: f64) -> Box<dyn Animal> {
+pub fn random_animal(random_number: f64) -> Box<dyn Animal> {
     if random_number < 0.5 {
         Box::new(Sheep {
             name: "Bob",
@@ -445,7 +445,7 @@ fn random_animal(random_number: f64) -> Box<dyn Animal> {
 /// https://doc.rust-lang.org/core/ops/
 /// In Rust, many of the operators can be overloaded via traits. That is, some operators can be used to accomplish different tasks based on their input arguments. This is possible because operators are syntactic sugar for method calls. For example, the + operator in a + b calls the add method (as in a.add(b)). This add method is part of the Add trait. Hence, the + operator can be used by any implementor of the Add trait.
 
-struct Rectangle {
+pub struct Rectangle {
     width: u32,
     height: u32,
 }
@@ -465,7 +465,7 @@ impl Mul<u32> for Rectangle {
 /// If your function returns a type that implements MyTrait, you can write its return
 /// type as -> impl MyTrait. This can help simplify your type signatures quite a lot!
 
-fn combine_vecs(v: Vec<i32>, u: Vec<i32>) -> impl Iterator<Item = i32> {
+pub fn combine_vecs(v: Vec<i32>, u: Vec<i32>) -> impl Iterator<Item = i32> {
     // You could also write the following which is a lot more complicated.
     //    -> std::iter::Chain<std::vec::IntoIter<i32>, std::vec::IntoIter<i32>> {
     v.into_iter().chain(u.into_iter())
@@ -475,7 +475,7 @@ fn combine_vecs(v: Vec<i32>, u: Vec<i32>) -> impl Iterator<Item = i32> {
 /// closure has its own unnamed concrete type. Before impl Trait syntax, you had
 /// to allocate on the heap in order to return a closure. But now you can do it
 /// all statically, like this:
-fn make_adder(y: i32) -> impl Fn(i32) -> i32 {
+pub fn make_adder(y: i32) -> impl Fn(i32) -> i32 {
     let closure = move |x: i32| x + y;
     closure
 }

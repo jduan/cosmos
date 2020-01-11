@@ -40,7 +40,7 @@ pub fn run() {
     vec_of_enums();
 }
 
-fn ownership() {
+pub fn ownership() {
     let mut v = vec![1, 2, 3, 4, 5];
     let first = &v[0];
     v.push(6);
@@ -61,20 +61,20 @@ fn ownership() {
     println!("The first element is {}", &v[0]);
 }
 
-fn iterate_vec(v: &Vec<i32>) {
+pub fn iterate_vec(v: &Vec<i32>) {
     for i in v {
         println!("Vector element is {}", i);
     }
 }
 
-enum SpreadsheetCell {
+pub enum SpreadsheetCell {
     Int(i32),
     Float(f64),
     Text(String),
 }
 
 // Use an enum to store a vector of different types!
-fn vec_of_enums() {
+pub fn vec_of_enums() {
     let row = vec![
         SpreadsheetCell::Int(3),
         SpreadsheetCell::Float(10.12),

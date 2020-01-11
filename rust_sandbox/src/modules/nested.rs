@@ -3,7 +3,7 @@ pub fn function() {
 }
 
 #[allow(dead_code)]
-fn private_function() {
+pub fn private_function() {
     println!("called `modules::nested::private_function()`");
 }
 

@@ -88,7 +88,7 @@ pub fn run() {
     println!("Area of rectangle {:#?} is {}", rect, area(&rect));
 }
 
-struct User {
+pub struct User {
     username: String,
     email: String,
     sign_in_count: u64,
@@ -100,11 +100,11 @@ struct User {
 // with their fields. Tuple structs are useful when you want to give the whole tuple a name and
 // make the tuple be a different type from other tuples, and naming each field as in a regular
 // struct would be verbose or redundant.
-struct Color(i32, i32, i32);
+pub struct Color(i32, i32, i32);
 // fields are private by default
-struct Bounds(pub usize, pub usize);
+pub struct Bounds(pub usize, pub usize);
 
-fn create_user(email: String, username: String) -> User {
+pub fn create_user(email: String, username: String) -> User {
     User {
         email: email,
         username: username,
@@ -113,7 +113,7 @@ fn create_user(email: String, username: String) -> User {
     }
 }
 
-fn update_struct(user: User) -> User {
+pub fn update_struct(user: User) -> User {
     User {
         email: String::from("joel@airbnb.com"),
         username: String::from("Joel"),
@@ -123,12 +123,12 @@ fn update_struct(user: User) -> User {
 }
 
 #[derive(Debug)]
-struct Rectangle2 {
+pub struct Rectangle2 {
     width: u32,
     height: u32,
 }
 
-fn area(rect: &Rectangle2) -> u32 {
+pub fn area(rect: &Rectangle2) -> u32 {
     rect.width * rect.height
 }
 
@@ -182,7 +182,7 @@ impl<T> Queue<T> {
 // Structs with lifetime parameters
 // If a struct contains references, you must name those references' lifetimes.
 
-struct Extrema<'a> {
+pub struct Extrema<'a> {
     greatest: &'a i32,
     least: &'a i32,
 }
@@ -190,7 +190,7 @@ struct Extrema<'a> {
 // Accordding "elision rule", you can omit the lifetime parameter for this
 // function.
 // fn find_extrema<'a>(slice: &'a [i32]) -> Extrema<'a> {
-fn find_extrema(slice: &[i32]) -> Extrema {
+pub fn find_extrema(slice: &[i32]) -> Extrema {
     let mut greatest = &slice[0];
     let mut least = &slice[0];
 

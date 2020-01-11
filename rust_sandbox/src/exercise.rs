@@ -4,12 +4,12 @@ pub fn run() {
 }
 
 // Convert fahrenheit to celsius
-fn f2c(x: f32) -> f32 {
+pub fn f2c(x: f32) -> f32 {
     (x - 32.0) * 5.0 / 9.0
 }
 
 // generate the nth fibonacci number
-fn nth_fib(n: u32) -> u32 {
+pub fn nth_fib(n: u32) -> u32 {
     if n == 1 {
         0
     } else if n == 2 {

@@ -21,7 +21,7 @@ pub fn run() {
 }
 
 // memorization or lazy evaluation
-struct Cacher<T>
+pub struct Cacher<T>
 where
     // T is a closure type.
     T: Fn(u32) -> u32,
@@ -54,7 +54,7 @@ where
     }
 }
 
-fn generate_workout(intensity: u32, random_number: u32) {
+pub fn generate_workout(intensity: u32, random_number: u32) {
     // This is how you pass a closure as a argument to Cacher::new
     let mut expensive_result = Cacher::new(|num| {
         println!("calculating slowly...");
@@ -76,7 +76,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
     }
 }
 
-fn types_are_inferred_once() {
+pub fn types_are_inferred_once() {
     let closure = |x| x;
     let s = closure(String::from("hello"));
 
@@ -89,7 +89,7 @@ fn types_are_inferred_once() {
 }
 
 // This function shows the equal_to_x closure captures its surrounding environment: x in this case.
-fn capture_env() {
+pub fn capture_env() {
     let x = 4;
     let equal_to_x = |z: u32| z == x;
     let y = 4;
@@ -102,7 +102,7 @@ fn capture_env() {
     // }
 }
 
-fn move_and_take_ownership() {
+pub fn move_and_take_ownership() {
     let x = vec![1, 2, 3];
     let equal_to_x = move |z| z == x;
 
@@ -120,21 +120,21 @@ fn move_and_take_ownership() {
 //  1.  Fn: the closure captures by reference (&T)
 //  2.  FnMut: the closure captures by mutable reference (&mut T)
 //  3.  FnOnce: the closure captures by value (T)
-fn apply<F>(f: F)
+pub fn apply<F>(f: F)
 where
     F: FnOnce(),
 {
     f();
 }
 
-fn apply2<F>(f: F)
+pub fn apply2<F>(f: F)
 where
     F: Fn(),
 {
     f();
 }
 
-fn apply_to_3<F>(f: F) -> i32
+pub fn apply_to_3<F>(f: F) -> i32
 where
     F: Fn(i32) -> i32,
 {
@@ -153,7 +153,7 @@ where
 /// &mut T or T are not allowed.
 
 // Even if "apply" takes a FnOnce, you can pass "diary" to it. "diary" is a Fn.
-fn test_apply_1() {
+pub fn test_apply_1() {
     let greeting = "hello";
     let diary = || {
         println!("I said {}", greeting);
@@ -162,7 +162,7 @@ fn test_apply_1() {
 }
 
 // Even if "apply" takes a FnOnce, you can pass "diary" to it. "diary" is a FnMut.
-fn test_apply_2() {
+pub fn test_apply_2() {
     let mut greeting = String::from("hello");
     let diary = || {
         greeting.push_str(", world");
@@ -171,7 +171,7 @@ fn test_apply_2() {
     apply(diary);
 }
 
-fn test_apply_3() {
+pub fn test_apply_3() {
     let mut greeting = String::from("hello");
     let diary = || {
         greeting.push_str(", world");
@@ -189,7 +189,7 @@ fn test_apply_3() {
 //    FnMut: normal
 //    FnOnce: There are some unusual things at play here, so the FnBox type is currently needed, and is unstable. This is expected to change in the future.
 
-fn create_fn() -> impl Fn() {
+pub fn create_fn() -> impl Fn() {
     let text = String::from("Fn");
     let mut count = 0;
     move || {
@@ -201,7 +201,7 @@ fn create_fn() -> impl Fn() {
     }
 }
 
-fn create_fn_mut() -> impl FnMut() {
+pub fn create_fn_mut() -> impl FnMut() {
     let mut text = String::from("FnMut");
     let mut count = 0;
     move || {
@@ -212,7 +212,7 @@ fn create_fn_mut() -> impl FnMut() {
     }
 }
 
-fn create_fn_once() -> impl FnOnce() {
+pub fn create_fn_once() -> impl FnOnce() {
     let text = String::from("FnOnce");
     move || println!("This is a {}", text)
 }

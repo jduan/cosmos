@@ -17,7 +17,7 @@ pub fn run() {
     match_number(None);
 }
 
-fn match_number(num: Option<u8>) -> &'static str {
+pub fn match_number(num: Option<u8>) -> &'static str {
     if let Some(3) = num {
         "three"
     } else {
@@ -25,13 +25,13 @@ fn match_number(num: Option<u8>) -> &'static str {
     }
 }
 
-enum Foo {
+pub enum Foo {
     Bar,
     Baz,
     Qux(u32),
 }
 
-fn match_enum(foo: Foo) -> &'static str {
+pub fn match_enum(foo: Foo) -> &'static str {
     if let Foo::Bar = foo {
         "foobar"
     } else if let Foo::Baz = foo {
