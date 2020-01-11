@@ -183,3 +183,5 @@
 	newHighlight = green bold 22
 [protocol]
 	version = 2
+[gerrit]
+	account = jingjing-duan
