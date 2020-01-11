@@ -117,8 +117,8 @@ pub fn use_binding(number: Option<u32>) -> String {
 #[cfg(test)]
 mod tests {
     use crate::pattern_matching::{
-        destruct_enums, destruct_structs, destruct_tuples, get_number_value, report_age,
-        use_binding, use_guard, Color, Foo,
+        Color, destruct_enums, destruct_structs, destruct_tuples, Foo,
+        get_number_value, report_age, use_binding, use_guard,
     };
 
     #[test]

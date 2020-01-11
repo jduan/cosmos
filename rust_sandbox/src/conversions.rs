@@ -1,7 +1,8 @@
-use regex::Regex;
 use std::convert::TryFrom;
 use std::fmt::{Display, Error, Formatter};
 use std::str::FromStr;
+
+use regex::Regex;
 
 /// Rust addresses conversion between types by the use of traits. The generic conversions will use
 /// the From and Into traits. However there are more specific ones for the more common cases, in
@@ -73,8 +74,9 @@ impl FromStr for Circle {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::convert::TryInto;
+
+    use super::*;
 
     #[test]
     fn test_from() {

@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::ops::Deref;
 use std::rc::Rc;
+
 // This is so that you can refer Cons and Nil without prepending the List module
 use List::{Cons, Nil};
 use List2::{Cons as Cons2, Nil as Nil2};
@@ -259,8 +260,9 @@ pub fn rc_and_refcell() {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::cell::RefCell;
+
+    use super::*;
 
     // This is a mock that implements the Messenger trait.
     struct MockMessenger {

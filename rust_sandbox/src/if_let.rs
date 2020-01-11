@@ -43,7 +43,7 @@ pub fn match_enum(foo: Foo) -> &'static str {
 
 #[cfg(test)]
 mod tests {
-    use crate::if_let::{match_enum, match_number, Foo};
+    use crate::if_let::{Foo, match_enum, match_number};
 
     #[test]
     fn test_match_number() {

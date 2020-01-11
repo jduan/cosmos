@@ -16,8 +16,9 @@ pub struct PhantomStruct<A, B> {
 
 #[cfg(test)]
 mod tests {
-    use crate::phantom_types::{PhantomStruct, PhantomTuple};
     use std::marker::PhantomData;
+
+    use crate::phantom_types::{PhantomStruct, PhantomTuple};
 
     #[test]
     fn test_phantom_types() {

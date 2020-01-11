@@ -67,7 +67,7 @@ pub fn difference2<C: Contains2>(c: &C) -> i32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::associate_types::{difference, difference2, Container, Container2};
+    use crate::associate_types::{Container, Container2, difference, difference2};
 
     #[test]
     fn test_difference() {

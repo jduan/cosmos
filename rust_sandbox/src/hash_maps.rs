@@ -111,8 +111,9 @@ pub fn deposit<'a>(account: Account<'a>, amount: f64, map: &mut HashMap<Account<
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use float_cmp::*;
+
+    use super::*;
 
     #[test]
     fn test_strings_as_keys() {

@@ -1,3 +1,6 @@
+use std;
+use std::fmt;
+use std::fmt::{Debug, Display, Formatter};
 /// # There are 2 types of error handling in Rust: panic and Results.
 ///
 /// Ordinary errors are handled using Results. These are typically caused by things outside the
@@ -165,13 +168,13 @@
 /// handling more in Rust than you would in other languages. As in many other
 /// areas, Rust’s take on error handling is wound just a little tighter than what
 /// you’re used to. For systems programming, it’s worth it.
-use std::error::Error;
 use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::ErrorKind;
 use std::io::Read;
-use std::io::{stderr, Write};
+use std::io::Write;
+use std::num::ParseIntError;
 
 pub fn run() {
     // open_file();
@@ -285,11 +288,6 @@ pub struct JsonError {
     pub column: usize,
 }
 
-use std;
-use std::fmt;
-use std::fmt::{Debug, Display, Formatter};
-use std::num::ParseIntError;
-
 // Errors should be printable.
 impl fmt::Display for JsonError {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
@@ -371,7 +369,7 @@ pub fn double_first3(vec: Vec<&str>) -> DoubleErrorResult<i32> {
         // DoubleError is a unit struct. A unit struct is a type as well as an
         // instance of that type.
         .ok_or(DoubleError)
-        .and_then(|s| s.parse::<i32>().map_err(|_| DoubleError).map(|i| 2 * i))
+        .and_then(|s| s.parse::<i32>().map(|i| 2 * i).map_err(|_| DoubleError))
 }
 
 /// A way to write simple code while preserving the original errors is to Box them.
@@ -379,7 +377,7 @@ pub fn double_first3(vec: Vec<&str>) -> DoubleErrorResult<i32> {
 /// statically determined.
 /// The stdlib helps in boxing our errors by having Box implement conversion from
 /// any type that implements the Error trait into the trait object Box<Error>, via From.
-pub fn double_first4(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
+pub fn double_first4(vec: Vec<&str>) -> Result<i32, Box<dyn std::error::Error>> {
     vec.first()
         .ok_or_else(|| DoubleError.into())
         .and_then(|s| s.parse::<i32>().map_err(|e| e.into()))

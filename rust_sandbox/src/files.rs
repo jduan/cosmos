@@ -27,12 +27,13 @@ pub fn touch(path: &Path) -> io::Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::fs;
     use std::fs::File;
     use std::io::{BufRead, BufReader, Read, Write};
     use std::os::unix;
     use std::path::Path;
+
+    use super::*;
 
     static FILEPATH: &str = "/tmp/jkfdsjkfdj";
     static LOREM_IPSUM: &str =

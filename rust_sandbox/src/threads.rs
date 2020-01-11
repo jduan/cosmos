@@ -1,9 +1,9 @@
-use std::thread;
-use std::time::Duration;
-// mpsc stands for "multiple producers, single consumer"
-use std::sync::mpsc;
 // Arc: atomic reference count. It's similar to Rc  but it's safe to use in concurrent situations.
 use std::sync::{Arc, Mutex};
+// mpsc stands for "multiple producers, single consumer"
+use std::sync::mpsc;
+use std::thread;
+use std::time::Duration;
 
 pub fn run() {
     create_thread();

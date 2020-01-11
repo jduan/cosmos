@@ -1,7 +1,8 @@
-use serde::Deserialize;
-use serde_xml_rs::from_reader;
 use std::fs::File;
 use std::io::BufReader;
+
+use serde::Deserialize;
+use serde_xml_rs::from_reader;
 
 #[derive(Debug, Deserialize)]
 pub struct TestCase {
@@ -55,9 +56,11 @@ pub fn parse_xml_file(junit_xml_file: &std::path::PathBuf) -> TestSuites {
 
 #[cfg(test)]
 mod tests {
-    use crate::serde_examples::parse_xml_file;
     use std::io::Write;
+
     use tempfile::NamedTempFile;
+
+    use crate::serde_examples::parse_xml_file;
 
     #[test]
     fn test_xml_parsing() {

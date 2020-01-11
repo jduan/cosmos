@@ -219,8 +219,9 @@ pub fn create_fn_once() -> impl FnOnce() {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::mem;
+
+    use super::*;
 
     #[test]
     fn closure_syntax() {

@@ -1,8 +1,9 @@
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::fs::File;
-    use std::io::{self, prelude::*, BufReader};
+    use std::io::{self, BufReader, prelude::*};
+
+    use super::*;
 
     // Most of the control flows in C are statements. In Rust, they are all expressions.
     #[test]

@@ -1,3 +1,11 @@
+// Rich data structures using enums!
+//
+// Enums are useful for quickly implementing tree-like data structures (recursive), like JSON.
+// In memory, any JSON object can be represented as a value of this Rust type:
+use std::collections::HashMap;
+
+use crate::enums::List::{Cons, Nil};
+
 // Enums in Rust are basically sum types (ie algebraic data types) in ML languages.
 //
 // Enums are useful whenever a value might be either one thing or another. The "price" of using
@@ -193,11 +201,6 @@ pub enum Shape {
 //
 // Note that a single enum can have variants of all three kinds.
 
-// Rich data structures using enums!
-//
-// Enums are useful for quickly implementing tree-like data structures (recursive), like JSON.
-// In memory, any JSON object can be represented as a value of this Rust type:
-use std::collections::HashMap;
 pub enum Json {
     Null,
     Boolean(bool),
@@ -233,8 +236,6 @@ pub struct Account {
     name: String,
     language: String,
 }
-
-use crate::enums::List::{Cons, Nil};
 
 /// The enum keyword allows the creation of a type which may be one of a few different variants.
 /// Any variant which is valid as a struct is also valid as an enum.

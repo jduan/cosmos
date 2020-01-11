@@ -212,8 +212,9 @@ pub fn find_extrema(slice: &[i32]) -> Extrema {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use float_cmp::approx_eq;
+
+    use super::*;
 
     #[test]
     fn test_person() {
