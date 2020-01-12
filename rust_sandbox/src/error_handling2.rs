@@ -1,4 +1,17 @@
+/// Summary
+/// 1. If you're writing quick 'n' dirty code that would be overburdened by error handling, it's
+/// probably just fine to use unwrap or expect.
+/// 2. If you're writing a quick 'n' dirty program and feel ashamed about panicking anyway, then
+/// using either a Result of String or a Box<Error + Send + Sync> for your error type.
+/// 3. Otherwise, in a program, define your own error types with appropriate From and Error impls
+/// so your error types work with the ? operator.
+/// 4. If you're writing a library and your code can produce errors, define your own error type
+/// and implement the std::error::Error trait. Where appropriate, implement From to make both
+/// your library code and the caller's code easier to write. (Because of Rust's coherence rules,
+/// callers will not be able to impl From on your error type, so your library should do it.)
+/// 5. Learn the combinators defined on Option and Result, such as map, unwrap_or, and_then, etc.
 use serde::export::Formatter;
+use serde::Deserialize;
 use std::error::Error;
 use std::fmt::Display;
 use std::fs::File;
@@ -205,8 +218,8 @@ impl std::error::Error for FileDoubleError {
 /// This impl says that for any type that impls Error, we can convert it to a trait object
 /// Box<Error>.
 ///
-/// The only problem is Box<dyn Error> is opaque. We lost the ability to check the actual
-/// error type at compile. We use reflection to get the actual type only at Runtime!
+/// The downside is that since Box<Error> is a trait object, it erases the type, which means
+/// the compiler can no longer reason about its underlying type.
 pub fn file_double5<P: AsRef<Path>>(file_path: P) -> Result<i32, Box<dyn Error>> {
     // The ? actually calls: std::convert::From::from(err)
     let mut file = File::open(file_path)?;
@@ -237,6 +250,102 @@ pub fn file_double6<P: AsRef<Path>>(file_path: P) -> Result<i32, FileDoubleError
     file.read_to_string(&mut contents)?;
     let n: i32 = contents.trim().parse()?;
     Ok(n * 2)
+}
+
+/// Case study: A program to read population data
+/// https://doc.rust-lang.org/1.5.0/book/error-handling.html#case-study-a-program-to-read-population-data
+
+#[derive(Debug, Deserialize)]
+struct Row {
+    country: String,
+    city: String,
+    agency: String,
+    region: String,
+    population: Option<u64>,
+    latitude: Option<f64>,
+    longitude: Option<f64>,
+}
+
+/// This function returns a Box<dyn Error>
+pub fn search_city<P: AsRef<Path>>(filepath: P, city: &str) -> Result<String, Box<dyn Error>> {
+    let file = File::open(filepath)?;
+    let mut rdr = csv::Reader::from_reader(file);
+    for row in rdr.deserialize() {
+        let record: Row = row?;
+        if &record.city == city {
+            return Ok(format!(
+                "{} {}: {:?}",
+                record.city,
+                record.country,
+                record.population.expect("population count")
+            ));
+        }
+    }
+
+    // This is how to convert a String to a Box<dyn Error>
+    Err(Box::<dyn Error>::from(String::from("City not found")))
+
+    // This also works because "From::from" is overloaded on both its argument and
+    // its return type!
+    // Err(From::from(String::from("City not found")))
+}
+
+#[derive(Debug)]
+pub enum CityFinderError {
+    Io(std::io::Error),
+    Csv(csv::Error),
+    NotFound,
+}
+
+impl Display for CityFinderError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+        match self {
+            CityFinderError::Io(err) => write!(f, "IO error: {}", err),
+            CityFinderError::Csv(err) => write!(f, "Csv error: {}", err),
+            CityFinderError::NotFound => write!(f, "City not found"),
+        }
+    }
+}
+
+impl std::error::Error for CityFinderError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            CityFinderError::Io(err) => Some(err),
+            CityFinderError::Csv(err) => Some(err),
+            CityFinderError::NotFound => None,
+        }
+    }
+}
+
+impl From<std::io::Error> for CityFinderError {
+    fn from(err: std::io::Error) -> Self {
+        Self::Io(err)
+    }
+}
+
+impl From<csv::Error> for CityFinderError {
+    fn from(err: csv::Error) -> Self {
+        Self::Csv(err)
+    }
+}
+
+/// This function returns a custom error type.
+pub fn search_city2<P: AsRef<Path>>(filepath: P, city: &str) -> Result<String, CityFinderError> {
+    let file = File::open(filepath)?;
+    let mut rdr = csv::Reader::from_reader(file);
+    for row in rdr.deserialize() {
+        let record: Row = row?;
+        if &record.city == city {
+            return Ok(format!(
+                "{} {}: {:?}",
+                record.city,
+                record.country,
+                record.population.expect("population count")
+            ));
+        }
+    }
+
+    Err(CityFinderError::NotFound)
 }
 
 #[cfg(test)]
