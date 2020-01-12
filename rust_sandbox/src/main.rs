@@ -14,6 +14,7 @@ pub mod debug_trait;
 pub mod diverging_functions;
 pub mod enums;
 pub mod error_handling;
+pub mod error_handling2;
 pub mod exercise;
 pub mod expressions;
 pub mod files;
