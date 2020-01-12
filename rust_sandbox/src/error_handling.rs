@@ -389,7 +389,7 @@ pub fn double_first4(vec: Vec<&str>) -> Result<i32, Box<dyn std::error::Error>> 
 /// From::from is a conversion utility between different types, this means that
 /// if you ? where the error is convertible to the return type, it will convert
 /// automatically.
-pub fn double_first5(vec: Vec<&str>) -> Result<i32, Box<std::error::Error>> {
+pub fn double_first5(vec: Vec<&str>) -> Result<i32, Box<dyn std::error::Error>> {
     let first = vec.first().ok_or(DoubleError)?;
     let parsed = first.parse::<i32>()?;
     Ok(parsed * 2)
@@ -484,5 +484,73 @@ mod tests {
         assert_eq!(Ok(84), double_first3(numbers));
         assert_eq!(Err(DoubleError), double_first3(empty));
         assert_eq!(Err(DoubleError), double_first3(strings));
+    }
+
+    #[test]
+    fn test_double_first4() {
+        let numbers = vec!["42", "93", "18"];
+        let empty = vec![];
+        let strings = vec!["hello", "world"];
+        assert_eq!(84, double_first4(numbers).unwrap());
+        match double_first4(empty) {
+            Ok(_) => panic!("We expect a DoubleError but got Ok"),
+            Err(err) => match err.downcast_ref::<DoubleError>() {
+                Some(e) => println!("It's a DoubleError"),
+                None => panic!("We expect a DoubleError but got None"),
+            },
+        }
+        match double_first4(strings) {
+            Ok(_) => panic!("We expect a ParseIntError but got Ok"),
+            Err(err) => match err.downcast_ref::<ParseIntError>() {
+                Some(e) => println!("It's a ParseIntError"),
+                None => panic!("We expect a ParseIntError but got None"),
+            },
+        }
+    }
+
+    #[test]
+    fn test_double_first5() {
+        let numbers = vec!["42", "93", "18"];
+        let empty = vec![];
+        let strings = vec!["hello", "world"];
+        assert_eq!(84, double_first5(numbers).unwrap());
+        match double_first5(empty) {
+            Ok(_) => panic!("We expect a DoubleError but got Ok"),
+            Err(err) => match err.downcast_ref::<DoubleError>() {
+                Some(e) => println!("It's a DoubleError"),
+                None => panic!("We expect a DoubleError but got None"),
+            },
+        }
+        match double_first5(strings) {
+            Ok(_) => panic!("We expect a ParseIntError but got Ok"),
+            Err(err) => match err.downcast_ref::<ParseIntError>() {
+                Some(e) => println!("It's a ParseIntError"),
+                None => panic!("We expect a ParseIntError but got None"),
+            },
+        }
+    }
+
+    #[test]
+    fn test_double_first6() {
+        let numbers = vec!["42", "93", "18"];
+        let empty = vec![];
+        let strings = vec!["hello", "world"];
+        assert_eq!(84, double_first6(numbers).unwrap());
+        match double_first6(empty) {
+            Ok(_) => panic!("Expect MyError but got an Ok"),
+            Err(err) => match err {
+                MyError::EmptyVec => println!("Got what we expected"),
+                MyError::ParseError(_) => {
+                    panic!("Expect MyError::EmtpyVec but got MyError::ParseError")
+                }
+            },
+        }
+        match double_first6(strings) {
+            Ok(_) => panic!("Expect MyError but got an Ok"),
+            Err(err) => match err {
+                MyError::EmptyVec => panic!("Expect MyError::ParseError but got MyError::EmptyVec"),
+                MyError::ParseError(_) => print!("Got what we expected."),
+            },
+        }
     }
 }
