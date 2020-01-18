@@ -65,7 +65,7 @@ mod tests {
 
     #[test]
     fn wait_for_process_to_finish() -> std::io::Result<()> {
-        let mut child = Command::new("sleep").arg("2").spawn()?;
+        let mut child = Command::new("sleep").arg("0.01").spawn()?;
 
         let result = child.wait()?;
         assert!(result.success());
