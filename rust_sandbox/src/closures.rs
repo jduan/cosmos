@@ -78,7 +78,7 @@ pub fn generate_workout(intensity: u32, random_number: u32) {
 
 pub fn types_are_inferred_once() {
     let closure = |x| x;
-    let s = closure(String::from("hello"));
+    let _s = closure(String::from("hello"));
 
     // The next line will trigger a compilation error because The first time we call
     // closure with the String value, the compiler infers the type of x and the return type
@@ -91,7 +91,7 @@ pub fn types_are_inferred_once() {
 // This function shows the equal_to_x closure captures its surrounding environment: x in this case.
 pub fn capture_env() {
     let x = 4;
-    let equal_to_x = |z: u32| z == x;
+    let _equal_to_x = |z: u32| z == x;
     let y = 4;
     assert_eq!(y, x);
 
@@ -173,7 +173,7 @@ pub fn test_apply_2() {
 
 pub fn test_apply_3() {
     let mut greeting = String::from("hello");
-    let diary = || {
+    let _diary = || {
         greeting.push_str(", world");
         println!("I said {}", greeting);
     };
@@ -191,7 +191,7 @@ pub fn test_apply_3() {
 
 pub fn create_fn() -> impl Fn() {
     let text = String::from("Fn");
-    let mut count = 0;
+    let count = 0;
     move || {
         // This line doesn't compile.
         // Cannot assign to `count`, as it is a captured variable in a `Fn` closure.

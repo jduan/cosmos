@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn function() {
     println!("called `modules::nested::function()`");
 }

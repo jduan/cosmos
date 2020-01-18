@@ -46,15 +46,15 @@ pub fn loops() {
 pub fn fizzbuzz(n: u32) -> Vec<String> {
     let mut words: Vec<String> = Vec::new();
     // From 1 to 15
-    for n in 1..=15 {
-        if n % 15 == 0 {
+    for i in 1..=n {
+        if i % 15 == 0 {
             words.push(String::from("fizzbuzz"));
-        } else if n % 3 == 0 {
+        } else if i % 3 == 0 {
             words.push(String::from("fizz"));
-        } else if n % 5 == 0 {
+        } else if i % 5 == 0 {
             words.push(String::from("buzz"));
         } else {
-            words.push(format!("{}", n));
+            words.push(format!("{}", i));
         }
     }
 

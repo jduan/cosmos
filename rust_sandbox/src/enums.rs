@@ -35,23 +35,23 @@ use crate::enums::List::{Cons, Nil};
 //
 // But sometimes more flexibility is needed. For those situations, Rust has traits.
 pub fn run() {
-    let four = IpAddrKind::V4;
-    let six = IpAddrKind::V6;
+    let _four = IpAddrKind::V4;
+    let _six = IpAddrKind::V6;
 
-    let home = IpAddr {
+    let _home = IpAddr {
         kind: IpAddrKind::V4,
         address: String::from("127.0.0.1"),
     };
-    let loopback = IpAddr {
+    let _loopback = IpAddr {
         kind: IpAddrKind::V6,
         address: String::from("::1"),
     };
 
-    let home2 = IpAddr2::V4(String::from("127.0.0.1"));
-    let loopback2 = IpAddr2::V6(String::from("::1"));
+    let _home2 = IpAddr2::V4(String::from("127.0.0.1"));
+    let _loopback2 = IpAddr2::V6(String::from("::1"));
 
-    let home3 = IpAddr3::V4(127, 0, 0, 1);
-    let loopback3 = IpAddr3::V6(String::from("::1"));
+    let _home3 = IpAddr3::V4(127, 0, 0, 1);
+    let _loopback3 = IpAddr3::V6(String::from("::1"));
 
     let msg1 = Message::Quit;
     msg1.call();
@@ -69,8 +69,8 @@ pub enum IpAddrKind {
 }
 
 pub struct IpAddr {
-    kind: IpAddrKind,
-    address: String,
+    pub kind: IpAddrKind,
+    pub address: String,
 }
 
 // this is better than the above
@@ -100,7 +100,7 @@ impl Message {
     fn call(&self) {
         match self {
             Message::Quit => println!("This is a Quite message"),
-            Message::Move { x: x, y: y } => println!("This is a Move (x: {}, y: {}) message", x, y),
+            Message::Move { x, y } => println!("This is a Move (x: {}, y: {}) message", x, y),
             Message::Write(str) => println!("This is a Write message: {}", str),
             Message::ChangeColor(r, g, b) => {
                 println!("This is a ChangeColor({}, {}, {}) message", r, g, b)
@@ -146,7 +146,7 @@ pub enum TimeUnit {
 }
 
 impl TimeUnit {
-    fn plural(&self) -> &'static str {
+    pub fn plural(&self) -> &'static str {
         match self {
             TimeUnit::Seconds => "seconds",
             TimeUnit::Minutes => "minutes",
@@ -157,7 +157,7 @@ impl TimeUnit {
         }
     }
 
-    fn singular(&self) -> &'static str {
+    pub fn singular(&self) -> &'static str {
         self.plural().trim_end_matches('s')
     }
 }
@@ -171,7 +171,7 @@ pub enum RoughTime {
 }
 
 impl RoughTime {
-    fn to_english(&self) -> String {
+    pub fn to_english(&self) -> String {
         match self {
             RoughTime::InThePast(tu, 1) => format!("a {} ago", tu.singular()),
             RoughTime::InThePast(tu, n) => format!("{} {} ago", n, tu.plural()),
@@ -182,6 +182,7 @@ impl RoughTime {
     }
 }
 
+#[allow(dead_code)]
 pub struct Point {
     x: f32,
     y: f32,
@@ -215,6 +216,7 @@ pub enum Json {
 
 // Generic Enums
 // Enums can be generic, such as Option<T> and Result<T, E> from the stdlib.
+#[allow(dead_code)]
 pub struct TreeNode<T> {
     element: T,
     left: BinaryTree<T>,
@@ -226,12 +228,14 @@ pub enum BinaryTree<T> {
     NonEmpty(Box<TreeNode<T>>),
 }
 
+#[allow(dead_code)]
 pub struct TreeNode2<T> {
     element: T,
     left: Option<Box<TreeNode2<T>>>,
     right: Option<Box<TreeNode2<T>>>,
 }
 
+#[allow(dead_code)]
 pub struct Account {
     name: String,
     language: String,
@@ -439,7 +443,7 @@ mod tests {
         };
 
         match p {
-            Point { x: x, y: y, z: z } => {
+            Point { x, y, z } => {
                 assert_eq!(1.0, x);
                 assert_eq!(2.0, y);
                 assert_eq!(3.0, z);
@@ -564,8 +568,8 @@ mod tests {
         fn get_kind(ch: char) -> Kind {
             // The vertical bar (|) can be used to combine several patterns in a single match arm.
             match ch {
-                'a'...'z' | 'A'...'Z' => Kind::Letter,
-                '0'...'9' => Kind::Digit,
+                'a'..='z' | 'A'..='Z' => Kind::Letter,
+                '0'..='9' => Kind::Digit,
                 _ => Kind::Other,
             }
         }
@@ -585,7 +589,7 @@ mod tests {
             // Use the if keyword to add a guard to a match arm. The match succeeds only if the
             // guard evaluates to true.
             Point { x, y, z } if x == y && x == z => assert_eq!(x, y),
-            Point { x, y, z } => assert_eq!(1.0, x),
+            Point { x, y: _y, z: _z } => assert_eq!(1.0, x),
         }
     }
 

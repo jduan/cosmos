@@ -13,25 +13,25 @@ pub fn run() {
     println!("y is {} now", y);
 
     // characters
-    let c = 'z';
-    let z = 'ℤ';
+    let _c = 'z';
+    let _z = 'ℤ';
     let heart_eyed_cat = '😻';
     println!("heart eyed cat: {}", heart_eyed_cat);
 
     // tuples
     let tup = (500, 6.4, "hello");
     // destructuring
-    let (x, y, z) = tup;
+    let (_x, _y, z) = tup;
     println!("The value of z is {}", z);
     println!("The value of z is {}", tup.2);
 
     // arrays
-    let nums = [1, 2, 3, 4, 5];
+    let _nums = [1, 2, 3, 4, 5];
     // explicit type
-    let nums2: [i32; 5] = [1, 2, 3, 4, 5];
+    let _nums2: [i32; 5] = [1, 2, 3, 4, 5];
     // 3 means all elements are 3; 5 means size;
-    let nums3 = [3; 5];
-    let months = [
+    let _nums3 = [3; 5];
+    let _months = [
         "January",
         "February",
         "March",

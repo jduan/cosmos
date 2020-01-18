@@ -37,7 +37,7 @@ impl Rectangle {
 
     // This method requires the caller object to be mutable
     // `&mut self` desugars to `self: &mut Self`
-    fn enlarge_by(&mut self, by: u32) {
+    pub fn enlarge_by(&mut self, by: u32) {
         self.width *= by;
         self.height *= by;
     }
@@ -62,7 +62,7 @@ pub struct Pair(Box<i32>, Box<i32>);
 impl Pair {
     // This method "consumes" the resources of the caller object
     // `self` desugars to `self: Self`
-    fn destroy(self) -> i32 {
+    pub fn destroy(self) -> i32 {
         let Pair(first, second) = self;
         first.as_ref() + second.as_ref()
     }

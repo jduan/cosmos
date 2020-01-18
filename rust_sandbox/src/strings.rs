@@ -1,5 +1,3 @@
-use regex::Regex;
-
 /// Prefer to pass &str than String to functions.
 /// Prefer to return &str than String from functions.
 
@@ -47,7 +45,7 @@ pub fn run() {
 
 pub fn create_strings() {
     // this creates an empty string
-    let mut s = String::new();
+    let s = String::new();
     println!("string is: {}", s);
 
     let data = "initial contents";
@@ -56,7 +54,7 @@ pub fn create_strings() {
     println!("string is: {}", s);
 
     // same as above
-    let s = String::from("initial contents");
+    let _s = String::from("initial contents");
 
     // strings are UTF-8 encoded
     let hello = String::from("你好");
@@ -86,7 +84,7 @@ pub fn update_strings() {
     // fn add(self, s: &str) -> String
     // This method takes ownership of s1, appends a copy of the contents of s2,
     // and then returns ownership of the result.
-    let s3 = s1 + &s2;
+    let _s3 = s1 + &s2;
 
     // this looks ugly:
     // let s = s1 + "-" + &s2 + "-" + &s3;
@@ -107,7 +105,7 @@ pub fn update_strings() {
 // Indexing into a UTF-8 encoded string doesn't really make sense because
 // the "byte" for a given index may not make sense at all.
 pub fn access_string() {
-    let s = String::from("hello");
+    let _s = String::from("hello");
     // the line below won't compile!
     // let h = s[0];
 }
@@ -130,6 +128,7 @@ pub fn iterate_string() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use regex::Regex;
 
     #[test]
     fn test_person() {
@@ -151,7 +150,7 @@ mod tests {
 
     #[test]
     fn string_literals() {
-        let speech = "\"Outch!\" said the well.\n";
+        let _speech = "\"Outch!\" said the well.\n";
 
         println!(
             "A string literal may
@@ -168,8 +167,8 @@ mod tests {
 
         // Raw strings. Everything inside a raw string are included verbatim. No escape sequences
         // are recognized.
-        let default_win_install_path = r"C:\Program Files\Gorillas";
-        let pattern = Regex::new(r"\d+(\.\d+)*");
+        let _default_win_install_path = r"C:\Program Files\Gorillas";
+        let _pattern = Regex::new(r"\d+(\.\d+)*");
     }
 
     #[test]
@@ -182,7 +181,7 @@ mod tests {
     #[test]
     fn ways_to_create_strings() {
         // .to_string() converts a &str to a String. This copies the string.
-        let error_message = "too many pets".to_string();
+        let _error_message = "too many pets".to_string();
 
         // format! works just like println! except it doesn't add a newline at the end
         let date = format!("{}-{}-{}", 2019, 11, 11);

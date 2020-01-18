@@ -42,7 +42,7 @@ pub fn run() {
 
 pub fn ownership() {
     let mut v = vec![1, 2, 3, 4, 5];
-    let first = &v[0];
+    let _first = &v[0];
     v.push(6);
 
     // The line below would cause "v.push(6)" to fail to compile because

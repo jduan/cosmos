@@ -59,6 +59,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
             Err(why) => panic!("couldn't write to file {}: {}", path.display(), why),
             Ok(_) => println!("successfully wrote to file {}", path.display()),
         };
+        file.flush().unwrap();
     }
 
     #[test]

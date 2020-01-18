@@ -93,7 +93,7 @@ use std::fmt::Debug;
 use std::hash::Hash;
 use std::io;
 use std::io::Write;
-use std::ops::{Add, Mul};
+use std::ops::Mul;
 
 pub fn run() {
     let tweet = Tweet {
@@ -159,7 +159,7 @@ impl Summary for NewsArticle {
 impl NewsArticle {
     // You can't define this function in the "impl Summary for NewsArticle" block
     // because it's not a function of the NewsArticle trait!
-    fn get_headline(&self) -> &String {
+    pub fn get_headline(&self) -> &String {
         &self.headline
     }
 }
@@ -205,7 +205,7 @@ pub fn notify3<T: Summary + Display>(item: T) {
 
 // "trait bound" using "where" clause between return type and open curly brace
 // this is easier to read when you have many trait bounds
-pub fn some_function<T, U>(t: T, u: U) -> i32
+pub fn some_function<T, U>(_t: T, _u: U) -> i32
 where
     T: Display + Clone,
     U: Clone + Summary,
@@ -224,14 +224,14 @@ pub fn returns_summarizable() -> impl Summary {
 }
 
 // This is a plain function that takes a "trait object".
-pub fn say_hello(out: &mut Write) -> std::io::Result<()> {
+pub fn say_hello(out: &mut dyn Write) -> std::io::Result<()> {
     out.write_all(b"hello world\n")?;
     out.flush()
 }
 
 // In contrast, this is a generic function whose type parameter W is bound by "Write" trait.
 pub fn say_hello2<W: Write>(out: &mut W) -> std::io::Result<()> {
-    out.write_all(b"hello world\n");
+    out.write_all(b"hello world\n")?;
     out.flush()
 }
 
@@ -257,12 +257,16 @@ pub trait Reducer {}
 pub trait Serialize {}
 pub struct DataSet {}
 // Generic functions can have multiple type parameters: M and R.
-pub fn run_query<M: Mapper + Serialize, R: Reducer + Serialize>(data: &DataSet, map: M, reduce: R) {
+pub fn run_query<M: Mapper + Serialize, R: Reducer + Serialize>(
+    _data: &DataSet,
+    _map: M,
+    _reduce: R,
+) {
     unimplemented!()
 }
 
 // Alternative syntax: bounds can be specified in the where clause
-pub fn run_query2<M, R>(data: &DataSet, map: M, reduce: R)
+pub fn run_query2<M, R>(_data: &DataSet, _map: M, _reduce: R)
 where
     M: Mapper + Serialize,
     R: Reducer + Serialize,
@@ -273,7 +277,7 @@ where
 pub trait MeasureDistance {}
 // A generic function can have both lifetime parameters and type parameters. Lifetime parameters
 // come first.
-pub fn nearest<'t, 'c, P>(target: &'t P, candidates: &'c [P]) -> &'c P
+pub fn nearest<'t, 'c, P>(_target: &'t P, _candidates: &'c [P]) -> &'c P
 where
     P: MeasureDistance,
 {
@@ -318,7 +322,7 @@ pub trait WriteHtml {
 
 /// You can write HTML to any std::io writer.
 impl<W: Write> WriteHtml for W {
-    fn write_html(&mut self, html: &HtmlDocument) -> io::Result<()> {
+    fn write_html(&mut self, _html: &HtmlDocument) -> io::Result<()> {
         unimplemented!()
     }
 }
@@ -359,7 +363,7 @@ impl Sheep {
         self.naked
     }
 
-    fn shear(&mut self) {
+    pub fn shear(&mut self) {
         if self.is_naked() {
             // You can call the trait method "name()" here because Sheep implements
             // the Animal trait.
@@ -518,7 +522,7 @@ mod tests {
         // A reference to a trait type, like writer, is a called a "trait object". Like any other
         // reference, a trait object points to some value, it has a lifetime, and it can be either
         // mut or shared. The size of a reference is fixed!
-        let writer: &mut Write = &mut buf;
+        let _writer: &mut dyn Write = &mut buf;
 
         // What makes a trait object different is that Rust usually doesn’t know the type of the
         // referent at compile time. So a trait object includes a little extra information about

@@ -21,6 +21,7 @@ mod tests {
     use crate::phantom_types::{PhantomStruct, PhantomTuple};
 
     #[test]
+    #[allow(unused_variables)]
     fn test_phantom_types() {
         let t1: PhantomTuple<char, f32> = PhantomTuple('Q', PhantomData);
         let t2: PhantomTuple<char, f64> = PhantomTuple('Q', PhantomData);

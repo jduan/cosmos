@@ -173,10 +173,9 @@ use std::fs::File;
 use std::io;
 use std::io::ErrorKind;
 use std::io::Read;
-use std::io::Write;
 use std::num::ParseIntError;
 
-pub fn run() {
+pub fn run() -> Result<(), io::Error> {
     // open_file();
     open_or_create_file();
     open_or_create_file2();
@@ -185,15 +184,17 @@ pub fn run() {
         Ok(username) => println!("username is {}", username),
         Err(e) => println!("failed to read username from file {:?}", e),
     }
-    the_question_operator();
-    the_question_operator2();
-    the_question_operator3();
+    the_question_operator()?;
+    the_question_operator2()?;
+    the_question_operator3()?;
+
+    Ok(())
 }
 
 pub fn open_file() {
     let f = File::open("/tmp/fjdksljfdfd");
 
-    let f = match f {
+    let _file = match f {
         Ok(file) => file,
         Err(error) => panic!("Problem opening the file: {:?}", error),
     };
@@ -203,7 +204,7 @@ pub fn open_or_create_file() {
     let s = "/tmp/hello.txt";
     let f = File::open(s);
 
-    let f = match f {
+    let _f = match f {
         Ok(file) => file,
         Err(error) => match error.kind() {
             ErrorKind::NotFound => match File::create(s) {
@@ -219,7 +220,7 @@ pub fn open_or_create_file() {
 pub fn open_or_create_file2() {
     let s = "/tmp/hello2.txt";
 
-    let f = File::open(s).unwrap_or_else(|error| {
+    let _f = File::open(s).unwrap_or_else(|error| {
         if error.kind() == ErrorKind::NotFound {
             File::create(s).unwrap_or_else(|error| {
                 panic!("Problem creating the file: {:?}", error);
@@ -231,8 +232,8 @@ pub fn open_or_create_file2() {
 }
 
 pub fn unwrap_or_expect() {
-    let f = File::open("/tmp/hello.txt").unwrap();
-    let f = File::open("/tmp/world.txt").expect("Failed to open file /tmp/world.txt");
+    let _f = File::open("/tmp/hello.txt").unwrap();
+    let _f = File::open("/tmp/world.txt").expect("Failed to open file /tmp/world.txt");
 }
 
 // Read the username from the file. Return an error if something bad happens.
@@ -495,14 +496,14 @@ mod tests {
         match double_first4(empty) {
             Ok(_) => panic!("We expect a DoubleError but got Ok"),
             Err(err) => match err.downcast_ref::<DoubleError>() {
-                Some(e) => println!("It's a DoubleError"),
+                Some(_e) => println!("It's a DoubleError"),
                 None => panic!("We expect a DoubleError but got None"),
             },
         }
         match double_first4(strings) {
             Ok(_) => panic!("We expect a ParseIntError but got Ok"),
             Err(err) => match err.downcast_ref::<ParseIntError>() {
-                Some(e) => println!("It's a ParseIntError"),
+                Some(_e) => println!("It's a ParseIntError"),
                 None => panic!("We expect a ParseIntError but got None"),
             },
         }
@@ -517,14 +518,14 @@ mod tests {
         match double_first5(empty) {
             Ok(_) => panic!("We expect a DoubleError but got Ok"),
             Err(err) => match err.downcast_ref::<DoubleError>() {
-                Some(e) => println!("It's a DoubleError"),
+                Some(_e) => println!("It's a DoubleError"),
                 None => panic!("We expect a DoubleError but got None"),
             },
         }
         match double_first5(strings) {
             Ok(_) => panic!("We expect a ParseIntError but got Ok"),
             Err(err) => match err.downcast_ref::<ParseIntError>() {
-                Some(e) => println!("It's a ParseIntError"),
+                Some(_e) => println!("It's a ParseIntError"),
                 None => panic!("We expect a ParseIntError but got None"),
             },
         }

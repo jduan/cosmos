@@ -27,6 +27,7 @@ pub fn call_public_function_in_modules() {
 }
 
 // pub(crate) makes functions visible only within the current crate
+#[allow(dead_code)]
 pub(crate) fn public_function_in_crate() {
     println!("called `modules::public_function_in_crate()`");
 }

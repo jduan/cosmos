@@ -6,7 +6,7 @@ use std::thread;
 /// by each thread.
 pub fn sum_all_digits(digits: &str) -> u32 {
     let mut children = vec![];
-    for (idx, data) in digits.split_whitespace().into_iter().enumerate() {
+    for (_idx, data) in digits.split_whitespace().into_iter().enumerate() {
         // We need to make a copy of the chunk here, otherwise the chunk won't live
         // as long as the thread itself. With the copy, the data_copy value will be owned
         // by the thread and everything will be good.

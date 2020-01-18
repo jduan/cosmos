@@ -8,20 +8,20 @@ pub fn next_birthday(current_age: Option<u8>) -> Option<String> {
 
 /// You can chain many ?s together to make your code much more readable.
 pub struct Person {
-    job: Option<Job>,
+    pub job: Option<Job>,
 }
 
 pub struct Job {
-    phone_number: Option<PhoneNumber>,
+    pub phone_number: Option<PhoneNumber>,
 }
 
 pub struct PhoneNumber {
-    area_code: Option<u8>,
-    number: u32,
+    pub area_code: Option<u8>,
+    pub number: u32,
 }
 
 impl Person {
-    fn work_phone_area_code(self) -> Option<u8> {
+    pub fn work_phone_area_code(self) -> Option<u8> {
         // This would need many nested `match` statements without the `?` operator.
         self.job?.phone_number?.area_code
     }
@@ -96,18 +96,18 @@ pub fn eat(food: Option<Cooked>) {
 /// Option<Option<T>>. Chaining multiple calls together can then become confusing.
 /// That's where another combinator called and_then(), known in some languages as
 /// flatmap, comes in.
-pub fn get_shortest(names: Vec<&str>) -> Option<&str> {
+pub fn get_shortest(_names: Vec<&str>) -> Option<&str> {
     unimplemented!()
 }
 
 pub struct JSON {}
 pub struct User {}
 
-pub fn find_user_by_name(name: &str) -> Option<JSON> {
+pub fn find_user_by_name(_name: &str) -> Option<JSON> {
     unimplemented!()
 }
 
-pub fn json_to_user(json: JSON) -> Option<User> {
+pub fn json_to_user(_json: JSON) -> Option<User> {
     unimplemented!()
 }
 
@@ -132,14 +132,14 @@ pub fn get_user_with_shortest_name2(names: Vec<&str>) -> Option<User> {
 }
 
 pub fn run() {
-    let some_number = Some(5);
-    let some_string = Some("a string");
+    let _some_number = Some(5);
+    let _some_string = Some("a string");
     // the type is needed because Rust can't infer the type for None
-    let absent_number: Option<i32> = None;
+    let _absent_number: Option<i32> = None;
 
     let five = Some(5);
     let six = plus_one(five);
-    let none = plus_one(None);
+    let _none = plus_one(None);
 
     match six {
         Some(i) => println!("five plus one is {}", i),

@@ -145,10 +145,10 @@ impl Drop for CustomSmartPointer {
 pub fn drop_trait() {
     // Variables are dropped in the reverse order of their creation, so 'd' gets dropped before
     // 'c'.
-    let c = CustomSmartPointer {
+    let _c = CustomSmartPointer {
         data: String::from("my stuff"),
     };
-    let d = CustomSmartPointer {
+    let _d = CustomSmartPointer {
         data: String::from("other stuff"),
     };
     println!("CustomSmartPointer created.");
@@ -182,13 +182,13 @@ pub fn reference_counting() {
     // The initial reference count is 1
     assert_eq!(1, Rc::strong_count(&a));
 
-    let b = Cons2(3, Rc::clone(&a));
+    let _b = Cons2(3, Rc::clone(&a));
     // The reference count is 2 after one clone
     assert_eq!(2, Rc::strong_count(&a));
 
     {
         // The reference count is 3 after another clone
-        let c = Cons2(4, Rc::clone(&a));
+        let _c = Cons2(4, Rc::clone(&a));
         assert_eq!(3, Rc::strong_count(&a));
     }
 

@@ -20,7 +20,7 @@ pub fn create_maps() {
     // different data structures and Rust doesn’t know which you want unless you specify. For the
     // parameters for the key and value types, however, we use underscores, and Rust can infer the
     // types that the hash map contains based on the types of the data in the vectors.
-    let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
+    let _scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
 }
 
 pub fn ownership() {
@@ -105,7 +105,7 @@ pub struct Account<'a> {
 }
 
 pub fn deposit<'a>(account: Account<'a>, amount: f64, map: &mut HashMap<Account<'a>, f64>) {
-    let mut balance = map.entry(account).or_insert(0.0);
+    let balance = map.entry(account).or_insert(0.0);
     *balance += amount;
 }
 

@@ -1,9 +1,7 @@
 #[cfg(test)]
 mod tests {
     use std::fs::File;
-    use std::io::{self, BufReader, prelude::*};
-
-    use super::*;
+    use std::io::{self, prelude::*, BufReader};
 
     // Most of the control flows in C are statements. In Rust, they are all expressions.
     #[test]
@@ -51,7 +49,7 @@ mod tests {
         // create the file first
         let path = "/tmp/temp_rust_file";
         let mut output = File::create(path)?;
-        write!(output, "Rust is fun!");
+        write!(output, "Rust is fun!")?;
 
         let file = File::open(path)?;
         let reader = BufReader::new(file);

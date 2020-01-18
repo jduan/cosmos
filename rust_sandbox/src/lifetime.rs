@@ -1,4 +1,3 @@
-use std::borrow::Borrow;
 use std::fmt::Display;
 
 pub fn run() {
@@ -51,7 +50,7 @@ pub fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 // We specify a lifetime parameter 'a for the parameter x and the return type,
 // but not for the parameter y, because of the lifetime of y doesn't have any
 // relationship with the lifetime of x or the return value.
-pub fn longest2<'a>(x: &'a str, y: &str) -> &'a str {
+pub fn longest2<'a>(x: &'a str, _y: &str) -> &'a str {
     x
 }
 
@@ -104,11 +103,11 @@ pub struct Excerpt<'a> {
 }
 
 impl<'a> Excerpt<'a> {
-    fn level(&self) -> i32 {
+    pub fn level(&self) -> i32 {
         3
     }
 
-    fn announce_and_return_part(&self, announcement: &str) -> &str {
+    pub fn announce_and_return_part(&self, announcement: &str) -> &str {
         println!("Attention please: {}", announcement);
         self.part
         // If you return "announcement" instead, you would get an error of "lifetime mismatch"
@@ -134,18 +133,19 @@ where
 // Note that the lifetime annotations 'a and 'b can be inferred by Rust
 // based on the elision rules: each parameter that is a reference gets its
 // own lifetime parameter.
-pub fn print_refs<'a, 'b>(x: &'a i32, y: &'b i32) {
+//pub fn print_refs<'a, 'b>(x: &'a i32, y: &'b i32) {
+pub fn print_refs(x: &i32, y: &i32) {
     println!("x is {} and y is {}", x, y);
 }
 
 pub fn failed_borrow<'a>() {
-    let x = 12;
+    let _x = 12;
     // This line doesn't compile because "borrowed value doesn't live long enough".
     // The lifetime 'a can be anything while x only lives as long as this function lives.
     //    let y: &'a i32 = &x;
 }
 
-pub fn pass_x<'a, 'b>(x: &'a i32, y: &'b i32) -> &'a i32 {
+pub fn pass_x<'a, 'b>(x: &'a i32, _y: &'b i32) -> &'a i32 {
     x
 }
 
@@ -162,18 +162,20 @@ pub struct Owner(i32);
 
 impl Owner {
     // Explicitly annotate lifetimes. This isn't needed due to elision rules.
-    fn add_one<'a>(&'a mut self) {
+    //    pub fn add_one<'a>(&'a mut self) {
+    pub fn add_one(&mut self) {
         self.0 += 1;
     }
 
     // Explicitly annotate lifetimes. This isn't needed due to elision rules.
-    fn print<'a>(&'a self) {
+    //    pub fn print<'a>(&'a self) {
+    pub fn print(&self) {
         println!("Owner is {}", self.0);
     }
 }
 
 pub struct Borrowed<'a> {
-    x: &'a i32,
+    pub x: &'a i32,
 }
 
 /// Annotation of lifetimes in trait methods are similar to functions.
@@ -190,7 +192,7 @@ pub fn multiply<'a>(first: &'a i32, second: &'a i32) -> i32 {
 
 /// <'a: 'b, 'b>` reads as lifetime `'a` is at least as long as `'b`.
 /// Here, we take in an `&'a i32` and return a `&'b i32` as a result of coercion.
-pub fn choose_first<'a: 'b, 'b>(first: &'a i32, second: &'b i32) -> &'b i32 {
+pub fn choose_first<'a: 'b, 'b>(first: &'a i32, _second: &'b i32) -> &'b i32 {
     first
 }
 
@@ -204,7 +206,8 @@ pub fn choose_first<'a: 'b, 'b>(first: &'a i32, second: &'b i32) -> &'b i32 {
 static NUM: i32 = 18;
 
 /// Returns a reference to `NUM` where its `'static` lifetime is coerced to that of the input argument.
-pub fn coerce_static<'a>(_: &'a i32) -> &'a i32 {
+//pub fn coerce_static<'a>(_: &'a i32) -> &'a i32 {
+pub fn coerce_static(_: &i32) -> &i32 {
     &NUM
 }
 

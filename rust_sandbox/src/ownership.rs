@@ -45,7 +45,7 @@ pub fn move_example() {
     let s1 = String::from("hello");
     // s2 will be pointing to the object s1 used to point to.
     // s1 will go out of scope and become invalid!
-    let s2 = s1;
+    let _s2 = s1;
     // The line below won't compile!
     // println!("original s1 is {}", s1);
 }
@@ -96,7 +96,7 @@ pub fn change(some_string: &mut String) {
 pub fn multiple_mut_refs() {
     let mut s = String::from("hello");
 
-    let r1 = &mut s;
+    let _r1 = &mut s;
     // the next line won't compile because you can't have multiple mutable references at the same
     // time
     // let r2 = &mut s;
@@ -117,13 +117,13 @@ pub fn multiple_mut_refs2() {
 }
 
 pub struct Person {
-    name: String,
-    birth: i32,
+    pub name: String,
+    pub birth: i32,
 }
 
 pub fn misc() {
     let s = vec!["udon".to_string(), "ramen".to_string(), "soba".to_string()];
-    let t = s;
+    let _t = s;
 
     let mut composers = Vec::new();
     composers.push(Person {
@@ -203,6 +203,7 @@ pub fn loop_over_vector() {
 
 pub struct Person2 {
     name: Option<String>,
+    #[allow(dead_code)]
     birth: i32,
 }
 
@@ -245,6 +246,7 @@ pub struct Label2 {
 
 // The derive annotation doesn't work because String isn't a Copy type!
 // #[derive(Copy, Clone)]
+#[allow(dead_code)]
 pub struct StringLabel {
     name: String,
 }
@@ -261,6 +263,7 @@ pub fn this_works_now() {
     println!("My label number is {}", label.number);
 }
 
+#[allow(dead_code)]
 pub struct Book {
     // `&'static str` is a reference to a string allocated in read only memory
     author: &'static str,

@@ -43,7 +43,7 @@ pub fn get_number_value(n: u32) -> &'static str {
     match n {
         1 => "One",
         2 | 3 | 5 | 7 | 11 => "Prime",
-        13...19 => "Teen",
+        13..=19 => "Teen",
         _ => "Aren't special",
     }
 }
@@ -80,7 +80,7 @@ pub struct Foo {
 pub fn destruct_structs(foo: Foo) -> String {
     match foo {
         Foo { x: (1, b), y } => format!("First of x is 1, b = {}, y = {}", b, y),
-        Foo { y: 2, x: x } => format!("y is 2, x = {:?}", x),
+        Foo { y: 2, x } => format!("y is 2, x = {:?}", x),
         // Use ".." to ignore some fields
         Foo { y, .. } => format!("y = {}, and we don't care about x", y),
     }
@@ -117,8 +117,8 @@ pub fn use_binding(number: Option<u32>) -> String {
 #[cfg(test)]
 mod tests {
     use crate::pattern_matching::{
-        Color, destruct_enums, destruct_structs, destruct_tuples, Foo,
-        get_number_value, report_age, use_binding, use_guard,
+        destruct_enums, destruct_structs, destruct_tuples, get_number_value, report_age,
+        use_binding, use_guard, Color, Foo,
     };
 
     #[test]

@@ -1,5 +1,3 @@
-use crate::type_alias::add_or_subtract;
-
 /// Diverging functions never return. They are marked using !, which is an empty type.
 pub fn foo() -> ! {
     panic!("This can never returns!");
@@ -50,8 +48,8 @@ mod tests {
         let a: () = some_fn();
         println!("This function returns {:?} and you can see this line", a);
 
-        let x: ! = panic!("This call never returns");
-        println!("You will never see this line.");
+        let _x: ! = panic!("This call never returns");
+        // println!("You will never see this line.");
     }
 
     #[test]

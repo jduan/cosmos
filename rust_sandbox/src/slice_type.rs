@@ -17,7 +17,7 @@ pub fn run() {
     // word still has the value 5 here, but there's no more string that
     // we could meaningfully use the value 5 with. word is now totally invalid!
 
-    let mut s2 = String::from("Hello, world!");
+    let s2 = String::from("Hello, world!");
     let word2 = string_slice(&s2);
 
     // The following line won't compile because:
@@ -32,6 +32,7 @@ pub fn run() {
     // other kinds of slices
     let a = [1, 2, 3, 4, 5];
     let a_slice: &[i32] = &a[1..3];
+    println!("a_slice: {:?}", a_slice);
 }
 // Return the index of the end of the first word.
 pub fn first_word(s: &String) -> usize {

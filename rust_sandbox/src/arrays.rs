@@ -69,6 +69,7 @@ mod tests {
 
     #[test]
     fn arrays_are_fix_sized() {
+        #[allow(unused_variables)]
         let n = 10;
         // This line doesn't compile because the "size" of the array has to be a constant!
         // let nums = [1; n];

@@ -26,9 +26,10 @@
 ///    literal is used for literal constants
 ///    pat (pattern)
 ///    and more...
+#[allow(unused_macros)]
 macro_rules! create_function {
     ($func_name:ident) => {
-        fn $func_name() {
+        pub fn $func_name() {
             println!("You called {}()", stringify!($func_name));
         }
     };
@@ -36,6 +37,7 @@ macro_rules! create_function {
 
 create_function!(foo);
 
+#[allow(unused_macros)]
 macro_rules! print_result {
     ($expression:expr) => {
         println!("{:?} = {:?}", stringify!($expression), $expression);
@@ -46,6 +48,7 @@ macro_rules! print_result {
 ///
 /// Macros can be overloaded to accept different combinations of arguments. In that regard,
 /// macro_rules! can work similarly to a match block.
+#[allow(unused_macros)]
 macro_rules! test {
     // Arguments don't need to be separated by a comma. Any template can be used!
     ($left:expr; and $right:expr) => {{

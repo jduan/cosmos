@@ -1,17 +1,18 @@
+#[allow(dead_code)]
 pub struct Point<T> {
     x: T,
     y: T,
 }
 
 impl<T> Point<T> {
-    fn x(&self) -> &T {
+    pub fn x(&self) -> &T {
         &self.x
     }
 }
 
 // we can also implement methods on concrete Point types
 impl Point<f32> {
-    fn distance_from_origin(&self) -> f32 {
+    pub fn distance_from_origin(&self) -> f32 {
         (self.x.powi(2) + self.y.powi(2)).sqrt()
     }
 }
@@ -28,7 +29,7 @@ pub struct Point2<T, U> {
 impl<T, U> Point2<T, U> {
     // interacts with another struct of different types
     // here the generic types V, W only apply to this method, not the struct itself
-    fn mixup<V, W>(self, other: Point2<V, W>) -> Point2<T, W> {
+    pub fn mixup<V, W>(self, other: Point2<V, W>) -> Point2<T, W> {
         Point2 {
             x: self.x,
             y: other.y,
@@ -87,7 +88,7 @@ mod tests {
 
         let integer = Point { x: 5, y: 10 };
         assert_eq!(5, integer.x);
-        let float = Point { x: 1.0, y: 4.0 };
+        let _float = Point { x: 1.0, y: 4.0 };
 
         let integer_and_float = Point2 { x: 5, y: 4.0 };
         let p2 = Point2 { x: "Hello", y: 'c' };

@@ -35,6 +35,7 @@ use std::cell::{Cell, RefCell};
 use std::fs::File;
 use std::io::Write;
 
+#[allow(dead_code)]
 pub struct SpiderRobot {
     species: String,
     web_enabled: bool,
@@ -47,7 +48,7 @@ impl SpiderRobot {
         let log_file = File::create("/tmp/spider_robot.log").unwrap();
 
         SpiderRobot {
-            species: species,
+            species,
             web_enabled: false,
             hardware_error_count: Cell::new(0),
             log_file: RefCell::new(log_file),

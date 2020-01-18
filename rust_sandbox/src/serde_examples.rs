@@ -67,6 +67,7 @@ mod tests {
         let file = build_xml_file_bad().unwrap();
         let xml_file = file.path().to_path_buf();
         let test_suites = parse_xml_file(&xml_file);
+        println!("test_suites: {:?}", test_suites);
     }
 
     fn build_xml_file_bad() -> Result<NamedTempFile, Box<dyn std::error::Error>> {

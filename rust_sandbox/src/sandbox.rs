@@ -5,32 +5,29 @@ pub struct Name {
 }
 
 impl Name {
-    fn new(first: &str, last: &str) -> Name {
+    pub fn new(first: &str, last: &str) -> Name {
         Name {
             first: first.into(),
             last: last.into(),
         }
     }
 
-    fn first_name(&self) -> &str {
+    pub fn first_name(&self) -> &str {
         &self.first
     }
 }
 
 pub struct Person {
     name: Name,
-    age: u8,
+    pub age: u8,
 }
 
 impl Person {
-    fn new(name: Name, age: u8) -> Person {
-        Person {
-            name: name,
-            age: age,
-        }
+    pub fn new(name: Name, age: u8) -> Person {
+        Person { name, age }
     }
 
-    fn name(&self) -> Name {
+    pub fn name(&self) -> Name {
         self.name.clone()
     }
 }
@@ -63,7 +60,7 @@ mod tests {
     #[test]
     fn test_sandbox() {
         let name = Name::new("Jill", "Johnson");
-        let mut jill = Person::new(name, 20);
+        let jill = Person::new(name, 20);
         let name = jill.name();
         let first_name = name.first_name();
         assert_eq!("Jill", first_name);

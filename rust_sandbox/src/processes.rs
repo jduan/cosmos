@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod tests {
-    use std::error::Error;
     use std::io::{Read, Write};
     use std::process::{Command, Stdio};
 
@@ -39,18 +38,18 @@ mod tests {
             .stdout(Stdio::piped())
             .spawn()
         {
-            Err(why) => panic!("couldn't spawn wc: {}", why.description()),
+            Err(why) => panic!("couldn't spawn wc: {}", why),
             Ok(proc) => proc,
         };
 
         match process.stdin.unwrap().write_all(PANGRAM.as_bytes()) {
-            Err(why) => panic!("couldn't write to wc stdin: {}", why.description()),
+            Err(why) => panic!("couldn't write to wc stdin: {}", why),
             Ok(_) => println!("sent pangram to wc"),
         }
 
         let mut s = String::new();
         match process.stdout.unwrap().read_to_string(&mut s) {
-            Err(why) => panic!("couldn't read wc stdout: {}", why.description()),
+            Err(why) => panic!("couldn't read wc stdout: {}", why),
             Ok(_) => {
                 println!("wc responded with:\n{}", s);
                 let counts: Vec<u32> = s

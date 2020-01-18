@@ -88,6 +88,7 @@ pub fn run() {
     println!("Area of rectangle {:#?} is {}", rect, area(&rect));
 }
 
+#[allow(dead_code)]
 pub struct User {
     username: String,
     email: String,
@@ -106,8 +107,8 @@ pub struct Bounds(pub usize, pub usize);
 
 pub fn create_user(email: String, username: String) -> User {
     User {
-        email: email,
-        username: username,
+        email,
+        username,
         sign_in_count: 1,
         active: true,
     }
@@ -134,7 +135,7 @@ pub fn area(rect: &Rectangle2) -> u32 {
 
 // T is a "type parameter"
 pub struct Queue<T> {
-    items: Vec<T>,
+    pub items: Vec<T>,
 }
 
 // Methods are also known as "associated functions", since they’re associated with
@@ -148,7 +149,7 @@ impl<T> Queue<T> {
     // It’s conventional in Rust for constructor functions to be named new.
     // "new" isn't a keyword, and types often have other static methods that
     // serve as constructors, like Vec::with_capacity.
-    fn new() -> Queue<T> {
+    pub fn new() -> Queue<T> {
         // Note that we didn't have to write the type parameter T here. This is
         // Rust’s type inference at work: since there’s only one type that works
         // for that function’s return value—namely, Queue<T>—Rust supplies the
@@ -160,21 +161,21 @@ impl<T> Queue<T> {
     // distraction. As another shorthand, every impl block, generic or not,
     // defines the special type parameter Self (note the CamelCase name) to be
     // whatever type we’re adding methods to. Here: "Self" would be Queue<T>.
-    fn with_capacity(capacity: usize) -> Self {
+    pub fn with_capacity(capacity: usize) -> Self {
         Queue {
             items: Vec::with_capacity(capacity),
         }
     }
 
-    fn push(&mut self, item: T) {
+    pub fn push(&mut self, item: T) {
         self.items.push(item);
     }
 
-    fn pop(&mut self) -> Option<T> {
+    pub fn pop(&mut self) -> Option<T> {
         self.items.pop()
     }
 
-    fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.items.len()
     }
 }
@@ -182,6 +183,7 @@ impl<T> Queue<T> {
 // Structs with lifetime parameters
 // If a struct contains references, you must name those references' lifetimes.
 
+#[allow(dead_code)]
 pub struct Extrema<'a> {
     greatest: &'a i32,
     least: &'a i32,
@@ -204,10 +206,7 @@ pub fn find_extrema(slice: &[i32]) -> Extrema {
         }
     }
 
-    Extrema {
-        greatest: greatest,
-        least: least,
-    }
+    Extrema { greatest, least }
 }
 
 #[cfg(test)]
@@ -302,7 +301,7 @@ mod tests {
         assert_eq!(p1, p2);
         assert_eq!(p1, p2);
         assert_eq!(p1, p3);
-        assert!(p1 != p4);
+        assert_ne!(p1, p4);
         println!("p2 is {:?}", p2);
     }
 }

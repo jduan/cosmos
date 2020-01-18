@@ -101,6 +101,7 @@ pub fn references_are_explicit() {
 pub fn dot_operator() {
     struct Anime {
         name: &'static str,
+        #[allow(dead_code)]
         bechdel_pass: bool,
     }
 
@@ -128,6 +129,7 @@ pub fn dot_operator2() {
 }
 
 pub struct Point {
+    #[allow(dead_code)]
     x: i32,
     y: i32,
 }
@@ -243,9 +245,11 @@ pub fn update_globa_var2(p: &'static i32) {
 pub fn ref_in_struct() {
     // This says: the lifetime of any reference you store in r had better enclose 'a, and
     // 'a must outlast the lifetime of whatever you store the S.
+    #[derive(Debug)]
     struct S<'a> {
         // Whenever a reference type appears inside another type’s definition, you must write out
         // its lifetime.
+        #[allow(dead_code)]
         r: &'a i32,
     }
 
@@ -259,6 +263,7 @@ pub fn ref_in_struct() {
         // arrived at the same contradictory constraints as before: 'a must not outlive x, yet must
         // live at least as long as s. No satisfactory lifetime exists, and Rust rejects the code.
         s = S { r: &x };
+        println!("s is {:?}", s);
     }
     // This line doesn't compile. See the above for now.
     // If you move this line to the inner block right after "s = S {...}", it will compile.
@@ -267,12 +272,14 @@ pub fn ref_in_struct() {
 
 // This isn't much different from the function above.
 pub fn struct_inside_struct() {
+    #[allow(dead_code)]
     struct S {
         name: String,
     }
 
     // We can’t leave off S’s lifetime parameter here: Rust needs to know how a T’s lifetime
     // relates to that of the reference in its S
+    #[allow(dead_code)]
     struct T<'a> {
         s: &'a S,
     }
@@ -292,6 +299,7 @@ pub fn struct_inside_struct() {
 // compiles
 pub fn distinct_lifetimes() {
     // If you change x and y to have the same lifetime 'a, the code wouldn't compile.
+    #[allow(dead_code)]
     struct S<'a, 'b> {
         x: &'a i32,
         y: &'b i32,
