@@ -74,7 +74,7 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         let mut content = String::new();
         match file.read_to_string(&mut content) {
             Err(why) => panic!("couldn't read file {}: {}", FILEPATH, why),
-            Ok(_) => assert_eq!(447, content.len()),
+            Ok(n) => assert_eq!(447, n),
         };
     }
 

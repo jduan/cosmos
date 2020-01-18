@@ -56,6 +56,39 @@
 ///
 /// One important thing: iter() and iter_mut() aren't methods of traits. Most iterable
 /// types just happen to have methods by those names!
+///
+///
+/// Free functions:
+/// 1. std::iter::empty()           returns None immediately
+/// 2. std::iter::once(5)           produces the given value, and then ends
+/// 3. std::iter::repeat("hello")   produces the given value forever
+///
+///
+/// ## Adapter Methods
+///
+/// Once you have an iterator in hand, the Iterator trait provides a broad selection of
+/// "adapter methods", that consume one iterator and build a new one with useful behaviors.
+/// such as:
+/// * map
+/// * filter
+/// * flat_map
+/// * take
+/// * scan
+/// * and a lot more ...
+///
+/// There are 2 important points to notice about iterator adapters.
+///
+/// 1. First, simply calling an adapter on an iterator doesn't consume any items; it just returns
+/// a new iterator, ready to produce its own items by drawing from the first iterator as needed.
+/// In other words, iterators are "lazy"! Common ways of consuming iterators are calling "next"
+/// or "collect" on the iterator.
+///
+/// 2. Secondly, iterator adapters are a zero-overhead abstraction. Since map, filter, and
+/// their companions are generic, applying them to an iterator specializes their code for the
+/// specific iterator type involved. This means that Rust has enough information to inline each
+/// iterator’s next method into its consumer, and then translate the entire arrangement into machine
+/// code as a unit. So the lines/map/filter chain of iterators we showed before is as efficient as
+/// the code you would probably write by hand.
 use std::iter::Iterator;
 
 pub struct Counter {
@@ -106,6 +139,7 @@ impl Iterator for Fibonacci {
 mod tests {
     use super::*;
     use std::collections::{HashMap, HashSet};
+    use std::str::FromStr;
 
     #[test]
     fn test_range() {
@@ -297,5 +331,288 @@ mod tests {
         //        for color in &mut colors {
         //            println!("color is {}", color);
         //        }
+    }
+
+    #[test]
+    fn drain_collection() {
+        let mut outer = vec![
+            String::from("John"),
+            String::from("Dave"),
+            String::from("Ava"),
+            String::from("Luke"),
+            String::from("Tom"),
+        ];
+        let mut inner = vec![];
+        // If you need to drain the whole collection, use the full range ".."
+        for mut s in outer.drain(1..3) {
+            s.insert(s.len(), '!');
+            inner.push(s);
+        }
+        assert_eq!(vec![String::from("Dave!"), String::from("Ava!"),], inner);
+        assert_eq!(
+            vec![
+                String::from("John"),
+                String::from("Luke"),
+                String::from("Tom"),
+            ],
+            outer
+        );
+    }
+
+    #[test]
+    /// Vec<T> and &[T] have various fancy methods to iterate through their elements.
+    fn vector_iterators() {
+        let names = vec![
+            String::from("John"),
+            String::from("Dave"),
+            String::from("Ava"),
+            String::from("Luke"),
+            String::from("Tom"),
+        ];
+
+        // "windows" produces every contiguous slice of the given length. The windows overlap.
+        let windows = names.windows(2);
+        for pair in windows {
+            assert_eq!(2, pair.len());
+            println!("pair: {:?}", pair);
+        }
+
+        // "chunks" produces non-overlapping, contiguous slice of the given length.
+        // there's also "chunks_mut"
+        let chunks = names.chunks(2);
+        for chunk in chunks {
+            println!("chunk: {:?}", chunk);
+        }
+
+        // There's also split_mut and rsplit
+        let str = "hello,world,everyone";
+        // Patterns can be many things: characters, strings, closures.
+        for part in str.split(',') {
+            println!("part: {}", part);
+        }
+
+        let v = str.split(|c| c == ',').collect::<Vec<&str>>();
+        assert_eq!(v, ["hello", "world", "everyone"]);
+
+        let v: Vec<&str> = "abc1defXghi".split(|c| c == '1' || c == 'X').collect();
+        assert_eq!(v, ["abc", "def", "ghi"]);
+
+        // Strings have even more methods: bytes, chars, split_whitespace(), lines, split, matches
+        let paragraph = r###"
+        line one
+        line two
+        "###
+        .trim();
+        let mut lines = paragraph.lines();
+        assert_eq!("line one", lines.next().unwrap().trim());
+        assert_eq!("line two", lines.next().unwrap().trim());
+    }
+
+    #[test]
+    fn map_and_filter() {
+        let text = "  ponies  \n   giraffes\niguanas  \nsquid".to_string();
+        let v: Vec<&str> = text.lines().map(str::trim).collect();
+        assert_eq!(v, ["ponies", "giraffes", "iguanas", "squid"]);
+
+        // There are 3 iterators at play here: lines, map, and filter
+        // The closures taken by map and filter are different:
+        // 1. A map iterator passes each item to its closure by value, and in turn, passes along
+        // ownership of the closure's result to its consumer
+        // 2. A filter iterator passes each item to its closure by shared reference, retaining
+        // ownership in case the item is selected to be passed on to its consumer
+        let v2: Vec<&str> = text
+            .lines()
+            .map(str::trim)
+            // s is a ref to the vector's element and the vector's elements are &str themselves
+            .filter(|s| *s != "iguanas")
+            .collect();
+        assert_eq!(v2, ["ponies", "giraffes", "squid"]);
+    }
+
+    #[test]
+    fn filter_map() {
+        let text = "1\nfrond .25  289\n3.1415 estuary\n";
+        let numbers: Vec<f64> = text
+            .split_whitespace()
+            // filter_map takes a closure that returns an Option type, dropping all the None values
+            .filter_map(|w| f64::from_str(w).ok())
+            .collect();
+
+        // Same as above but it's a bit ungainly
+        let numbers2: Vec<f64> = text
+            .split_whitespace()
+            .map(f64::from_str)
+            .filter(Result::is_ok)
+            .map(Result::unwrap)
+            .collect();
+        assert_eq!(vec![1.0, 0.25, 289.0, 3.1415], numbers);
+        assert_eq!(vec![1.0, 0.25, 289.0, 3.1415], numbers2);
+    }
+
+    #[test]
+    fn scan() {
+        let squares: Vec<i32> = (0..10)
+            // sum is the internal state
+            // iteration ends when None is returned from the closure
+            .scan(0, |sum, item| {
+                *sum += item;
+                if *sum > 10 {
+                    None
+                } else {
+                    Some(item * item)
+                }
+            })
+            .collect();
+
+        assert_eq!(vec![0, 1, 4, 9, 16], squares);
+    }
+
+    #[test]
+    fn take_while() {
+        let message = "To: jimb\r\n\
+               From: superego <editor@oreilly.com>\r\n\
+               \r\n\
+               Did you get any writing done today?\r\n\
+               When will you stop wasting time plotting fractals?\r\n";
+        let headers: Vec<&str> = message
+            .lines()
+            .take_while(|line| !line.is_empty())
+            .collect();
+        assert_eq!(
+            vec!["To: jimb", "From: superego <editor@oreilly.com>"],
+            headers
+        );
+    }
+
+    #[test]
+    fn skip_while() {
+        let message = "To: jimb\r\n\
+               From: superego <editor@oreilly.com>\r\n\
+               \r\n\
+               Did you get any writing done today?\r\n\
+               When will you stop wasting time plotting fractals?\r\n";
+        let body: Vec<&str> = message
+            .lines()
+            .skip_while(|line| !line.is_empty())
+            .skip(1) // skip the empty line
+            .collect();
+        assert_eq!(
+            vec![
+                "Did you get any writing done today?",
+                "When will you stop wasting time plotting fractals?"
+            ],
+            body
+        );
+    }
+
+    #[test]
+    /// You can turn almost any iterator into a peekable iterator by calling the Iterator
+    /// trait's peekable method.
+    /// Calling peek tries to draw the next item from the underlying iterator, and if there is one,
+    /// caches it until the next call to next. All the other Iterator methods on Peekable know about
+    /// this cache.
+    fn peekable() {
+        let mut chars = "47328943789243,4378294732".chars().peekable();
+        let mut n: u128 = 0;
+        loop {
+            match chars.peek() {
+                Some(r) if r.is_digit(10) => {
+                    n = n * 10 + r.to_digit(10).unwrap() as u128;
+                }
+                _ => {
+                    break;
+                }
+            }
+
+            chars.next();
+        }
+        assert_eq!(47328943789243 as u128, n);
+    }
+
+    #[test]
+    /// Once an Iterator has returned None, the trait doesn’t specify how it ought to behave if you
+    /// call its next method again. Most iterators just return None again, but not all.
+    ///
+    /// The fuse adapter takes any iterator and turns into one that will definitely continue to
+    /// return None once it has done so the first time.
+    fn fuse_iterator() {
+        struct Flaky(bool);
+
+        impl Iterator for Flaky {
+            type Item = &'static str;
+            fn next(&mut self) -> Option<Self::Item> {
+                if self.0 {
+                    self.0 = false;
+                    Some("totally the last item")
+                } else {
+                    self.0 = true; // D'oh!
+                    None
+                }
+            }
+        }
+
+        let mut flaky = Flaky(true);
+        assert_eq!(Some("totally the last item"), flaky.next());
+        assert_eq!(None, flaky.next());
+        assert_eq!(Some("totally the last item"), flaky.next());
+
+        let mut not_flaky = Flaky(true).fuse();
+        assert_eq!(Some("totally the last item"), not_flaky.next());
+        assert_eq!(None, not_flaky.next());
+        assert_eq!(None, not_flaky.next());
+        assert_eq!(None, not_flaky.next());
+        assert_eq!(None, not_flaky.next());
+    }
+
+    #[test]
+    /// trait DoubleEndedIterator: Iterator
+    /// The standard library provides double-ended iteration whenever it's practical.
+    /// eg: BTreeSet and BTeeMap are double-ended too.
+    fn double_ended_iterator() {
+        let parts = ["head", "thorax", "abdomen"];
+        let mut iter = parts.iter();
+        assert_eq!(Some(&"head"), iter.next());
+        assert_eq!(Some(&"abdomen"), iter.next_back());
+        assert_eq!(Some(&"thorax"), iter.next());
+        assert_eq!(None, iter.next());
+        assert_eq!(None, iter.next_back());
+
+        // If an iterator is double-ended, you can reverse it with the "rev" adapter.
+        let meals = ["breakfast", "lunch", "dinner"];
+
+        let mut iter = meals.iter().rev();
+        assert_eq!(iter.next(), Some(&"dinner"));
+        assert_eq!(iter.next(), Some(&"lunch"));
+        assert_eq!(iter.next(), Some(&"breakfast"));
+        assert_eq!(iter.next(), None);
+    }
+
+    #[test]
+    fn flat_map() {
+        let mut major_cities = HashMap::new();
+        major_cities.insert("Japan", vec!["Tokyo", "Kyoto"]);
+        major_cities.insert("The United States", vec!["Portland", "Nashville"]);
+        major_cities.insert("Brazil", vec!["São Paulo", "Brasília"]);
+        major_cities.insert("Kenya", vec!["Nairobi", "Mombasa"]);
+        major_cities.insert("The Netherlands", vec!["Amsterdam", "Utrecht"]);
+
+        let countries = ["Japan", "Brazil", "Kenya"];
+
+        let cities: Vec<&&str> = countries
+            .iter()
+            .flat_map(|country| major_cities.get(country).unwrap())
+            .collect();
+
+        assert_eq!(
+            vec![
+                &"Tokyo",
+                &"Kyoto",
+                &"São Paulo",
+                &"Brasília",
+                &"Nairobi",
+                &"Mombasa"
+            ],
+            cities
+        );
     }
 }
