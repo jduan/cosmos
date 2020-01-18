@@ -1,7 +1,61 @@
+/// ```
+/// pub trait Iterator {
+///     type Item;
+///     fn next(&mut self) -> Option<Self::Item>;
+///     ... and many other functions
+/// }
+/// ```
+///
+/// If there's a natural way to iterate over some type, it can implement `std::iter::IntoIterator`, whose `into_iter` method takes a value and returns an iterator over it.
+///
+/// ```
+/// pub trait IntoIterator where Self::IntoIter::Item == Self::Item {
+///     type Item;
+///     type IntoIter: Iterator;
+///     fn into_iter(self) -> Self::IntoIter;
+/// }
+/// ```
+///
 /// There are 3 functions that can iterate through a collection and they return different views:
-/// iter: borrows each element of the collection through each iteration
-/// iter_mut: mutably borrows each element of the collection through each iteration
-/// into_iter: consumes each element of the collection through each iteration
+/// 1. iter: borrows each element of the collection through each iteration
+/// 2. iter_mut: mutably borrows each element of the collection through each iteration
+/// 3. into_iter: consumes each element of the collection through each iteration
+///
+/// Note that slices like &[T] and &str have "iter" and "iter_mut" methods too.
+///
+/// Most collections actually provide several implementations of IntoIterator:
+/// 1. Given a shared ref to the collection, "into_iter" returns an interator that produces
+/// shared refs to its items. For example: (&favoriates).into_iter()
+/// 2. Given a mutable reference to the collection, into_iter returns an iterator
+/// that produces mutable references to the items. For example: (&mut favorites).into_iter()
+/// 3. When passed the collection by value, into_iter returns an iterator that takes
+/// ownership of the collection and returns items by value; the items’ ownership moves
+/// from the collection to the consumer, and the original collection is consumed in
+/// the process. For example: favorites.into_iter()
+///
+/// These three implementations are what create the following idioms for iterating over
+/// a collection in for loops:
+///
+///     for element in &collection { ... }
+///     for element in &mut collection { ... }
+///     for element in collection { ... }
+///
+/// Not every type provides all three implementations. For example, HashSet, BTreeSet
+/// and BinaryHeap don’t implement IntoIterator on mutable references, since modifying
+/// their elements would probably violate the type’s invariants.
+///
+/// Slices implement two of the three IntoIterator variants; since they don’t own their
+/// elements, there is no “by value” case.
+///
+/// You may have noticed that the first two IntoIterator variants are equivalent to
+/// calling iter() or iter_mut(). Why does Rust provide both?
+///
+/// IntoIterator is what makes for loops work, so that’s obviously necessary. But when
+/// you’re not using a for loop, favorites.iter() is clearer than (&favorites).into_iter().
+/// So iter and iter_mut are still valuable for their ergonomics.
+///
+/// One important thing: iter() and iter_mut() aren't methods of traits. Most iterable
+/// types just happen to have methods by those names!
 use std::iter::Iterator;
 
 pub struct Counter {
@@ -9,7 +63,7 @@ pub struct Counter {
 }
 
 impl Counter {
-    fn new() -> Counter {
+    pub fn new() -> Counter {
         Counter { count: 0 }
     }
 }
@@ -33,7 +87,7 @@ pub struct Fibonacci {
 }
 
 impl Fibonacci {
-    fn new() -> Fibonacci {
+    pub fn new() -> Fibonacci {
         Fibonacci { curr: 0, next: 1 }
     }
 }
@@ -51,11 +105,55 @@ impl Iterator for Fibonacci {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::{HashMap, HashSet};
+
+    #[test]
+    fn test_range() {
+        let mut sum = 0;
+        let n = 10;
+        // Although a "for" loop always calls "into_iter" on its operand, you can also pass
+        // iterators to "for" loops directly; this occurs when you loop over a Range.
+        // All iterators automatically implement IntoIterator, with an "into_iter" method
+        // that simply returns the iterator itself.
+        for i in 1..n + 1 {
+            sum += i;
+        }
+
+        assert_eq!(55, sum);
+    }
+
+    #[test]
+    fn iterator_vs_iterable() {
+        // Range implements Iterator so we can call Iterator methods on it directly.
+        let mut r = 1..10;
+        assert_eq!(1, r.next().unwrap());
+
+        // Vector doesn't implement Iterator but it implements IntoIterator so you need to
+        // call "into_iter" first before you can call other Iterator methods.
+        let names = vec!["john", "dave"];
+        let mut iter = names.into_iter();
+        assert_eq!("john", iter.next().unwrap());
+    }
+
+    #[test]
+    fn test_fold() {
+        let n = 10;
+        let sum = (1..n + 1).fold(0, |sum, elem| sum + elem);
+        assert_eq!(55, sum);
+    }
 
     #[test]
     fn test_iter() {
         let names = vec!["Bob", "Frank", "Ferris"];
-        for name in names {
+        for name in &names {
+            println!("name is {}", name);
+        }
+
+        // Under the hood, every "for" loop is just shorthand for calls to IntoIterator
+        // and Iterator methods.
+
+        let mut iter = (&names).into_iter();
+        while let Some(name) = iter.next() {
             println!("name is {}", name);
         }
     }
@@ -174,5 +272,30 @@ mod tests {
         for n in array.iter() {
             println!("next element of array is {}", n);
         }
+    }
+
+    #[test]
+    fn iterate_hashmap() {
+        let mut people = HashMap::new();
+        people.insert("John", 30);
+        people.insert("Dave", 50);
+
+        for (key, value) in &mut people {
+            // Refs to keys are immutable
+            println!("name: {}", key);
+            // Refs to values are mutable
+            *value += 1;
+        }
+
+        assert_eq!(&31, people.get("John").unwrap());
+        assert_eq!(&51, people.get("Dave").unwrap());
+
+        let mut colors = HashSet::new();
+        colors.insert("red");
+        colors.insert("green");
+        // This code doesn't compile.
+        //        for color in &mut colors {
+        //            println!("color is {}", color);
+        //        }
     }
 }
