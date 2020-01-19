@@ -605,6 +605,84 @@ mod tests {
     }
 
     #[test]
+    /// You can chain an interator with any iterable that produces the same item type.
+    fn chain() {
+        let nums: Vec<i32> = (1..=3).chain(vec![4, 5, 6]).collect();
+        assert_eq!(vec![1, 2, 3, 4, 5, 6], nums);
+
+        // A chain iterator is reversible if both of its underlying iterators are
+        let nums: Vec<i32> = (1..=3).chain(vec![4, 5, 6]).rev().collect();
+        assert_eq!(vec![6, 5, 4, 3, 2, 1], nums);
+    }
+
+    #[test]
+    fn enumerate() {
+        let names = ["John", "Jack", "Joe"];
+        let pairs: Vec<(usize, &&str)> = names.iter().enumerate().collect();
+        assert_eq!(vec![(0, &"John"), (1, &"Jack"), (2, &"Joe")], pairs);
+        for (idx, name) in names.iter().enumerate() {
+            println!("{}: {}", idx, name);
+        }
+    }
+
+    #[test]
+    /// "zip" is more general than "enumerate"
+    fn zip() {
+        let names = vec!["John", "Jack", "Joe"];
+        for (idx, name) in (0..).zip(names) {
+            println!("{}: {}", idx, name);
+        }
+    }
+
+    #[test]
+    /// Throughout this section, we’ve been attaching adapters to iterators. Once you’ve done so,
+    /// can you ever take the adapter off again? Usually, no: adapters take ownership of the
+    /// underlying iterator, and provide no method to give it back.
+    ///
+    /// An iterator’s by_ref method borrows a mutable reference to the iterator, so that you can
+    /// apply adaptors to the reference. When you’re done consuming items from these adaptors,
+    /// you drop them, the borrow ends, and you regain access to your original iterator.
+    fn by_ref() {
+        let message = "To: jimb\r\n\
+               From: id\r\n\
+               \r\n\
+               Oooooh, donuts!!\r\n";
+
+        // lines is an iterator
+        let mut lines = message.lines();
+
+        let headers: Vec<&str> = lines.by_ref().take_while(|line| !line.is_empty()).collect();
+        // Now you can still use the "lines" iterator
+        let body: Vec<&str> = lines.collect();
+        assert_eq!(vec!["To: jimb", "From: id"], headers);
+        assert_eq!(vec!["Oooooh, donuts!!"], body);
+    }
+
+    #[test]
+    /// The cloned adapter takes an iterator that produces references, and returns an iterator
+    /// that produces values cloned from those references.
+    fn cloned() {
+        let names = vec!["John", "Jack", "Joe"];
+        let names2: Vec<&str> = names.iter().cloned().collect();
+        assert_eq!(names, names2);
+    }
+
+    #[test]
+    /// The underlying iterator must implement std::clone::Clone, so that cycle can save its
+    /// initial state and reuse it each time the cycle starts again.
+    fn cycle() {
+        let dirs = ["North", "East", "South", "West"];
+        let mut spin = dirs.iter().cycle();
+        assert_eq!(Some(&"North"), spin.next());
+        assert_eq!(Some(&"East"), spin.next());
+        assert_eq!(Some(&"South"), spin.next());
+        assert_eq!(Some(&"West"), spin.next());
+        assert_eq!(Some(&"North"), spin.next());
+        assert_eq!(Some(&"East"), spin.next());
+        assert_eq!(Some(&"South"), spin.next());
+    }
+
+    #[test]
     fn flat_map() {
         let mut major_cities = HashMap::new();
         major_cities.insert("Japan", vec!["Tokyo", "Kyoto"]);
