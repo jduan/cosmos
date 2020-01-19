@@ -138,7 +138,8 @@ impl Iterator for Fibonacci {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::collections::{HashMap, HashSet};
+    use std::cmp::Ordering;
+    use std::collections::{BTreeSet, HashMap, HashSet, LinkedList};
     use std::str::FromStr;
 
     #[test]
@@ -170,10 +171,30 @@ mod tests {
     }
 
     #[test]
+    /// fold is really general. Many of the other methods for consuming an iterator's values
+    /// can be written as uses of fold.
     fn test_fold() {
         let n = 10;
         let sum = (1..n + 1).fold(0, |sum, elem| sum + elem);
         assert_eq!(55, sum);
+
+        let a = [5, 6, 7, 8, 9, 10];
+        // use fold to implement max
+        assert_eq!(
+            10,
+            a.iter().fold(i32::min_value(), |m, &i| std::cmp::max(m, i))
+        );
+
+        let words = [
+            "Pack ", "my ", "box ", "with ", "five ", "dozen ", "liquor ", "jugs",
+        ];
+        // The accumulator is moved into and out of the closure, so you can use fold with
+        // non-Copy accumlator types, such as String.
+        let pangram = words.iter().fold(String::new(), |mut s, &w| {
+            s.push_str(w);
+            s
+        });
+        assert_eq!("Pack my box with five dozen liquor jugs", pangram);
     }
 
     #[test]
@@ -680,6 +701,149 @@ mod tests {
         assert_eq!(Some(&"North"), spin.next());
         assert_eq!(Some(&"East"), spin.next());
         assert_eq!(Some(&"South"), spin.next());
+    }
+
+    #[test]
+    /// Of course, you can consume an iterator with a for loop, or call next explicitly, but
+    /// there are many common tasks that you shouldn’t have to write out again and again.
+    fn consume_iterators() {
+        // Simple Accumulation: count, sum, product
+        // You can extend sum and product to work with other types by implementing the
+        // std::iter::Sum and std::iter::Product traits
+        let count = (1..100).filter(|n| n % 15 == 0).count();
+        assert_eq!(6, count);
+        let sum = (1..100).filter(|n| n % 15 == 0).sum();
+        assert_eq!(315, sum);
+
+        // max, min, max_by, min_by, max_by_key, min_by_key
+        assert_eq!([-2, 0, 1, 0, -2, -5].iter().max(), Some(&1));
+        assert_eq!([-2, 0, 1, 0, -2, -5].iter().min(), Some(&-5));
+        let numbers = [1.0, 4.0, 2.0];
+        assert_eq!(
+            Some(&4.0),
+            numbers.iter().max_by(|m, n| m.partial_cmp(n).unwrap())
+        );
+        let numbers = [1.0, 4.0, std::f64::NAN, 2.0];
+        assert_eq!(
+            Some(&4.0),
+            // We ignore NAN
+            numbers.iter().max_by(|m, n| {
+                if m.is_nan() {
+                    Ordering::Less
+                } else if n.is_nan() {
+                    Ordering::Greater
+                } else {
+                    m.partial_cmp(n).unwrap()
+                }
+            })
+        );
+
+        // max_by_key, min_by_key
+        let mut populations = HashMap::new();
+        populations.insert("Portland", 583_776);
+        populations.insert("Fossil", 449);
+        populations.insert("Greenhorn", 2);
+        populations.insert("Boring", 7_762);
+        populations.insert("The Dalles", 15_340);
+        assert_eq!(
+            Some((&"Portland", &583_776)),
+            populations.iter().max_by_key(move |&(_key, value)| value)
+        );
+
+        // compare item sequences: eq, lt, le, gt, ge
+        let packed = "Helen of Troy";
+        let spaced = "Helen   of    Troy";
+        let obscure = "Helen of Sandusky"; // nice person, just not famous
+        assert!(packed.split_whitespace().eq(spaced.split_whitespace()));
+        assert!(spaced < packed);
+        assert!(spaced.split_whitespace().gt(obscure.split_whitespace()));
+
+        // any, all
+        assert!("Iterator".chars().any(char::is_uppercase));
+        assert!(!"Iterator".chars().all(char::is_uppercase));
+
+        // position, rposition
+        let text = "Xerxes";
+        assert_eq!(Some(1), text.chars().position(|ch| ch == 'e'));
+        assert_eq!(None, text.chars().position(|ch| ch == 'z'));
+        // rposition requires a reversible iterator. It also requires an
+        // std::iter::ExactSizeIterator
+        let bytes = b"Xerxes";
+        assert_eq!(Some(4), bytes.iter().rposition(|&ch| ch == b'e'));
+        assert_eq!(None, bytes.iter().rposition(|&ch| ch == b'z'));
+
+        // nth
+        // Note that all preceding elements, as well as the returned element, will be
+        // consumed from the iterator. That means that the preceding elements will be
+        // discarded.
+        let mut squares = (0..10).map(|i| i * i);
+        assert_eq!(Some(16), squares.nth(4));
+        assert_eq!(Some(25), squares.nth(0));
+        assert_eq!(None, squares.nth(6));
+
+        // last
+        let squares = (0..10).map(|i| i * i);
+        assert_eq!(Some(81), squares.last());
+
+        // find
+        assert_eq!(
+            None,
+            populations.iter().find(|&(_name, &pop)| pop > 1_000_000)
+        );
+        assert_eq!(
+            Some((&"Portland", &583_776)),
+            populations.iter().find(|&(_name, &pop)| pop > 500_000)
+        );
+    }
+
+    #[test]
+    /// "collect" isn't specific to vectors; it can build any kind of collection from Rust's
+    /// standard library, as long as the iterator produces a suitable item type.
+    /// The target type needs to implement the std::iter::FromIterator.
+    fn build_collections() {
+        let names = vec!["John", "Jack", "Joe"];
+
+        let set: HashSet<&&str> = names.iter().collect();
+        assert!(set.contains(&"John"));
+        let bset: BTreeSet<&&str> = names.iter().collect();
+        assert!(bset.contains(&"John"));
+        let list: LinkedList<&&str> = names.iter().collect();
+        assert!(list.contains(&&"John"));
+        let map: HashMap<&&str, usize> = names.iter().zip(0..).collect();
+        assert!(map.contains_key(&&"John"));
+    }
+
+    #[test]
+    /// If a type implements the std::iter::Extend trait, then its extend method adds an iterable’s
+    /// items to the collection. All of the standard collections implement this trait, so does
+    /// String. Arrays and slices, which have a fixed length, do not.
+    fn the_extend_trait() {
+        let mut v: Vec<i32> = (0..5).map(|i| 1 << i).collect();
+        v.extend(&[31, 57, 99, 163]);
+        assert_eq!(vec![1, 2, 4, 8, 16, 31, 57, 99, 163], v);
+    }
+
+    #[test]
+    fn partition() {
+        let things = [
+            "doorknob",
+            "mushroom",
+            "mushroom",
+            "noodle",
+            "giraffe",
+            "grapefruit",
+        ];
+        let (short, long): (Vec<&str>, Vec<&str>) = things.iter().partition(|name| name.len() < 8);
+        assert_eq!(vec!["noodle", "giraffe"], short);
+        assert_eq!(vec!["doorknob", "mushroom", "mushroom", "grapefruit"], long);
+
+        // Like collection, partition can make any sort of collections you like, but both
+        // must be of the same type!
+        let (short2, long2): (HashSet<&str>, HashSet<&str>) =
+            things.iter().partition(|name| name.len() < 8);
+        assert_eq!(2, short2.len());
+        // "mushroom" is only counted once because of set
+        assert_eq!(3, long2.len());
     }
 
     #[test]
