@@ -117,12 +117,10 @@ pub enum Ordering {
 }
 
 pub fn compare(n: i32, m: i32) -> Ordering {
-    if n < m {
-        Ordering::Less
-    } else if n > m {
-        Ordering::Greater
-    } else {
-        Ordering::Equal
+    match n.cmp(&m) {
+        std::cmp::Ordering::Less => Ordering::Less,
+        std::cmp::Ordering::Equal => Ordering::Equal,
+        std::cmp::Ordering::Greater => Ordering::Greater,
     }
 }
 

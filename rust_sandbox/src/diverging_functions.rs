@@ -7,6 +7,7 @@ pub fn foo() -> ! {
 /// set of all possible values this type can have is empty. Note that, it is
 /// different from the () type, which has exactly one possible value.
 pub fn some_fn() {
+    #[allow(clippy::unused_unit)]
     ()
 }
 
@@ -16,12 +17,13 @@ pub fn some_fn() {
 pub fn sum_odd_numbers(upto: u32) -> u32 {
     let mut sum = 0;
     for i in 1..upto {
-        let additional = match i % 2 == 1 {
-            true => i,
+        let additional = if i % 2 == 1 {
+            i
+        } else {
             // the "continue" expression does not return a "u32" but it is still fine,
             // because it never returns and therefore does not violate the type
             // requirements of the match expression.
-            false => continue,
+            continue;
         };
         sum += additional;
     }

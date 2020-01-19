@@ -480,8 +480,7 @@ pub fn combine_vecs(v: Vec<i32>, u: Vec<i32>) -> impl Iterator<Item = i32> {
 /// to allocate on the heap in order to return a closure. But now you can do it
 /// all statically, like this:
 pub fn make_adder(y: i32) -> impl Fn(i32) -> i32 {
-    let closure = move |x: i32| x + y;
-    closure
+    move |x: i32| x + y
 }
 
 #[cfg(test)]

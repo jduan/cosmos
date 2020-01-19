@@ -68,8 +68,7 @@ pub fn makes_copy(some_integer: i32) {
 
 // This function moves its return value into the function that calls it.
 pub fn gives_ownership() -> String {
-    let some_string = String::from("John Rambo");
-    some_string
+    String::from("John Rambo")
 }
 
 // This function takes a String and returns it back
