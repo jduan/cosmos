@@ -588,6 +588,23 @@ mod tests {
     }
 
     #[test]
+    /// The inspect() adapter simply applies a closure to a shared reference to each item, and
+    /// then passes the item through. The closure can’t affect the items, but it can do things
+    /// like print them or make assertions about them.
+    fn inspect() {
+        let upper_case: String = "hello"
+            .chars()
+            .inspect(|ch| println!("before: {}", ch))
+            // The uppercase equivalent of the lowercase German letter “ß” is “SS”, which is why
+            // char::to_uppercase returns an iterator over characters, not a single replacement
+            // character.
+            .flat_map(char::to_uppercase)
+            .inspect(|ch| println!("after: {}", ch))
+            .collect();
+        assert_eq!("HELLO", upper_case);
+    }
+
+    #[test]
     fn flat_map() {
         let mut major_cities = HashMap::new();
         major_cities.insert("Japan", vec!["Tokyo", "Kyoto"]);
