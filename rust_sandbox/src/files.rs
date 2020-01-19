@@ -34,8 +34,8 @@ mod tests {
     use std::path::Path;
 
     use super::*;
+    use tempfile::NamedTempFile;
 
-    static FILEPATH: &str = "/tmp/jkfdsjkfdj";
     static LOREM_IPSUM: &str =
         "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
@@ -44,45 +44,36 @@ consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 ";
+    fn create_file() -> std::result::Result<NamedTempFile, Box<dyn std::error::Error>> {
+        let mut file = NamedTempFile::new()?;
+        file.write_all(LOREM_IPSUM.as_bytes())?;
 
-    #[test]
-    fn create_file() {
-        let path = Path::new(FILEPATH);
-        println!("About to create a file {}", path.display());
-
-        let mut file = match File::create(path) {
-            Err(why) => panic!("couldn't create file {}: {}", path.display(), why),
-            Ok(file) => file,
-        };
-
-        match file.write_all(LOREM_IPSUM.as_bytes()) {
-            Err(why) => panic!("couldn't write to file {}: {}", path.display(), why),
-            Ok(_) => println!("successfully wrote to file {}", path.display()),
-        };
-        file.flush().unwrap();
+        Ok(file)
     }
 
     #[test]
     fn read_file() {
-        create_file();
+        let file = create_file().unwrap();
+        let path = file.path();
 
-        let mut file = match File::open(FILEPATH) {
-            Err(why) => panic!("couldn't open file {}: {}", FILEPATH, why),
+        let mut file = match File::open(path) {
+            Err(why) => panic!("couldn't open file {:?}: {}", path, why),
             Ok(file) => file,
         };
 
         let mut content = String::new();
         match file.read_to_string(&mut content) {
-            Err(why) => panic!("couldn't read file {}: {}", FILEPATH, why),
+            Err(why) => panic!("couldn't read file {:?}: {}", path, why),
             Ok(n) => assert_eq!(447, n),
         };
     }
 
     #[test]
     fn read_lines() -> Result<(), std::io::Error> {
-        create_file();
+        let file = create_file().unwrap();
+        let path = file.path();
 
-        let file = File::open(FILEPATH)?;
+        let file = File::open(path)?;
         let lines = BufReader::new(file).lines();
         let mut count = 0;
         for line in lines {
