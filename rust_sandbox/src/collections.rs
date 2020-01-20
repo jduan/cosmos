@@ -23,7 +23,7 @@
 /// using the "collect()" method.
 #[cfg(test)]
 mod tests {
-    use std::collections::{BinaryHeap, HashMap, LinkedList, VecDeque};
+    use std::collections::{BinaryHeap, HashMap, HashSet, LinkedList, VecDeque};
 
     #[test]
     /// A vector has 3 fields:
@@ -358,5 +358,34 @@ mod tests {
         }
         assert_eq!(Some(&2), count.get(&"john"));
         assert_eq!(2, count[&"john"]);
+    }
+
+    /// Behind the scenes, a set is like a map with only keys, rather than key-value pairs. In
+    /// fact, Rust’s two set types, HashSet<T> and BTreeSet<T>, are implemented as thin
+    /// wrappers around HashMap<T, ()> and BTreeMap<T, ()>.
+    ///
+    /// HashSet<T> and BTreeSet<T> have all the basic methods of HashMap and BTeeMap.
+    ///
+    /// Set operations:
+    /// set1.intersection(&set2)    returns an iterator
+    /// &set1 & &set2               returns a new set that's the intersection of both sets
+    /// set1.union(&set2)           returns an iterator
+    /// &set1 | &set2               returns a new set containing both sets
+    /// set1.difference(&set2)      returns an iterator
+    /// &set1 - &set2               returns an iterator over values that are in set1 but not in set2
+    ///
+    /// Set relationship
+    /// set1.is_disjoint(set2)
+    /// set1.is_subset(set2)
+    /// set1.is_superset(set2)
+    #[test]
+    fn hashset_and_btreeset() {
+        let mut names = HashSet::new();
+        names.insert("John");
+        names.insert("John");
+        names.insert("Dave");
+        names.insert("Jack");
+        names.insert("Dave");
+        assert!(names.contains("John"));
     }
 }
