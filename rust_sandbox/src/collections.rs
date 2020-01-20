@@ -23,6 +23,8 @@
 /// using the "collect()" method.
 #[cfg(test)]
 mod tests {
+    use std::collections::VecDeque;
+
     #[test]
     /// A vector has 3 fields:
     /// * the length,
@@ -190,5 +192,32 @@ mod tests {
         v.retain(|&val| val <= 4);
 
         assert_eq!(vec![1, 3], v);
+    }
+
+    #[test]
+    /// Rust’s std::collections::VecDeque<T> is a deque (pronounced “deck”), a double-ended
+    /// queue. It supports efficient add and remove operations at both the front and the back.
+    /// VecDeque is implemented using a ring buffer.
+    ///
+    /// push_front(value)
+    /// push_back(value)
+    /// pop_front()
+    /// pop_back()
+    /// front(), front_mut()
+    /// back(), back_mut()
+    ///
+    /// iterators: iter(), iter_mut(), into_iter()
+    ///
+    /// Because deques don't store their elements contiguously in memory, they don't inherit
+    /// all the methods of slices. One way to perform vector and slice operations on deques
+    /// is to convert it to a Vec, do the operation, and convert it back:
+    ///
+    /// Vec<T> implements From<VecDeque<T>>, so Vec::from(deque) turns a deque into a vector
+    /// VecDeque<T> implements From<Vec<T>>, so VecDeque::from(vec) turns a vector into a deque
+    fn vec_deque() {
+        let mut scores = VecDeque::from(vec![1, 2, 3, 4, 5]);
+        scores.push_front(0);
+        scores.push_back(6);
+        assert_eq!(vec![0, 1, 2, 3, 4, 5, 6], Vec::from(scores));
     }
 }
