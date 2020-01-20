@@ -7,6 +7,7 @@ pub mod casting;
 pub mod channels;
 pub mod clone_trait;
 pub mod closures;
+pub mod collections;
 pub mod constants;
 pub mod control_flow;
 pub mod conversions;
