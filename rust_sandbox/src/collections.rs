@@ -330,6 +330,22 @@ mod tests {
     ///
     /// Again, there’s no way to get mut access to keys stored in a map, because the entries
     /// are organized by their keys.
+    ///
+    /// ## Hashing
+    ///
+    /// Most built-in types that implement Eq also implement Hash. The integer types, char,
+    /// and String are all hashable; so are tuples, arrays, slices, and vectors, as long as
+    /// their elements are hashable.
+    ///
+    /// One principle of the standard library is that a value should have the same hash code
+    /// regardless of where you store it or how you point to it. Therefore, a reference has
+    /// the same hash code as the value it refers to, and a Box has the same hash code as
+    /// the boxed value. A vector vec has the same hash code as the slice containing all its
+    /// data, &vec[..]. A String has the same hash code as a &str with the same characters.
+    ///
+    /// Structs and enums don’t implement Hash by default, but an implementation can be derived.
+    ///
+    /// If you implement PartialEq by hand for a type, you should also implement Hash by hand.
     #[test]
     fn hashmap_and_btreemap() {
         // Both HashMap and BTreeMap have a corresponding Entry type. The point of entries is
