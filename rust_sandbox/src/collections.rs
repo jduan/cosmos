@@ -23,7 +23,7 @@
 /// using the "collect()" method.
 #[cfg(test)]
 mod tests {
-    use std::collections::{LinkedList, VecDeque};
+    use std::collections::{BinaryHeap, LinkedList, VecDeque};
 
     #[test]
     /// A vector has 3 fields:
@@ -247,5 +247,38 @@ mod tests {
             lst1.into_iter().collect::<Vec<i32>>()
         );
         assert!(lst2.is_empty());
+    }
+
+    /// A BinaryHeap is a collection whose elements are kept loosely organized so that the
+    /// greatest value always bubbles up to the front of the queue.  It can hold any type of
+    /// value that implements the Ord trait.
+    ///
+    /// The most important methods are:
+    /// push(value)
+    /// pop() returns an Option<T>
+    /// peek() returns an Option<&T>
+    ///
+    /// A good use of BinaryHeap is work queues. You can define a task struct that implements
+    /// Ord on the basis of priority, so that higher-priority tasks are Greater than
+    /// lower-priority tasks. Then, create a BinaryHeap to hold all pending tasks. Its .pop()
+    /// method will always return the most important item, the task your program should work
+    /// on next.
+    #[test]
+    fn binary_heap() {
+        let mut heap = BinaryHeap::from(vec![2, 3, 8, 6, 9, 5, 4]);
+        assert_eq!(Some(&9), heap.peek());
+        assert_eq!(Some(9), heap.pop());
+        assert_eq!(Some(8), heap.pop());
+        assert_eq!(Some(6), heap.pop());
+
+        // BinaryHeap is iterable but its iterator produces elements in an arbitrary order.
+        // There's also into_iter_sorted() but it's unstable.
+        println!("heap: {:?}", heap.iter().collect::<Vec<&i32>>());
+
+        // To consume values from a BinaryHeap in order of priority, use a while loop:
+        let mut tasks = BinaryHeap::from(vec![1, 2, 3, 4, 5]);
+        while let Some(task) = tasks.pop() {
+            println!("task: {}", task);
+        }
     }
 }
