@@ -23,7 +23,7 @@
 /// using the "collect()" method.
 #[cfg(test)]
 mod tests {
-    use std::collections::VecDeque;
+    use std::collections::{LinkedList, VecDeque};
 
     #[test]
     /// A vector has 3 fields:
@@ -194,7 +194,6 @@ mod tests {
         assert_eq!(vec![1, 3], v);
     }
 
-    #[test]
     /// Rust’s std::collections::VecDeque<T> is a deque (pronounced “deck”), a double-ended
     /// queue. It supports efficient add and remove operations at both the front and the back.
     /// VecDeque is implemented using a ring buffer.
@@ -214,10 +213,39 @@ mod tests {
     ///
     /// Vec<T> implements From<VecDeque<T>>, so Vec::from(deque) turns a deque into a vector
     /// VecDeque<T> implements From<Vec<T>>, so VecDeque::from(vec) turns a vector into a deque
+    #[test]
     fn vec_deque() {
         let mut scores = VecDeque::from(vec![1, 2, 3, 4, 5]);
         scores.push_front(0);
         scores.push_back(6);
         assert_eq!(vec![0, 1, 2, 3, 4, 5, 6], Vec::from(scores));
+    }
+
+    /// std::collections::LinkedList<T> is a doubly linked list for Rust. It supports a subset
+    /// of VecDeque's methods. Methods that access elements by index, though, are generally
+    /// omitted, since it’s inherently inefficient to access linked list elements by index.
+    ///
+    /// For now, the main advantage of LinkedList over VecDeque is that combining two lists is
+    /// very fast. list.append(&mut list2), the method that moves all elements from one list to
+    /// another, only involves changing a few pointers, which can be done in constant time.
+    #[test]
+    fn linked_list() {
+        let mut lst1 = LinkedList::new();
+        lst1.push_back(1);
+        lst1.push_back(2);
+        lst1.push_back(3);
+        let mut lst2 = LinkedList::new();
+        lst2.push_back(10);
+        lst2.push_back(20);
+        lst2.push_back(30);
+
+        // This reuses all the nodes from `lst2` and moves them into `lst1`. After
+        // this operation, `lst2` becomes empty.
+        lst1.append(&mut lst2);
+        assert_eq!(
+            vec![1, 2, 3, 10, 20, 30],
+            lst1.into_iter().collect::<Vec<i32>>()
+        );
+        assert!(lst2.is_empty());
     }
 }
