@@ -23,7 +23,7 @@
 /// using the "collect()" method.
 #[cfg(test)]
 mod tests {
-    use std::collections::{BinaryHeap, LinkedList, VecDeque};
+    use std::collections::{BinaryHeap, HashMap, LinkedList, VecDeque};
 
     #[test]
     /// A vector has 3 fields:
@@ -280,5 +280,83 @@ mod tests {
         while let Some(task) = tasks.pop() {
             println!("task: {}", task);
         }
+    }
+
+    /// HashMap keys need to implement Hash and Eq traits.
+    /// BTreeMap keys need to implement Ord trait.
+    ///
+    /// The Rust standard library uses B-trees rather than balanced binary trees because
+    /// B-trees are faster on modern hardware. A binary tree may use fewer comparisons per
+    /// search than a B-tree, but searching a B-tree has better locality—that is, the memory
+    /// accesses are grouped together rather than scattered across the whole heap. This makes
+    /// CPU cache misses rarer. It’s a significant speed boost.
+    ///
+    /// Create maps:
+    /// HashMap::new, BTreeMap::new, HashMap::with_capacity(n)
+    /// iter.collect() where iter must be an Iterator<Item=(K, V)>
+    ///
+    /// In general, maps let you have mut access to the values stored inside them, but not the
+    /// keys. The values are yours to modify however you like. The keys belong to the map
+    /// itself; it needs to ensure that they don’t change, because the entries are organized
+    /// by their keys. Modifying a key in-place would be a bug.
+    ///
+    /// Important methods:
+    /// len()
+    /// is_empty()
+    /// contains_key(&key)
+    /// get(&key)
+    /// get_mut(&key)
+    /// insert(key, value)
+    /// extend(iterable)
+    /// append(&mut map2)       moves all entries from map2 into map. Afterward, map2 is empty.
+    /// remove(&key)
+    /// clear()                 removes all entries
+    ///
+    /// A map can also be queried using square brackets: map[&key]. That is, maps implement the
+    /// Index built-in trait. However, this panics if there is not already an entry for the
+    /// given key.
+    ///
+    /// BTreeMap has a "split_at(&key)" method to split the treemap into two.
+    ///
+    /// Map Iteration
+    /// by value: for (k, v) in map
+    /// by shared ref: for (k, v) in &map
+    /// by mut ref: for (k, v) in &mut map
+    /// iter()
+    /// iter_mut()
+    /// map.keys()
+    /// map.values()
+    /// map.values_mut()
+    ///
+    /// Again, there’s no way to get mut access to keys stored in a map, because the entries
+    /// are organized by their keys.
+    #[test]
+    fn hashmap_and_btreemap() {
+        // Both HashMap and BTreeMap have a corresponding Entry type. The point of entries is
+        // to eliminate redundant map lookups.
+        struct Student {}
+        let mut map = HashMap::new();
+        let name = "john";
+        if !map.contains_key(name) {
+            map.insert(name, Student {});
+        }
+        let _record = map.get_mut(name).unwrap();
+
+        // This works fine but it accesses the map 3 times. The idea with entries is that we do
+        // the lookup just once, producing an Entry value that is then used for all subsequent
+        // operations.
+        // The Entry value returned by map.entry(key) acts like a mutable reference to a place
+        // within the map that’s either occupied or vacant.
+        map.entry(name).or_insert(Student {});
+
+        // Count ballots
+        let ballots = ["john", "jack", "dave", "john", "joe", "dave"];
+        let mut count = HashMap::new();
+        for ballot in ballots.iter() {
+            let n = count.entry(ballot).or_insert(0);
+            *n += 1;
+        }
+        assert_eq!(Some(&2), count.get(&"john"));
+        assert_eq!(2, count[&"john"]);
     }
 }
