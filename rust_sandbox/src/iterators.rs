@@ -1,3 +1,4 @@
+use std::collections::VecDeque;
 /// ```
 /// pub trait Iterator {
 ///     type Item;
@@ -131,6 +132,7 @@ pub struct FibonacciIterator {
     curr: u32,
     next: u32,
 }
+
 impl Iterator for FibonacciIterator {
     type Item = u32;
 
@@ -174,12 +176,79 @@ impl Iterator for I32Range {
     }
 }
 
+#[derive(Debug)]
+pub enum BinaryTree<T> {
+    Empty,
+    NonEmpty(Box<TreeNode<T>>),
+}
+
+#[derive(Debug)]
+pub struct TreeNode<T> {
+    value: T,
+    left: BinaryTree<T>,
+    right: BinaryTree<T>,
+}
+
+pub struct TreeIter<'a, T: 'a> {
+    queue: VecDeque<&'a Box<TreeNode<T>>>,
+}
+
+impl<'a, T: 'a> Iterator for TreeIter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.queue.is_empty() {
+            return None;
+        }
+        let head = self.queue.pop_front().unwrap();
+        match &head.left {
+            BinaryTree::Empty => {}
+            BinaryTree::NonEmpty(node) => self.queue.push_back(node),
+        };
+        match &head.right {
+            BinaryTree::Empty => {}
+            BinaryTree::NonEmpty(node) => self.queue.push_back(node),
+        };
+        return Some(&head.value);
+    }
+}
+
+impl<'a, T: 'a> IntoIterator for &'a BinaryTree<T> {
+    type Item = &'a T;
+    type IntoIter = TreeIter<'a, T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        let mut dq = VecDeque::new();
+        match self {
+            BinaryTree::Empty => {}
+            BinaryTree::NonEmpty(node) => dq.push_back(node),
+        }
+        TreeIter { queue: dq }
+    }
+}
+
+pub fn make_node<T>(value: T, left: BinaryTree<T>, right: BinaryTree<T>) -> BinaryTree<T> {
+    BinaryTree::NonEmpty(Box::new(TreeNode { value, left, right }))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::iterators::BinaryTree::Empty;
     use std::cmp::Ordering;
     use std::collections::{BTreeSet, HashMap, HashSet, LinkedList};
     use std::str::FromStr;
+
+    #[test]
+    fn test_binary_tree() {
+        let subtree_l = make_node("mecha", Empty, Empty);
+        let subtree_rl = make_node("droid", Empty, Empty);
+        let subtree_r = make_node("robot", subtree_rl, Empty);
+        let tree = make_node("Jaeger", subtree_l, subtree_r);
+
+        let nodes: Vec<&&str> = tree.into_iter().collect();
+        assert_eq!(vec![&"Jaeger", &"mecha", &"robot", &"droid"], nodes);
+    }
 
     #[test]
     fn test_range() {
