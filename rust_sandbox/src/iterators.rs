@@ -101,11 +101,13 @@ impl Counter {
     }
 }
 
+/// Implement your own iterator
 impl Iterator for Counter {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.count += 1;
+        // Return None after a few iterations
         if self.count < 6 {
             Some(self.count)
         } else {
@@ -124,14 +126,51 @@ impl Fibonacci {
         Fibonacci { curr: 0, next: 1 }
     }
 }
-impl Iterator for Fibonacci {
+
+pub struct FibonacciIterator {
+    curr: u32,
+    next: u32,
+}
+impl Iterator for FibonacciIterator {
     type Item = u32;
 
-    fn next(&mut self) -> Option<u32> {
+    fn next(&mut self) -> Option<Self::Item> {
         let new_next = self.curr + self.next;
         self.curr = self.next;
         self.next = new_next;
         Some(self.curr)
+    }
+}
+
+/// Implement your own IntoIterator
+impl IntoIterator for Fibonacci {
+    type Item = u32;
+    type IntoIter = FibonacciIterator;
+
+    fn into_iter(self) -> Self::IntoIter {
+        FibonacciIterator {
+            curr: self.curr,
+            next: self.next,
+        }
+    }
+}
+
+struct I32Range {
+    start: i32,
+    end: i32,
+}
+
+impl Iterator for I32Range {
+    type Item = i32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.start > self.end {
+            None
+        } else {
+            let ret = Some(self.start);
+            self.start += 1;
+            ret
+        }
     }
 }
 
@@ -296,23 +335,23 @@ mod tests {
     fn implement_iterator() {
         let counter = Counter::new();
         // let nums: Vec<_> = counter.into_iter().collect();
-        for num in counter.into_iter() {
+        for num in counter {
             println!("next count: {}", num);
         }
 
         // You can use other methods that are provided by the Iterator interface by default.
         let sum: u32 = Counter::new()
+            // (0, 1), (1, 2), (2, 3), (3, 4), (4, 5)
             .zip(Counter::new().skip(1))
-            .map(|(a, b)| a * b)
-            .filter(|x| x % 3 == 0)
-            .sum();
-        println!("The sum is {}", sum);
+            .map(|(a, b)| a * b) // 0, 2, 6, 12, 25
+            .filter(|x| x % 3 == 0) // 6, 12
+            .sum(); // 18
         assert_eq!(18, sum);
     }
 
     #[test]
     fn test_fibonacci() {
-        let mut fib = Fibonacci::new();
+        let mut fib = Fibonacci::new().into_iter();
         assert_eq!(Some(1), fib.next());
         assert_eq!(Some(1), fib.next());
         assert_eq!(Some(2), fib.next());
