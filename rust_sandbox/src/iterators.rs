@@ -1,4 +1,20 @@
 use std::collections::VecDeque;
+/// Why is IntoIterator needed when there's already Iterator?
+///
+/// An Iterator is something you can use to iterate through the elements of something that's
+/// iterable, such as a collection. The collection itself doesn't usually implement the Iterator
+/// trait directly because that requires booking. The extra booking isn't needed if you never
+/// iterate through the collection.
+///
+/// Given an iterable, such as a vector, you call "into_iter()" to get an iterator.
+/// "into_iter" is the only method of the IntoIterator trait.
+///
+/// Java has equivalent setup:
+/// 1. Iterable is an interface. It has an "iterator()" method that returns an Interator.
+/// 2. Iterator is an interface. It has methods like "next", "hasNext", "remove".
+/// 3. All collections in Java implement the Iterable interface, meaning you can call the
+/// "iterator()" method to get an Iterator for the given collection.
+///
 /// ```
 /// pub trait Iterator {
 ///     type Item;
@@ -7,7 +23,9 @@ use std::collections::VecDeque;
 /// }
 /// ```
 ///
-/// If there's a natural way to iterate over some type, it can implement `std::iter::IntoIterator`, whose `into_iter` method takes a value and returns an iterator over it.
+/// If there's a natural way to iterate over some type, it can implement
+/// `std::iter::IntoIterator`, whose `into_iter` method takes a value and returns an iterator
+/// over it.
 ///
 /// ```
 /// pub trait IntoIterator where Self::IntoIter::Item == Self::Item {
@@ -18,6 +36,7 @@ use std::collections::VecDeque;
 /// ```
 ///
 /// There are 3 functions that can iterate through a collection and they return different views:
+///
 /// 1. iter: borrows each element of the collection through each iteration
 /// 2. iter_mut: mutably borrows each element of the collection through each iteration
 /// 3. into_iter: consumes each element of the collection through each iteration
@@ -25,6 +44,7 @@ use std::collections::VecDeque;
 /// Note that slices like &[T] and &str have "iter" and "iter_mut" methods too.
 ///
 /// Most collections actually provide several implementations of IntoIterator:
+///
 /// 1. Given a shared ref to the collection, "into_iter" returns an interator that produces
 /// shared refs to its items. For example: (&favoriates).into_iter()
 /// 2. Given a mutable reference to the collection, into_iter returns an iterator
@@ -33,6 +53,11 @@ use std::collections::VecDeque;
 /// ownership of the collection and returns items by value; the items’ ownership moves
 /// from the collection to the consumer, and the original collection is consumed in
 /// the process. For example: favorites.into_iter()
+///
+/// For example: HashMap implements all 3 IntoIterator
+///     impl<'a, K, V, S> IntoIterator for &'a HashMap<K, V, S> {
+///     impl<'a, K, V, S> IntoIterator for &'a mut HashMap<K, V, S> {
+///     impl<K, V, S> IntoIterator for HashMap<K, V, S> {
 ///
 /// These three implementations are what create the following idioms for iterating over
 /// a collection in for loops:
@@ -196,6 +221,9 @@ pub struct TreeIter<'a, T: 'a> {
 impl<'a, T: 'a> Iterator for TreeIter<'a, T> {
     type Item = &'a T;
 
+    /// Just because TreeIter uses a VecDeque<&'a Box<TreeNode<T>>> to maintain its internal state,
+    /// doesn't mean the Item's type has to be the same. We want to use T as the Item's type
+    /// because it's easier for the user of the iterator.
     fn next(&mut self) -> Option<Self::Item> {
         if self.queue.is_empty() {
             return None;
@@ -213,6 +241,9 @@ impl<'a, T: 'a> Iterator for TreeIter<'a, T> {
     }
 }
 
+/// The "&'a BinaryTree<T>" means we are implementing an IntoIterator that returns
+/// shared references to the BinaryTree's nodes. We can also implement other kinds:
+///     impl<T> IntoIterator for BinaryTree<T>
 impl<'a, T: 'a> IntoIterator for &'a BinaryTree<T> {
     type Item = &'a T;
     type IntoIter = TreeIter<'a, T>;
