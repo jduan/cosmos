@@ -1,7 +1,9 @@
 /// One of the great discoveries in programming is that it’s possible to write code that operates on
 /// values of many different types, even types that haven’t been invented yet.
 ///
-/// It’s called polymorphism.
+/// It’s called "polymorphism".
+///
+/// # Traits and Generics
 ///
 /// Rust supports polymorphism with two related features: traits and generics. These concepts will
 /// be familiar to many programmers, but Rust takes a fresh approach inspired by Haskell’s
@@ -9,14 +11,15 @@
 ///
 /// Generics and traits are closely related. For example, you can write a function to compare two
 /// values and find the smaller one. The function signature would looke like this:
+///
 ///      fn min<T: Ord>(value1: T, value2: T) -> T
 ///
 /// This function works with any type T that implements the Ord trait.
 ///
-/// Using Traits
+/// # Using Traits
 ///
 /// A trait is a feature that any given type may or may not support. Most often, a trait represents
-/// a capability: something a type can do.
+/// a "capability": something a type can do.
 ///
 ///     A value that implements std::io::Write can write out bytes.
 ///
@@ -43,6 +46,15 @@
 ///
 ///
 /// ## when to use which (trait objects vs generic functions)
+///
+/// * dynamic dispatch: trait objects
+/// * static dispatch: generic functions with trait bounds
+///
+/// How to understand "trait object"? Trait objects are very similar to how Java does dynamic
+/// dispatch, ie "polymorphism". In Java, you can have references that point to various subtypes of
+/// an interface. When you call methods on the reference, depending on the concrete subtype, a
+/// different implemention may get invoked. That's called "dynamic dispatch". Trait objects are
+/// equivalent to those references in Java and you can use "trait objects" to do dynamic dispatch.
 ///
 /// Both features are based on traits. They have a lot in common but there are subtle differences.
 ///
@@ -80,7 +92,7 @@
 ///
 /// 1. The first advantage is speed. Each time the Rust compiler generates machine code for a
 /// generic function, it knows which types it’s working with, so it knows at that time which
-/// write method to call. There’s no need for dynamic dispatch.
+/// write method to call. This is called "static dispatch", in contrast to "dynamic dispatch".
 ///
 /// Compare that to the behavior with trait objects. Rust never knows what type of value a trait
 /// object points to until run time.
@@ -88,6 +100,13 @@
 /// 2. The second advantage of generics is that not every trait can support trait objects. Traits
 /// support several features, such as static methods, that work only with generics: they rule out
 /// trait objects entirely.
+///
+/// You can only make "object-safe traits" into trait objects. Some complex rules govern all the
+/// properties that make a trait object safe, but in practice, only two rules are relevant. A
+/// trait is object safe if all the methods defined in the trait have the following properties:
+///
+///  * The return type isn’t Self.
+///  * There are no generic type parameters.
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::hash::Hash;
@@ -483,6 +502,58 @@ pub fn make_adder(y: i32) -> impl Fn(i32) -> i32 {
     move |x: i32| x + y
 }
 
+/// Polymorphism via trait objects
+pub trait Draw {
+    fn draw(&self);
+}
+
+pub struct Screen {
+    pub components: Vec<Box<dyn Draw>>,
+}
+
+impl Screen {
+    pub fn new() -> Self {
+        Screen { components: vec![] }
+    }
+
+    pub fn run(&self) {
+        for component in self.components.iter() {
+            component.draw();
+        }
+    }
+
+    pub fn add_component(&mut self, draw: Box<dyn Draw>) -> &mut Self {
+        self.components.push(draw);
+        self
+    }
+}
+
+#[derive(Debug)]
+pub struct Button {
+    pub width: u32,
+    pub height: u32,
+    pub label: String,
+}
+
+impl Draw for Button {
+    fn draw(&self) {
+        println!("Drawing a {:?}", self);
+    }
+}
+
+#[derive(Debug)]
+struct SelectBox {
+    width: u32,
+    height: u32,
+    options: Vec<String>,
+}
+
+impl Draw for SelectBox {
+    fn draw(&self) {
+        println!("Drawing a {:?}", self);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -532,8 +603,15 @@ mod tests {
         // a concrete type like Vec<u8>. In other words, you can only work with the "generic type"
         // of the trait itself.
         //
-        // In memory, a trait object is a "fat pointer" consisting of a pointer to the value, plus
-        // a pointer to a table representing that value's type. (Vec<u8> in this example)
+        // In memory, a trait object is a "fat pointer" consisting of two pointers:
+        // 1. data pointer: a pointer to the value, plus
+        // 2. vtable pointer: a pointer to a table representing that value's type.
+        // (Vec<u8> in this example)
+        //
+        // A vtable is essentially a struct of function pointers, pointing to the concrete piece of
+        // machine code for each method in the implementation. A method call like
+        // trait_object.method() will retrieve the correct pointer out of the vtable and then do a
+        // dynamic call of it.
 
         // Rust automatically converts ordinary references into trait objects when needed. Let's
         // say "say_hello" is a function that takes a "&mut Write", this works:
@@ -544,7 +622,7 @@ mod tests {
         // This kind of conversion is the only way to create a trait object. What the computer is
         // actually doing here is very simple. At the point where the conversion happens, Rust
         // knows the referent’s true type (in this case, File), so it just adds the address of the
-        // appropriate vtable, turning the regular pointer into a fat pointer.
+        // appropriate "vtable", turning the regular pointer into a fat pointer.
     }
 
     #[test]
@@ -609,5 +687,27 @@ mod tests {
     fn test_make_adder() {
         let add_one = make_adder(1);
         assert_eq!(2, add_one(1));
+    }
+
+    #[test]
+    fn test_screen() {
+        let mut screen = Screen::new();
+        screen
+            .add_component(Box::new(Button {
+                width: 50,
+                height: 10,
+                label: String::from("OK"),
+            }))
+            .add_component(Box::new(SelectBox {
+                width: 75,
+                height: 10,
+                options: vec![
+                    String::from("Yes"),
+                    String::from("No"),
+                    String::from("Maybe"),
+                ],
+            }));
+
+        screen.run();
     }
 }
