@@ -554,6 +554,118 @@ impl Draw for SelectBox {
     }
 }
 
+/// Implement the "state pattern" via trait objects.
+trait State {
+    // "self: Box<Self>" means that the method is only valid when called on a Box holding the type.
+    fn request_review(self: Box<Self>) -> Box<dyn State>;
+    fn approve(self: Box<Self>) -> Box<dyn State>;
+    fn reject(self: Box<Self>) -> Box<dyn State>;
+    fn content<'a>(&self, _post: &'a Post) -> &'a str {
+        ""
+    }
+}
+
+struct Draft {}
+
+/// Now we can start seeing the advantages of the state pattern: the request_review method on
+/// Post is the same no matter its state value. Each state is responsible for its own rules.
+impl State for Draft {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
+        Box::new(PendingReview {})
+    }
+    fn approve(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+    fn reject(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+}
+
+struct PendingReview {}
+
+impl State for PendingReview {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+    fn approve(self: Box<Self>) -> Box<dyn State> {
+        Box::new(Published {})
+    }
+    fn reject(self: Box<Self>) -> Box<dyn State> {
+        Box::new(Draft {})
+    }
+}
+
+struct Published {}
+
+impl State for Published {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+    fn approve(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+    fn reject(self: Box<Self>) -> Box<dyn State> {
+        self
+    }
+    fn content<'a>(&self, post: &'a Post) -> &'a str {
+        post.content.as_ref()
+    }
+}
+
+pub struct Post {
+    /// To consume the old state, the request_review method needs to take ownership of the state
+    /// value. This is where the Option in the state field of Post comes in: we call the take
+    /// method to take the Some value out of the state field and leave a None in its place,
+    /// because Rust doesn’t let us have unpopulated fields in structs. This lets us move the
+    /// state value out of Post rather than borrowing it. Then we’ll set the post’s state value
+    /// to the result of this operation.
+    state: Option<Box<dyn State>>,
+    content: String,
+}
+
+/// Post knows nothing about the various behaviors. It replies on various State objects to do
+/// their jobs.
+impl Post {
+    pub fn new() -> Self {
+        Self {
+            state: Some(Box::new(Draft {})),
+            content: String::new(),
+        }
+    }
+
+    // This behavior doesn’t depend on the state the post is in, so it’s not part of the state
+    // pattern. The add_text method doesn’t interact with the state field at all, but it is part
+    // of the behavior we want to support.
+    pub fn add_text(&mut self, text: &str) {
+        self.content.push_str(text);
+    }
+
+    pub fn content(&self) -> &str {
+        match &self.state {
+            Some(s) => s.content(self),
+            None => "",
+        }
+    }
+
+    pub fn request_review(&mut self) {
+        if let Some(s) = self.state.take() {
+            self.state = Some(s.request_review());
+        }
+    }
+
+    pub fn reject(&mut self) {
+        if let Some(s) = self.state.take() {
+            self.state = Some(s.reject());
+        }
+    }
+
+    pub fn approve(&mut self) {
+        if let Some(s) = self.state.take() {
+            self.state = Some(s.approve());
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -709,5 +821,24 @@ mod tests {
             }));
 
         screen.run();
+    }
+
+    #[test]
+    fn test_post() {
+        let mut post = Post::new();
+        post.add_text("I ate a salad for lunch today");
+        assert_eq!("", post.content());
+
+        post.request_review();
+        assert_eq!("", post.content());
+
+        post.reject();
+        assert_eq!("", post.content());
+
+        post.request_review();
+        assert_eq!("", post.content());
+
+        post.approve();
+        assert_eq!("I ate a salad for lunch today", post.content());
     }
 }
