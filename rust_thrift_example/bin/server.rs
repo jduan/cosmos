@@ -18,9 +18,6 @@
 #[macro_use]
 extern crate clap;
 
-extern crate rust_thrift_example;
-extern crate thrift;
-
 use std::collections::HashMap;
 use std::convert::{From, Into};
 use std::default::Default;
@@ -28,11 +25,11 @@ use std::sync::Mutex;
 
 use thrift::protocol::{TCompactInputProtocolFactory, TCompactOutputProtocolFactory};
 use thrift::server::TServer;
+use thrift::transport::{TFramedReadTransportFactory, TFramedWriteTransportFactory};
 
 use rust_thrift_example::shared::{SharedServiceSyncHandler, SharedStruct};
 use rust_thrift_example::tutorial::{CalculatorSyncHandler, CalculatorSyncProcessor};
 use rust_thrift_example::tutorial::{InvalidOperation, Operation, Work};
-use thrift::transport::{TFramedReadTransportFactory, TFramedWriteTransportFactory};
 
 fn main() {
     match run() {
