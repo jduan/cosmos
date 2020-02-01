@@ -32,9 +32,13 @@ pub fn add_or_subtract(op: Operations, x: i32, y: i32) -> i32 {
 pub type NanoSecond = u64;
 pub type Inch = u64;
 
+pub fn area(height: Inch, width: Inch) -> Inch {
+    height * width
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::type_alias::{add_or_subtract, Inch, NanoSecond, Operations};
+    use crate::type_alias::{add_or_subtract, area, Inch, NanoSecond, Operations};
 
     #[test]
     fn test_run() {
@@ -54,5 +58,10 @@ mod tests {
         let inches: Inch = 200;
         assert_eq!(5, elapsed);
         assert_eq!(200, inches);
+    }
+
+    #[test]
+    fn test_area() {
+        assert_eq!(20, area(4, 5));
     }
 }

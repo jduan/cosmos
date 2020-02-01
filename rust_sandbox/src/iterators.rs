@@ -100,6 +100,7 @@ use std::collections::VecDeque;
 /// * flat_map
 /// * take
 /// * scan
+/// * inspect (like Ruby's tap method)
 /// * and a lot more ...
 ///
 /// There are 2 important points to notice about iterator adapters.
