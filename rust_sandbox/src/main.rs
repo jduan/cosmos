@@ -3,6 +3,7 @@
 // declare modules
 pub mod arrays;
 pub mod associate_types;
+pub mod async_example;
 pub mod casting;
 pub mod channels;
 pub mod clone_trait;
