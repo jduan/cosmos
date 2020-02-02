@@ -9,7 +9,8 @@ edition = "2018"
 [dependencies]
 csv = "1.1"
 float-cmp = "0.6"
-futures = "0.3"
+futures = { version = "0.3", features = ["compat"] }
+hyper = "0.12"
 rand = "0.7.2"
 regex = "1"
 serde = {version = "1.0", features = ["derive"]}
@@ -18,3 +19,7 @@ serde-xml-rs = "0.3"
 [dev-dependencies]
 float-cmp = "0.6"
 tempfile = "3.1"
+
+[[bin]]
+name = "async_web_server"
+path = "bin/async_web_server.rs"
