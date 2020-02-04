@@ -24,3 +24,7 @@ tempfile = "3.1"
 [[bin]]
 name = "async_web_server"
 path = "bin/async_web_server.rs"
+
+[[bin]]
+name = "tokio_client_example"
+path = "bin/tokio_client_example.rs"
