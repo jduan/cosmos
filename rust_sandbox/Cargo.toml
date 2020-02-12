@@ -13,6 +13,8 @@ csv = "1.1"
 float-cmp = "0.6"
 futures = { version = "0.3", features = ["compat"] }
 hyper = "0.12"
+num_cpus = "1.12"
+once_cell = "1.3"
 pin-utils = "0.1.0-alpha.4"
 rand = "0.7.2"
 regex = "1"
@@ -39,3 +41,7 @@ path = "bin/tokio_echo_server.rs"
 [[bin]]
 name = "block_on"
 path = "bin/block_on.rs"
+
+[[bin]]
+name = "my_executors"
+path = "bin/my_executors.rs"
