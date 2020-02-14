@@ -5,7 +5,7 @@ import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.SftpException
 import org.junit.Test
 
-class JgitTest {
+class JSchTest {
     @Test
     fun f() {
         val jsch = JSch()
