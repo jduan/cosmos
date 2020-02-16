@@ -7,3 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+actix = "0.9"
+actix-rt = "1.0.0"
+
+[[bin]]
+name = "ping_example"
+path = "bin/ping_example.rs"
