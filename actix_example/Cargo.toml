@@ -10,6 +10,7 @@ edition = "2018"
 actix = "0.9"
 actix-rt = "1.0"
 factor = "0.4"
+structopt = "0.3"
 
 [[bin]]
 name = "ping_example"
@@ -22,3 +23,7 @@ path = "bin/two_actors.rs"
 [[bin]]
 name = "sync_actors"
 path = "bin/sync_actors.rs"
+
+[[bin]]
+name = "actor_ring"
+path = "bin/actor_ring.rs"
