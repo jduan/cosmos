@@ -13,3 +13,7 @@ actix-rt = "1.0.0"
 [[bin]]
 name = "ping_example"
 path = "bin/ping_example.rs"
+
+[[bin]]
+name = "two_actors"
+path = "bin/two_actors.rs"

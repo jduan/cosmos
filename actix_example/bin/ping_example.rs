@@ -1,3 +1,4 @@
+/// A simple actor that responds to a ping message.
 use actix::prelude::*;
 
 struct MyActor {
