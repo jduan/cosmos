@@ -8,7 +8,8 @@ edition = "2018"
 
 [dependencies]
 actix = "0.9"
-actix-rt = "1.0.0"
+actix-rt = "1.0"
+factor = "0.4"
 
 [[bin]]
 name = "ping_example"
@@ -17,3 +18,7 @@ path = "bin/ping_example.rs"
 [[bin]]
 name = "two_actors"
 path = "bin/two_actors.rs"
+
+[[bin]]
+name = "sync_actors"
+path = "bin/sync_actors.rs"
