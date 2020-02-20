@@ -1,3 +1,3 @@
 mod codec;
-mod message;
+mod server;
 mod session;
