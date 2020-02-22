@@ -1,15 +1,11 @@
 use mio::event::Event;
 use mio::net::{TcpListener, TcpStream};
-use mio::{Events, Interest, Poll, Registry, Token};
+use mio::{Events, Interest, Poll, Token};
 use std::collections::HashMap;
 use std::io::{self, Read, Write};
-use std::str::from_utf8;
 
 // Setup some tokens to allow us to identify which event is for which socket.
 const SERVER: Token = Token(0);
-
-// Some data we'll send over the connection.
-const DATA: &[u8] = b"Hello world!\n";
 
 pub fn start_server() -> io::Result<()> {
     // Create a poll instance.
@@ -27,6 +23,8 @@ pub fn start_server() -> io::Result<()> {
 
     // Map of `Token` -> `TcpStream`.
     let mut connections = HashMap::new();
+    // Map of `Token` -> `Vec<u8>`.
+    let mut pending_data = HashMap::new();
     // Unique token for each incoming connection.
     let mut unique_token = Token(SERVER.0 + 1);
 
@@ -53,11 +51,14 @@ pub fn start_server() -> io::Result<()> {
                     )?;
 
                     connections.insert(token, connection);
+                    let data: Vec<u8> = Vec::with_capacity(4096);
+                    pending_data.insert(token, data);
                 }
                 token => {
                     // (maybe) received an event for a TCP connection.
                     let done = if let Some(connection) = connections.get_mut(&token) {
-                        handle_connection_event(poll.registry(), connection, event)?
+                        let data = pending_data.get_mut(&token).unwrap();
+                        handle_connection_event(connection, data, event)?
                     } else {
                         // Sporadic events happen.
                         false
@@ -79,37 +80,23 @@ fn next(current: &mut Token) -> Token {
 
 /// Returns `true` if the connection is done.
 fn handle_connection_event(
-    registry: &Registry,
     connection: &mut TcpStream,
+    data: &mut Vec<u8>,
     event: &Event,
 ) -> io::Result<bool> {
     if event.is_writable() {
-        // We can (maybe) write to the connection.
-        match connection.write(DATA) {
-            // We want to write the entire `DATA` buffer in a single go. If we
-            // write less we'll return a short write error (same as
-            // `io::Write::write_all` does).
-            Ok(n) if n < DATA.len() => return Err(io::ErrorKind::WriteZero.into()),
-            Ok(_) => {
-                // After we've written something we'll reregister the connection
-                // to only respond to readable events.
-                registry.reregister(connection, event.token(), Interest::READABLE)?
-            }
-            // Would block "errors" are the OS's way of saying that the
-            // connection is not actually ready to perform this I/O operation.
-            Err(ref err) if would_block(err) => {}
-            // Got interrupted (how rude!), we'll try again.
-            Err(ref err) if interrupted(err) => {
-                return handle_connection_event(registry, connection, event)
-            }
-            // Other errors we'll consider fatal.
-            Err(err) => return Err(err),
+        println!("Connection is ready for write again");
+        if data.is_empty() {
+            println!("Nothing to write to the client");
+            return Ok(false);
         }
+
+        write_to_socket(connection, data)?;
     }
 
     if event.is_readable() {
+        println!("Connection is ready for read again");
         let mut connection_closed = false;
-        let mut received_data = Vec::with_capacity(4096);
         // We can (maybe) read from the connection.
         loop {
             let mut buf = [0; 256];
@@ -120,7 +107,14 @@ fn handle_connection_event(
                     connection_closed = true;
                     break;
                 }
-                Ok(n) => received_data.extend_from_slice(&buf[..n]),
+                Ok(n) => {
+                    data.extend_from_slice(&buf[..n]);
+                    println!(
+                        "Appending {} bytes to the data buffer. Buffer size now: {}",
+                        n,
+                        data.len()
+                    );
+                }
                 // Would block "errors" are the OS's way of saying that the
                 // connection is not actually ready to perform this I/O operation.
                 Err(ref err) if would_block(err) => break,
@@ -130,11 +124,7 @@ fn handle_connection_event(
             }
         }
 
-        if let Ok(str_buf) = from_utf8(&received_data) {
-            println!("Received data: {}", str_buf.trim_end());
-        } else {
-            println!("Received (none UTF-8) data: {:?}", &received_data);
-        }
+        write_to_socket(connection, data)?;
 
         if connection_closed {
             println!("Connection closed");
@@ -143,6 +133,27 @@ fn handle_connection_event(
     }
 
     Ok(false)
+}
+
+fn write_to_socket(connection: &mut TcpStream, data: &mut Vec<u8>) -> io::Result<()> {
+    // We can (maybe) write to the connection.
+    match connection.write(data) {
+        // We want to write the entire `DATA` buffer in a single go. If we
+        // write less we'll return a short write error (same as
+        // `io::Write::write_all` does).
+        Ok(n) if n < data.len() => Err(io::ErrorKind::WriteZero.into()),
+        Ok(_) => {
+            data.clear();
+            Ok(())
+        }
+        // Would block "errors" are the OS's way of saying that the
+        // connection is not actually ready to perform this I/O operation.
+        Err(ref err) if would_block(err) => Ok(()),
+        // Got interrupted (how rude!), we'll try again.
+        Err(ref err) if interrupted(err) => write_to_socket(connection, data),
+        // Other errors we'll consider fatal.
+        Err(err) => Err(err),
+    }
 }
 
 fn would_block(err: &io::Error) -> bool {
