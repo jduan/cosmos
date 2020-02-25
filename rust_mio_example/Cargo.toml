@@ -1,5 +1,5 @@
 [package]
-name = "rust_mio"
+name = "rust_mio_example"
 version = "0.1.0"
 authors = ["Jingjing Duan <duanjingjing@gmail.com>"]
 edition = "2018"
