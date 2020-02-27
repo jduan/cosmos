@@ -5,19 +5,22 @@ use std::collections::HashMap;
 use std::io::{self, Read, Write};
 
 // Setup some tokens to allow us to identify which event is for which socket.
+// In the events returned by polling the OS, each event contains a token. You can match
+// them against this token to tell if it's for this token.
 const SERVER: Token = Token(0);
 
 pub fn start_server() -> io::Result<()> {
-    // Create a poll instance.
+    // Create a poll instance. This is arguably the most important thing.
     let mut poll = Poll::new()?;
-    // Create storage for events.
+    // Create storage for events. When you poll, you need to pass it a vector of events.
+    // It returns the list events that are ready.
     let mut events = Events::with_capacity(128);
 
     // Setup the TCP server socket.
     let addr = "127.0.0.1:9000".parse().unwrap();
     let mut server = TcpListener::bind(addr)?;
 
-    // Register the server with poll we can receive events for it.
+    // Register the server with poll, so we can receive events for it.
     poll.registry()
         .register(&mut server, SERVER, Interest::READABLE)?;
 
@@ -25,7 +28,7 @@ pub fn start_server() -> io::Result<()> {
     let mut connections = HashMap::new();
     // Map of `Token` -> `Vec<u8>`.
     let mut pending_data = HashMap::new();
-    // Unique token for each incoming connection.
+    // Unique token for each incoming connection. Every new connection gets a new token.
     let mut unique_token = Token(SERVER.0 + 1);
 
     println!("You can connect to the server using `nc`:");
@@ -33,8 +36,12 @@ pub fn start_server() -> io::Result<()> {
     println!("You'll see our welcome message and anything you type we'll be printed here.");
 
     loop {
+        // A `timeout` of `None` means that `poll` will block until a readiness event has been received.
         poll.poll(&mut events, None)?;
 
+        // Iterate through the events. Figure out what each event is for based on its token and
+        // act accordingly. If it's the TcpListener, it means there's a new incoming connection.
+        // If it's an existing connection, it means the socket has become readable/writeable.
         for event in events.iter() {
             match event.token() {
                 SERVER => {
@@ -43,7 +50,8 @@ pub fn start_server() -> io::Result<()> {
                     let (mut connection, address) = server.accept()?;
                     println!("Accepted connection from: {}", address);
 
-                    let token = next(&mut unique_token);
+                    // Generate a unique token for this connection and register it to the poll.
+                    let token = next_token(&mut unique_token);
                     poll.registry().register(
                         &mut connection,
                         token,
@@ -72,12 +80,14 @@ pub fn start_server() -> io::Result<()> {
     }
 }
 
-fn next(current: &mut Token) -> Token {
+/// Return the next token that's available to use.
+fn next_token(current: &mut Token) -> Token {
     let next = current.0;
     current.0 += 1;
     Token(next)
 }
 
+/// Handle readiness events for a client connection.
 /// Returns `true` if the connection is done.
 fn handle_connection_event(
     connection: &mut TcpStream,
@@ -97,7 +107,8 @@ fn handle_connection_event(
     if event.is_readable() {
         println!("Connection is ready for read again");
         let mut connection_closed = false;
-        // We can (maybe) read from the connection.
+        // We can (maybe) read from the connection. We need to keep reading until we
+        // get a WOULD_BLOCK. If we don't read all the data, we may never get notified again.
         loop {
             let mut buf = [0; 256];
             match connection.read(&mut buf) {
@@ -124,6 +135,7 @@ fn handle_connection_event(
             }
         }
 
+        // Write data back to the client.
         write_to_socket(connection, data)?;
 
         if connection_closed {
@@ -143,7 +155,7 @@ fn write_to_socket(connection: &mut TcpStream, data: &mut Vec<u8>) -> io::Result
         // `io::Write::write_all` does).
         Ok(n) if n < data.len() => Err(io::ErrorKind::WriteZero.into()),
         Ok(_) => {
-            data.clear();
+            data.clear(); // clear the data buffer once data is written
             Ok(())
         }
         // Would block "errors" are the OS's way of saying that the
