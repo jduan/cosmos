@@ -1,5 +1,7 @@
 #![feature(never_type)]
 
+use crate::command_example::run_command;
+
 // declare modules
 pub mod arrays;
 pub mod associate_types;
@@ -9,6 +11,7 @@ pub mod channels;
 pub mod clone_trait;
 pub mod closures;
 pub mod collections;
+pub mod command_example;
 pub mod constants;
 pub mod control_flow;
 pub mod conversions;
@@ -59,4 +62,5 @@ pub mod while_let;
 
 pub fn main() {
     println!("Hello World from Rust!");
+    run_command().unwrap();
 }
