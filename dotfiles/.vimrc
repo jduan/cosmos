@@ -633,3 +633,6 @@ noremap <C-k> :NV<CR>
 let g:rustfmt_autosave = 1
 " make ! part of a word
 autocmd FileType rust setlocal iskeyword+=!
+
+" automatically give executable permissions when saving shell scripts
+autocmd FileType sh autocmd BufWritePost * silent !chmod a+x <afile>
