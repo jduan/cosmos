@@ -23,6 +23,7 @@ struct ThreadContext {
     rbp: u64,
 }
 
+#[allow(clippy::empty_loop)]
 fn hello() -> ! {
     println!("I LOVE WAKING UP ON A NEW STACK!");
 
@@ -51,6 +52,7 @@ fn main() {
     // expansion that will relocate all the data and our pointers will no longer be valid
     let mut stack = vec![0_u8; SSIZE as usize];
 
+    #[allow(clippy::cast_ptr_alignment)]
     unsafe {
         // this returns the pointer to the memory for our Vec, we offset it so
         // we get the "high" address which will be the bottom of our stack.
