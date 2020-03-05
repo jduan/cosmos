@@ -8,7 +8,7 @@ async fn main() {
     // Here we spawn 3 async functions. This shows that all of them run in
     // the same main thread. You can adjust the number of sleepus we spawn here
     // and confirm that the number of threads won't change.
-    let sleepus1 = spawn(sleepus());
+    let sleepus1 = spawn(sleepus5());
     // let sleepus2 = spawn(sleepus());
     // let sleepus3 = spawn(sleepus());
     interruptus().await;
@@ -62,6 +62,34 @@ fn sleepus3() -> impl std::future::Future<Output = ()> {
 #[allow(dead_code)]
 async fn sleepus4() {
     DoNothing.await
+}
+
+/// A future that sleeps for a certain amount of time and then prints a message.
+struct SleepPrint<Fut> {
+    sleep: Fut,
+}
+
+impl<Fut: Future<Output = ()>> Future for SleepPrint<Fut> {
+    type Output = ();
+
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        let sleep: Pin<&mut Fut> = unsafe { self.map_unchecked_mut(|s| &mut s.sleep) };
+
+        match sleep.poll(cx) {
+            Poll::Pending => Poll::Pending,
+            Poll::Ready(()) => {
+                println!("Inside SleepPrint");
+                Poll::Ready(())
+            }
+        }
+    }
+}
+
+/// This wraps another future "sleep" inside. It finishes when the sleep future finishes.
+fn sleepus5() -> impl Future<Output = ()> {
+    SleepPrint {
+        sleep: sleep(Duration::from_millis(3000)),
+    }
 }
 
 async fn interruptus() {
