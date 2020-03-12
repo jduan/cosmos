@@ -425,6 +425,7 @@ name = "async_std_example"
 version = "0.1.0"
 dependencies = [
  "async-std",
+ "pin-project-lite",
 ]
 
 [[package]]

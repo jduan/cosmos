@@ -1,4 +1,5 @@
 use async_std::task::{sleep, spawn, Context, Poll};
+use pin_project_lite::pin_project;
 use std::future::Future;
 use std::pin::Pin;
 use std::time::Duration;
@@ -91,6 +92,26 @@ fn sleepus5() -> impl Future<Output = ()> {
         sleep: sleep(Duration::from_millis(3000)),
     }
 }
+
+pin_project! {
+    struct TwoFutures<Fut1, Fut2> {
+        first_done: bool,
+        #[pin]
+        first: Fut1,
+        #[pin]
+        second: Fut2,
+    }
+}
+
+// fn sleepus6() -> impl Future<Output = ()> {
+//     TwoFutures {
+//         first_done: false,
+//         first: sleep(Duration::from_millis(3000)),
+//         second: async {
+//             println!("Hello TwoFutures!");
+//         },
+//     }
+// }
 
 async fn interruptus() {
     for i in 1..=5 {
