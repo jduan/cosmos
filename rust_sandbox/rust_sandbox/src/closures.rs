@@ -6,6 +6,13 @@
 /// 1. use || instead of () around input variables
 /// 2. optional body delimination {} for a single expression; mandatory otherwisie
 /// 3. the ability to capture the outer environment variables
+///
+/// Closure and functions have very similar syntax:
+///
+/// fn  add_one_v1   (x: u32) -> u32 { x + 1 }          // types are necessary
+/// let add_one_v2 = |x: u32| -> u32 { x + 1 };         // types are not necessary
+/// let add_one_v3 = |x|             { x + 1 };
+/// let add_one_v4 = |x|               x + 1  ;
 use std::collections::HashMap;
 use std::thread;
 use std::time::Duration;
@@ -56,6 +63,8 @@ where
 
 pub fn generate_workout(intensity: u32, random_number: u32) {
     // This is how you pass a closure as a argument to Cacher::new
+    // You can also annotate the closure with types although it's unnecessary:
+    //  |num: u32| -> u32 { ... }
     let mut expensive_result = Cacher::new(|num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
@@ -72,18 +81,6 @@ pub fn generate_workout(intensity: u32, random_number: u32) {
             expensive_result.value(intensity)
         );
     }
-}
-
-pub fn types_are_inferred_once() {
-    let closure = |x| x;
-    let _s = closure(String::from("hello"));
-
-    // The next line will trigger a compilation error because The first time we call
-    // closure with the String value, the compiler infers the type of x and the return type
-    // of the closure to be String. Those types are then locked in to the closure
-    // and we get a type error if we try to use a different type with the same
-    // closure.
-    // let n = closure(10);
 }
 
 // This function shows the equal_to_x closure captures its surrounding environment: x in this case.
@@ -313,5 +310,20 @@ mod tests {
         fn_once();
         // This line doesn't compile because you can't call fn_once more than once!
         // fn_once();
+    }
+
+    #[test]
+    fn types_are_only_inferred_once() {
+        let closure = |x| x;
+        let s = closure(String::from("hello"));
+        assert_eq!("hello", s);
+
+        // The next line will trigger a compilation error because the first time we call
+        // closure with the String value, the compiler infers the type of x and the return type
+        // of the closure to be String. Those types are then locked in to the closure
+        // and we get a type error if we try to use a different type with the same
+        // closure.
+        //
+        // let n = closure(10);
     }
 }
