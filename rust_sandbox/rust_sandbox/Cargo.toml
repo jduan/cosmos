@@ -44,9 +44,9 @@ path = "bin/tokio_echo_server.rs"
 name = "block_on"
 path = "bin/block_on.rs"
 
-[[bin]]
-name = "my_executors"
-path = "bin/my_executors.rs"
+# [[bin]]
+# name = "my_executors"
+# path = "bin/my_executors.rs"
 
 [[bin]]
 name = "async_std_example"
