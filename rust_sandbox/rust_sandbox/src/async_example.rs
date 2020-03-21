@@ -11,7 +11,7 @@ pub struct Song {
 
 pub async fn learn_song() -> Song {
     println!("learn_song() is in thread: {:?}", std::thread::current());
-    sleep(Duration::new(1, 1));
+    sleep(Duration::new(0.1 as u64, 1));
     Song {
         name: "Rain".to_string(),
     }
@@ -19,7 +19,7 @@ pub async fn learn_song() -> Song {
 
 pub async fn sing_song(song: Song) {
     println!("sing_song() is in thread: {:?}", std::thread::current());
-    sleep(Duration::new(1, 1));
+    sleep(Duration::new(0.1 as u64, 1));
     println!("I'm singing song: {}", song.name);
 }
 
@@ -30,7 +30,7 @@ pub async fn learn_and_sing() {
 
 pub async fn dance() {
     println!("dance() is in thread: {:?}", std::thread::current());
-    sleep(Duration::new(1, 1));
+    sleep(Duration::new(0.1 as u64, 1));
     println!("I'm dancing now!");
 }
 
