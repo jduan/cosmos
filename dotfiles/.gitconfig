@@ -71,9 +71,8 @@
     r   = rebase
     ri  = rebase -i
     rc  = rebase --continue
-    # Reset origin hard
-    ro  = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git reset --hard $remote_branch; }; f"
-    rr  = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git rebase $remote_branch; }; f"
+    reset-origin   = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git reset --hard $remote_branch; }; f"
+    rebase-remote  = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git rebase $remote_branch; }; f"
     rv  = remote -v
     rh  = reset HEAD^
     rhh = reset HEAD^ --hard
