@@ -138,10 +138,7 @@ pub struct Queue<T> {
     pub items: Vec<T>,
 }
 
-// Methods are also known as "associated functions", since they’re associated with
-// a specific type. The opposite of an associated function is a "free function",
-// one that is not defined as an impl block’s item.
-impl<T> Queue<T> {
+impl<T> Default for Queue<T> {
     // You can also define methods that don’t take self as an argument at all.
     // These become functions associated with the struct type itself, not with
     // any specific value of the type. They're called "static methods".
@@ -149,14 +146,19 @@ impl<T> Queue<T> {
     // It’s conventional in Rust for constructor functions to be named new.
     // "new" isn't a keyword, and types often have other static methods that
     // serve as constructors, like Vec::with_capacity.
-    pub fn new() -> Queue<T> {
+    fn default() -> Queue<T> {
         // Note that we didn't have to write the type parameter T here. This is
         // Rust’s type inference at work: since there’s only one type that works
         // for that function’s return value—namely, Queue<T>—Rust supplies the
         // parameter for us.
         Queue { items: Vec::new() }
     }
+}
 
+// Methods are also known as "associated functions", since they’re associated with
+// a specific type. The opposite of an associated function is a "free function",
+// one that is not defined as an impl block’s item.
+impl<T> Queue<T> {
     // Shorthand: writing out Queue<T> everywhere becomes a mouthful and a
     // distraction. As another shorthand, every impl block, generic or not,
     // defines the special type parameter Self (note the CamelCase name) to be
@@ -178,6 +180,10 @@ impl<T> Queue<T> {
     pub fn len(&self) -> usize {
         self.items.len()
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
 }
 
 // Structs with lifetime parameters
@@ -196,8 +202,7 @@ pub fn find_extrema(slice: &[i32]) -> Extrema {
     let mut greatest = &slice[0];
     let mut least = &slice[0];
 
-    for i in 1..slice.len() {
-        let item = &slice[i];
+    for item in slice.iter().skip(1) {
         if *item > *greatest {
             greatest = item;
         }
@@ -274,7 +279,7 @@ mod tests {
         // can infer the type based on how it's used in this function later on.
         // Full syntax:
         //      let mut q: Queue<u32> = Queue::new::<u32>();
-        let mut q = Queue::new();
+        let mut q = Queue::default();
         q.push(1);
         q.push(2);
         q.push(3);

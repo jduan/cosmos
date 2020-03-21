@@ -84,7 +84,7 @@ pub fn calculate_length(s: String) -> (String, usize) {
 // & is a reference, which allows you to refer to some value without
 // taking ownership of it. Because it doesn't own the String object, the value
 // it points to will not be dropped when the reference goes out of scope.
-pub fn calculate_length2(s: &String) -> usize {
+pub fn calculate_length2(s: &str) -> usize {
     s.len()
 }
 

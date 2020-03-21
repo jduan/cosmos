@@ -104,7 +104,11 @@ pub struct Account<'a> {
     password: &'a str,
 }
 
-pub fn deposit<'a>(account: Account<'a>, amount: f64, map: &mut HashMap<Account<'a>, f64>) {
+pub fn deposit<'a, S: ::std::hash::BuildHasher>(
+    account: Account<'a>,
+    amount: f64,
+    map: &mut HashMap<Account<'a>, f64, S>,
+) {
     let balance = map.entry(account).or_insert(0.0);
     *balance += amount;
 }

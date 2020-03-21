@@ -41,7 +41,7 @@ impl Future for Task {
 
 async fn async_op() {
     let fast_task = Task::new("fast".to_string(), 123);
-    let slow_task = Task::new("slow".to_string(), 43213200);
+    let slow_task = Task::new("slow".to_string(), 43_213_200);
     join!(fast_task, slow_task);
 }
 

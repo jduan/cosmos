@@ -1,9 +1,8 @@
 pub fn run() {
     let some_u8_value = Some(3);
 
-    match some_u8_value {
-        Some(3) => println!("three"),
-        _ => (),
+    if let Some(3) = some_u8_value {
+        println!("three")
     }
 
     // the code below behaves exactly the same but it's more concise.
@@ -31,6 +30,7 @@ pub enum Foo {
     Qux(u32),
 }
 
+#[allow(clippy::blacklisted_name)]
 pub fn match_enum(foo: Foo) -> &'static str {
     if let Foo::Bar = foo {
         "foobar"

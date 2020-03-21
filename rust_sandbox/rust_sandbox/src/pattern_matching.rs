@@ -77,6 +77,7 @@ pub struct Foo {
     y: u32,
 }
 
+#[allow(clippy::blacklisted_name)]
 pub fn destruct_structs(foo: Foo) -> String {
     match foo {
         Foo { x: (1, b), y } => format!("First of x is 1, b = {}, y = {}", b, y),

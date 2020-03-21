@@ -33,7 +33,7 @@ impl Person {
 }
 
 pub fn two_words() -> (String, String) {
-    (format!("fellow"), format!("Rustaceans"))
+    ("fellow".to_string(), "Rustaceans".to_string())
 }
 
 /// Concatenate `suffix` onto the end of `prefix`.

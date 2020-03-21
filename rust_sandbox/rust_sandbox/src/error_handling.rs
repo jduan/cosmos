@@ -130,7 +130,8 @@ use std::fmt::{Debug, Display, Formatter};
 ///  enough, eventually it reaches main(), and that’s where this approach has to stop. main() can’t
 ///  use ? because its return type is not Result. You can handle errors in main like this:
 ///
-///      fn main() {
+///      fn main()
+///     {
 ///          if let Err(err) = calculate_tides() {
 ///              print_error(&err);
 ///              std::process::exit(1);

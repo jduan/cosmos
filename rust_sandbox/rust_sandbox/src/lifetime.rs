@@ -134,10 +134,12 @@ where
 // based on the elision rules: each parameter that is a reference gets its
 // own lifetime parameter.
 //pub fn print_refs<'a, 'b>(x: &'a i32, y: &'b i32) {
+#[allow(clippy::trivially_copy_pass_by_ref)]
 pub fn print_refs(x: &i32, y: &i32) {
     println!("x is {} and y is {}", x, y);
 }
 
+#[allow(clippy::extra_unused_lifetimes)]
 pub fn failed_borrow<'a>() {
     let _x = 12;
     // This line doesn't compile because "borrowed value doesn't live long enough".
@@ -186,12 +188,14 @@ impl<'a> Default for Borrowed<'a> {
 }
 
 /// A longer lifetime can be coerced into a shorter one so that it works inside a scope it normally wouldn't work in.
+#[allow(clippy::trivially_copy_pass_by_ref)]
 pub fn multiply<'a>(first: &'a i32, second: &'a i32) -> i32 {
     first * second
 }
 
 /// <'a: 'b, 'b>` reads as lifetime `'a` is at least as long as `'b`.
 /// Here, we take in an `&'a i32` and return a `&'b i32` as a result of coercion.
+#[allow(clippy::trivially_copy_pass_by_ref)]
 pub fn choose_first<'a: 'b, 'b>(first: &'a i32, _second: &'b i32) -> &'b i32 {
     first
 }

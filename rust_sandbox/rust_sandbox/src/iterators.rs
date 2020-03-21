@@ -118,14 +118,9 @@ use std::collections::VecDeque;
 /// the code you would probably write by hand.
 use std::iter::Iterator;
 
+#[derive(Default)]
 pub struct Counter {
     count: u32,
-}
-
-impl Counter {
-    pub fn new() -> Counter {
-        Counter { count: 0 }
-    }
 }
 
 /// Implement your own iterator
@@ -148,8 +143,8 @@ pub struct Fibonacci {
     next: u32,
 }
 
-impl Fibonacci {
-    pub fn new() -> Fibonacci {
+impl Default for Fibonacci {
+    fn default() -> Fibonacci {
         Fibonacci { curr: 0, next: 1 }
     }
 }
@@ -215,6 +210,7 @@ pub struct TreeNode<T> {
     right: BinaryTree<T>,
 }
 
+#[allow(clippy::borrowed_box)]
 pub struct TreeIter<'a, T: 'a> {
     queue: VecDeque<&'a Box<TreeNode<T>>>,
 }
@@ -238,7 +234,7 @@ impl<'a, T: 'a> Iterator for TreeIter<'a, T> {
             BinaryTree::Empty => {}
             BinaryTree::NonEmpty(node) => self.queue.push_back(node),
         };
-        return Some(&head.value);
+        Some(&head.value)
     }
 }
 
@@ -434,16 +430,16 @@ mod tests {
 
     #[test]
     fn implement_iterator() {
-        let counter = Counter::new();
+        let counter = Counter::default();
         // let nums: Vec<_> = counter.into_iter().collect();
         for num in counter {
             println!("next count: {}", num);
         }
 
         // You can use other methods that are provided by the Iterator interface by default.
-        let sum: u32 = Counter::new()
+        let sum: u32 = Counter::default()
             // (0, 1), (1, 2), (2, 3), (3, 4), (4, 5)
-            .zip(Counter::new().skip(1))
+            .zip(Counter::default().skip(1))
             .map(|(a, b)| a * b) // 0, 2, 6, 12, 25
             .filter(|x| x % 3 == 0) // 6, 12
             .sum(); // 18
@@ -452,7 +448,7 @@ mod tests {
 
     #[test]
     fn test_fibonacci() {
-        let mut fib = Fibonacci::new().into_iter();
+        let mut fib = Fibonacci::default().into_iter();
         assert_eq!(Some(1), fib.next());
         assert_eq!(Some(1), fib.next());
         assert_eq!(Some(2), fib.next());

@@ -111,7 +111,7 @@ pub fn double_first_arg(args: Vec<&str>) -> Result<i32, String> {
 pub fn double_first_arg2(args: Vec<&str>) -> Result<i32, String> {
     args.first()
         // ok_or turns an Option into a Result
-        .ok_or(String::from("Need at least one argument"))
+        .ok_or_else(|| String::from("Need at least one argument"))
         // We need "and_then" because "str.parse" returns another Result
         .and_then(|str| {
             str.parse::<i32>()
@@ -272,7 +272,7 @@ pub fn search_city<P: AsRef<Path>>(filepath: P, city: &str) -> Result<String, Bo
     let mut rdr = csv::Reader::from_reader(file);
     for row in rdr.deserialize() {
         let record: Row = row?;
-        if &record.city == city {
+        if record.city == city {
             return Ok(format!(
                 "{} {}: {:?}",
                 record.city,
@@ -335,7 +335,7 @@ pub fn search_city2<P: AsRef<Path>>(filepath: P, city: &str) -> Result<String, C
     let mut rdr = csv::Reader::from_reader(file);
     for row in rdr.deserialize() {
         let record: Row = row?;
-        if &record.city == city {
+        if record.city == city {
             return Ok(format!(
                 "{} {}: {:?}",
                 record.city,

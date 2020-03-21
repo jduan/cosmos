@@ -79,7 +79,7 @@ pub fn cook(food: Option<Chopped>) -> Option<Cooked> {
 // A function to peel, chop, and cook food all in sequence.
 // We chain multiple uses of `map()` to simplify the code.
 pub fn process(food: Option<Food>) -> Option<Cooked> {
-    food.map(|food| Peeled(food))
+    food.map(Peeled)
         .map(|Peeled(food)| Chopped(food))
         .map(|Chopped(food)| Cooked(food))
 }
@@ -114,7 +114,7 @@ pub fn json_to_user(_json: JSON) -> Option<User> {
 pub fn get_user_with_shortest_name(names: Vec<&str>) -> Option<User> {
     get_shortest(names)
         .and_then(|shortest| find_user_by_name(shortest))
-        .and_then(|user| json_to_user(user))
+        .and_then(json_to_user)
 }
 
 // This is equivalent to the function above but much more verbose!

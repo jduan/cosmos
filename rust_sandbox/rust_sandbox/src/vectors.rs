@@ -61,7 +61,7 @@ pub fn ownership() {
     println!("The first element is {}", &v[0]);
 }
 
-pub fn iterate_vec(v: &Vec<i32>) {
+pub fn iterate_vec(v: &[i32]) {
     for i in v {
         println!("Vector element is {}", i);
     }

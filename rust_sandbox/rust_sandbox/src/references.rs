@@ -67,7 +67,7 @@ pub fn show_table(table: &Table) {
 
 // Mutable Reference
 pub fn sort_works(table: &mut Table) {
-    for (_, works) in table {
+    for works in table.values_mut() {
         works.sort();
     }
 }
@@ -185,9 +185,10 @@ pub fn compare_references() {
 // * Otherwise, the anonymous variable lives to the end of the enclosing statement. In our
 // example, the anonymous variable created to hold 1009 lasts only to the end of the
 // assert_eq! statement.
+#[allow(clippy::op_ref)]
 pub fn borrow_ref_of_any_expr() {
     fn factorial(n: usize) -> usize {
-        (1..(n + 1)).fold(1, |acc, c| acc * c)
+        (1..(n + 1)).product()
     }
 
     // reference to a function call
@@ -232,6 +233,7 @@ static mut STASH: &i32 = &128;
 // will outlive the call. There’s no need to look into g’s definition; the signature alone tells us
 // what g can and can’t do with its argument. This fact ends up being very useful when you’re
 // trying to establish the safety of a call to the function.
+#[allow(clippy::trivially_copy_pass_by_ref)]
 pub fn update_globa_var2(p: &'static i32) {
     // Mutable statics are inherently not thread-safe (after all, any thread can access a static at
     // any time), and even in single-threaded programs, they can fall prey to other sorts of

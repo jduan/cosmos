@@ -35,7 +35,7 @@ pub fn run() {
     println!("a_slice: {:?}", a_slice);
 }
 // Return the index of the end of the first word.
-pub fn first_word(s: &String) -> usize {
+pub fn first_word(s: &str) -> usize {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
@@ -48,7 +48,7 @@ pub fn first_word(s: &String) -> usize {
 }
 
 // Return a string slice "&str"
-pub fn string_slice(s: &String) -> &str {
+pub fn string_slice(s: &str) -> &str {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
@@ -89,6 +89,7 @@ pub fn iterate_slices(n: &[f64]) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use float_cmp::approx_eq;
 
     #[test]
     fn create_slices() {
@@ -99,10 +100,10 @@ mod tests {
         let sv: &[f64] = &v;
         let sa: &[f64] = &a;
 
-        assert_eq!(sv[0], 0.0);
-        assert_eq!(sv[1], 0.707);
-        assert_eq!(sa[0], 0.0);
-        assert_eq!(sa[1], 0.707);
+        approx_eq!(f64, sv[0], 0.0);
+        approx_eq!(f64, sv[1], 0.707);
+        approx_eq!(f64, sa[0], 0.0);
+        approx_eq!(f64, sa[1], 0.707);
 
         iterate_slices(&sv); // works on vectors
         iterate_slices(&sa); // works on arrays

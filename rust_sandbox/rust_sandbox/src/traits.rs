@@ -256,7 +256,7 @@ pub fn say_hello2<W: Write>(out: &mut W) -> std::io::Result<()> {
 
 // Find the top occurring elements from a vector.
 // This is how to special a type parameter that implements multiple traits.
-pub fn top_ten<T>(values: &Vec<T>) -> Vec<&T>
+pub fn top_ten<T>(values: &[T]) -> Vec<&T>
 where
     T: Debug + Hash + Eq,
 {
@@ -511,11 +511,13 @@ pub struct Screen {
     pub components: Vec<Box<dyn Draw>>,
 }
 
-impl Screen {
-    pub fn new() -> Self {
+impl Default for Screen {
+    fn default() -> Self {
         Screen { components: vec![] }
     }
+}
 
+impl Screen {
     pub fn run(&self) {
         for component in self.components.iter() {
             component.draw();
@@ -625,14 +627,16 @@ pub struct Post {
 
 /// Post knows nothing about the various behaviors. It replies on various State objects to do
 /// their jobs.
-impl Post {
-    pub fn new() -> Self {
+impl Default for Post {
+    fn default() -> Self {
         Self {
             state: Some(Box::new(Draft {})),
             content: String::new(),
         }
     }
+}
 
+impl Post {
     // This behavior doesn’t depend on the state the post is in, so it’s not part of the state
     // pattern. The add_text method doesn’t interact with the state field at all, but it is part
     // of the behavior we want to support.
@@ -803,7 +807,7 @@ mod tests {
 
     #[test]
     fn test_screen() {
-        let mut screen = Screen::new();
+        let mut screen = Screen::default();
         screen
             .add_component(Box::new(Button {
                 width: 50,
@@ -825,7 +829,7 @@ mod tests {
 
     #[test]
     fn test_post() {
-        let mut post = Post::new();
+        let mut post = Post::default();
         post.add_text("I ate a salad for lunch today");
         assert_eq!("", post.content());
 

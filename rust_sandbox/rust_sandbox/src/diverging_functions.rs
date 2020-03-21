@@ -6,8 +6,8 @@ pub fn foo() -> ! {
 /// As opposed to all the other types, the "empty type" cannot be instantiated, because the
 /// set of all possible values this type can have is empty. Note that, it is
 /// different from the () type, which has exactly one possible value.
+#[allow(clippy::unused_unit)]
 pub fn some_fn() {
-    #[allow(clippy::unused_unit)]
     ()
 }
 
