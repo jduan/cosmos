@@ -326,4 +326,12 @@ mod tests {
         //
         // let n = closure(10);
     }
+
+    #[test]
+    fn test_cacher() {
+        let extra = 5;
+        let mut cacher = Cacher::new(|x| x * 3 + extra);
+        assert_eq!(cacher.value(3), 14);
+        assert_eq!(cacher.value(5), 20);
+    }
 }
