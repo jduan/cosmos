@@ -33,14 +33,6 @@ name = "async_web_server"
 path = "bin/async_web_server.rs"
 
 [[bin]]
-name = "tokio_client_example"
-path = "bin/tokio_client_example.rs"
-
-[[bin]]
-name = "tokio_echo_server"
-path = "bin/tokio_echo_server.rs"
-
-[[bin]]
 name = "block_on"
 path = "bin/block_on.rs"
 
