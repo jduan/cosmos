@@ -18,7 +18,7 @@ async fn main() {
                         // split up the reading and writing parts of the socket
                         let (mut reader, mut writer) = socket.split();
                         match tokio::io::copy(&mut reader, &mut writer).await {
-                            Ok(amt) => println!("wrote {} bytes", amt),
+                            Ok(amt) => println!("wrote {} bytes to {:?}", amt, socket.peer_addr()),
                             Err(err) => eprintln!("IO error: {:?}", err),
                         }
                     });
