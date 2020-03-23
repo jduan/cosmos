@@ -13,7 +13,9 @@ async fn main() {
             match socket_res {
                 Ok(mut socket) => {
                     println!("Accepted connection from {:?}", socket.peer_addr());
-                    // Handle this socket/client in the background
+                    // We want all clients to make progress concurrently, rather than blocking on
+                    // on completion of another. To achieve this, we use "tokio::spawn" to execute
+                    // the work in the background!
                     tokio::spawn(async move {
                         // split up the reading and writing parts of the socket
                         let (mut reader, mut writer) = socket.split();
