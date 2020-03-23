@@ -18,3 +18,7 @@ path = "bin/tokio_client_example.rs"
 name = "tokio_echo_server"
 path = "bin/tokio_echo_server.rs"
 
+[[bin]]
+name = "tokio_hello_world"
+path = "bin/tokio_hello_world.rs"
+
