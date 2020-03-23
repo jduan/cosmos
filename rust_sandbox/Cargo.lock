@@ -20,7 +20,7 @@ dependencies = [
  "pin-project",
  "smallvec 1.2.0",
  "tokio 0.2.13",
- "tokio-util",
+ "tokio-util 0.2.0",
  "trust-dns-proto",
  "trust-dns-resolver",
 ]
@@ -37,7 +37,7 @@ dependencies = [
  "futures-sink",
  "log 0.4.8",
  "tokio 0.2.13",
- "tokio-util",
+ "tokio-util 0.2.0",
 ]
 
 [[package]]
@@ -310,7 +310,7 @@ dependencies = [
  "serde_json 1.0.48",
  "structopt",
  "tokio 0.2.13",
- "tokio-util",
+ "tokio-util 0.2.0",
 ]
 
 [[package]]
@@ -1109,7 +1109,7 @@ dependencies = [
  "log 0.4.8",
  "slab",
  "tokio 0.2.13",
- "tokio-util",
+ "tokio-util 0.2.0",
 ]
 
 [[package]]
@@ -2057,6 +2057,7 @@ version = "0.1.0"
 dependencies = [
  "futures 0.3.4",
  "tokio 0.2.13",
+ "tokio-util 0.3.1",
 ]
 
 [[package]]
@@ -2567,6 +2568,21 @@ checksum = "571da51182ec208780505a32528fc5512a8fe1443ab960b3f2f3ef093cd16930"
 dependencies = [
  "bytes 0.5.4",
  "futures-core",
+ "futures-sink",
+ "log 0.4.8",
+ "pin-project-lite",
+ "tokio 0.2.13",
+]
+
+[[package]]
+name = "tokio-util"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be8242891f2b6cbef26a2d7e8605133c2c554cd35b3e4948ea892d6d68436499"
+dependencies = [
+ "bytes 0.5.4",
+ "futures-core",
+ "futures-io",
  "futures-sink",
  "log 0.4.8",
  "pin-project-lite",

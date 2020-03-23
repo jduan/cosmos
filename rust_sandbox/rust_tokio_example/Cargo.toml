@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 tokio = { version = "0.2", features = ["full"] }
+tokio-util = { version = "0.3", features = ["full"] }
 futures = "0.3"
 
 [[bin]]
@@ -22,3 +23,6 @@ path = "bin/tokio_echo_server.rs"
 name = "tokio_hello_world"
 path = "bin/tokio_hello_world.rs"
 
+[[bin]]
+name = "tokio_tinydb"
+path = "bin/tokio_tinydb.rs"
