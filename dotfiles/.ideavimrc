@@ -2,7 +2,7 @@
 " map b <Nop>
 " map <Space> <Nop>
 
-let mapleader = ","
+" let mapleader = ","
 
 " Integrate with system clipboard
 set clipboard=unnamedplus,unnamed
