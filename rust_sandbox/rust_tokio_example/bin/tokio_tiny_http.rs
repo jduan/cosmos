@@ -14,6 +14,7 @@ use tokio::stream::StreamExt;
 use tokio_util::codec::{Decoder, Encoder, Framed};
 
 #[tokio::main]
+/// TODO: understand how things work!
 async fn main() -> Result<(), Box<dyn Error>> {
     let addr = env::args()
         .nth(1)
@@ -52,6 +53,8 @@ async fn process(stream: TcpStream) -> Result<(), Box<dyn Error>> {
 }
 
 /// Send a response to the client.
+/// Request: a type from the http crate. It has headers and body.
+/// Response: a type from the http crate. It has headers and body.
 async fn respond(req: Request<()>) -> Result<Response<String>, Box<dyn Error>> {
     let mut response = Response::builder();
     let body = match req.uri().path() {
@@ -88,6 +91,7 @@ impl Decoder for Http {
     type Item = Request<()>;
     type Error = io::Error;
 
+    /// Convert a request (bytes) into a Request object.
     fn decode(&mut self, src: &mut BytesMut) -> io::Result<Option<Request<()>>> {
         let mut headers = [None; 16];
         let (method, path, version, amt) = {
@@ -162,6 +166,7 @@ impl Decoder for Http {
 impl Encoder<Response<String>> for Http {
     type Error = io::Error;
 
+    /// Convert a Response object into a list of bytes.
     fn encode(&mut self, item: Response<String>, dst: &mut BytesMut) -> io::Result<()> {
         use chrono::Utc;
         use std::fmt::Write;
