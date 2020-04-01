@@ -3,6 +3,7 @@ members = [
     "actix_example",
     "actix_web_example",
     "async_std_example",
+    "leetcode_30_challenges",
     "rust_cli",
     "rust_green_threads",
     "rust_minigrep",
