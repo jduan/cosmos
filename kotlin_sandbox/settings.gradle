@@ -1,2 +1,3 @@
 rootProject.name = "kotlin_sandbox"
 include "projects:kotlin_sandbox"
+include "projects:antlr_stringtemplate_example"
