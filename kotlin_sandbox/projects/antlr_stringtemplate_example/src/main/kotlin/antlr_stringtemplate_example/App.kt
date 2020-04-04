@@ -38,9 +38,20 @@ fun groupFile() {
     println("decl renders: ${decl.render()}")
 }
 
+data class User(val id: Int, val name: String)
+
+// Template expressions can access the properties of objects injected from the model.
+fun modelObject() {
+    // We use {...} as delimiters because we are generating HTML
+    val st = ST("<b>{u.id}</b>: {u.name}", '{', '}')
+    st.add("u", User(999, "parrt"))
+    println("html renders: ${st.render()}")
+}
+
 fun main(args: Array<String>) {
     helloWorld()
     templateFile()
     groupFile()
+    modelObject()
     println(App().greeting)
 }
