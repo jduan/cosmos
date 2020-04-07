@@ -25,6 +25,7 @@ use thrift::transport::{
 
 use rust_thrift_example::shared::TSharedServiceSyncClient;
 use rust_thrift_example::tutorial::{CalculatorSyncClient, Operation, TCalculatorSyncClient, Work};
+use std::time::Duration;
 
 fn main() {
     match run() {
@@ -94,6 +95,8 @@ fn run() -> thrift::Result<()> {
     println!("ping!");
     client.ping()?;
 
+    println!("Going to sleep for another 10 seconds before exiting.");
+    std::thread::sleep(Duration::from_secs(10));
     Ok(())
 }
 
