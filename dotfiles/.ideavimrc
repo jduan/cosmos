@@ -16,7 +16,7 @@ set relativenumber
 " highlight matches with last search pattern
 set hlsearch
 " show where search pattern typed so far matches
-set incsearch
+" set incsearch
 " hit space to turn off highlighted words
 nnoremap <Space> :nohlsearch<cr>
 " Press ii to exit insert mode
