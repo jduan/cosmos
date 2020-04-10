@@ -44,6 +44,18 @@ impl ListNode {
     }
 }
 
+// impl PartialEq for ListNode {
+//     fn eq(&self, other: &Self) -> bool {
+//         if self.val != other.val {
+//             false
+//         } else {
+//             match (self.next, other.next) {
+//                 ()
+//             }
+//         }
+//     }
+// }
+
 impl Solution {
     #[allow(dead_code)]
     pub fn middle_node(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
@@ -75,18 +87,20 @@ impl Solution {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::rc::Rc;
 
     #[test]
     fn test_hello() {
         let mut node1 = ListNode::new(1);
         let mut node2 = ListNode::new(2);
+        let node2_rc = Rc::new(node2);
         let node3 = ListNode::new(3);
-        let node2_clone = node2.clone();
         node2.next = Some(Box::new(node3));
-        node1.next = Some(Box::new(node2));
+        node1.next = Some(Box::new(node2_rc.));
+        let node2_ref = &node2_rc;
 
         let middle_node = Solution::middle_node(Some(Box::new(node1)));
 
-        assert_eq!(node2_clone.val, middle_node.unwrap().val);
+        assert_eq!(node2_ref, middle_node.unwrap().as_ref());
     }
 }
