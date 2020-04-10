@@ -42,6 +42,14 @@ impl ListNode {
     fn new(val: i32) -> Self {
         ListNode { next: None, val }
     }
+
+    #[allow(dead_code)]
+    fn append(val: i32, other: ListNode) -> Self {
+        ListNode {
+            next: Some(Box::new(other)),
+            val,
+        }
+    }
 }
 
 impl Solution {
@@ -77,21 +85,35 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_hello() {
+    fn test_hello1() {
         // original list
-        let mut node1 = ListNode::new(1);
-        let mut node2 = ListNode::new(2);
-        let node3 = ListNode::new(3);
-        node2.next = Some(Box::new(node3));
-        node1.next = Some(Box::new(node2));
-
-        // copy of the 2nd half
-        let mut node2_copy = ListNode::new(2);
-        let node3_copy = ListNode::new(3);
-        node2_copy.next = Some(Box::new(node3_copy));
+        let node6 = ListNode::new(6);
+        let node5 = ListNode::append(5, node6);
+        let node4 = ListNode::append(4, node5);
+        // copy of the 2nd half before the ownership of node4 gets moved
+        let middle_node_copy = node4.clone();
+        let node3 = ListNode::append(3, node4);
+        let node2 = ListNode::append(2, node3);
+        let node1 = ListNode::append(1, node2);
 
         let middle_node = Solution::middle_node(Some(Box::new(node1)));
 
-        assert_eq!(Box::new(node2_copy), middle_node.unwrap());
+        assert_eq!(Box::new(middle_node_copy), middle_node.unwrap());
+    }
+
+    #[test]
+    fn test_hello2() {
+        // original list
+        let node5 = ListNode::new(5);
+        let node4 = ListNode::append(4, node5);
+        let node3 = ListNode::append(3, node4);
+        // copy of the 2nd half before the ownership of node3 gets moved
+        let middle_node_copy = node3.clone();
+        let node2 = ListNode::append(2, node3);
+        let node1 = ListNode::append(1, node2);
+
+        let middle_node = Solution::middle_node(Some(Box::new(node1)));
+
+        assert_eq!(Box::new(middle_node_copy), middle_node.unwrap());
     }
 }
