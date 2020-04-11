@@ -16,14 +16,11 @@
 /// Return 3, which is the length of the path [4,2,1,3] or [5,2,1,3].
 ///
 /// Note: The length of path between two nodes is represented by the number of edges between them.
-use std::cell::RefCell;
-use std::rc::Rc;
-
 #[derive(Debug, PartialEq, Eq)]
 pub struct TreeNode {
     pub val: i32,
-    pub left: Option<Rc<RefCell<TreeNode>>>,
-    pub right: Option<Rc<RefCell<TreeNode>>>,
+    pub left: Option<Box<TreeNode>>,
+    pub right: Option<Box<TreeNode>>,
 }
 
 #[cfg(test)]
@@ -42,19 +39,17 @@ struct Solution;
 
 #[cfg(test)]
 impl Solution {
-    pub fn diameter_of_binary_tree(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+    pub fn diameter_of_binary_tree(root: Option<Box<TreeNode>>) -> i32 {
         let mut max_diameter = 0;
         Solution::recur(&root, &mut max_diameter);
 
         max_diameter
     }
 
-    // Return the height of the subtree
-    fn recur(node: &Option<Rc<RefCell<TreeNode>>>, max_diameter: &mut i32) -> i32 {
+    // Return the height of the subtree. Also update the "max_diameter" along the way.
+    fn recur(node: &Option<Box<TreeNode>>, max_diameter: &mut i32) -> i32 {
         use std::cmp::max;
         if let Some(node) = node {
-            let node = node.borrow();
-
             let left_height = if node.left.is_some() {
                 Solution::recur(&node.left, max_diameter) + 1
             } else {
@@ -88,14 +83,11 @@ mod tests {
         let node3 = TreeNode::new(3);
         let node4 = TreeNode::new(4);
         let node5 = TreeNode::new(5);
-        node2.left = Some(Rc::new(RefCell::new(node4)));
-        node2.right = Some(Rc::new(RefCell::new(node5)));
-        root.left = Some(Rc::new(RefCell::new(node2)));
-        root.right = Some(Rc::new(RefCell::new(node3)));
+        node2.left = Some(Box::new(node4));
+        node2.right = Some(Box::new(node5));
+        root.left = Some(Box::new(node2));
+        root.right = Some(Box::new(node3));
 
-        assert_eq!(
-            3,
-            Solution::diameter_of_binary_tree(Some(Rc::new(RefCell::new(root))))
-        );
+        assert_eq!(3, Solution::diameter_of_binary_tree(Some(Box::new(root))));
     }
 }
