@@ -106,13 +106,17 @@ impl Solution {
             let right_node = Node::new(cell.0 as usize, cell.1 as usize);
             // update the current_sum in the hash map
             let current_sum = current_sum + grid.cell(cell.0 as usize, cell.1 as usize);
-            let old_sum = visited.entry(right_node.clone()).or_insert_with(|| {
-                queue.push_back(right_node);
-                current_sum
-            });
-            if current_sum < *old_sum {
-                *old_sum = current_sum;
-            }
+            visited
+                .entry(right_node.clone())
+                .and_modify(|old_sum| {
+                    if current_sum < *old_sum {
+                        *old_sum = current_sum;
+                    }
+                })
+                .or_insert_with(|| {
+                    queue.push_back(right_node);
+                    current_sum
+                });
         }
     }
 }
