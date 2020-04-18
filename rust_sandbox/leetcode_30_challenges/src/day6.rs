@@ -37,7 +37,7 @@ impl Solution {
             anagrams
                 .entry(sorted_str)
                 .and_modify(|v| v.push(str))
-                .or_insert({ vec![original_str] });
+                .or_insert_with(|| vec![original_str]);
         }
 
         let mut ret = vec![];
