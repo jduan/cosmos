@@ -29,6 +29,10 @@ impl<T> Matrix<T> {
         self.matrix.get(row).unwrap().get(col).unwrap()
     }
 
+    pub fn valid_cell(&self, row: i32, col: i32) -> bool {
+        row >= 0 && row < self.rows as i32 && col >= 0 && col < self.cols as i32
+    }
+
     /// Return valid neighbors (up to 4)
     pub fn get_neighbors(&self, row: usize, col: usize) -> Vec<(usize, usize)> {
         let mut neighbors = vec![];
