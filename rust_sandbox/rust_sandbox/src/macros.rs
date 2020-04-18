@@ -71,9 +71,40 @@ macro_rules! test {
     }};
 }
 
+#[allow(unused_macros)]
+macro_rules! my_vec {
+    ($($x:expr), *) => {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($x);
+            )*
+            temp_vec
+        }
+    }
+}
+
+#[allow(unused_macros)]
+macro_rules! five_times {
+    ($x:expr) => {
+        5 * $x
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_five_times() {
+        assert_eq!(25, five_times!(2 + 3));
+    }
+
+    #[test]
+    fn test_my_vec() {
+        let nums = my_vec!(1, 2, 3);
+        assert_eq!(vec![1, 2, 3], nums);
+    }
 
     #[test]
     fn test_create_function() {
