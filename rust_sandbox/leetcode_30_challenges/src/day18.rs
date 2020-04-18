@@ -1,4 +1,5 @@
 use crate::matrix::Matrix;
+use std::collections::{HashMap, HashSet, VecDeque};
 
 /// Minimum Path Sum
 ///
@@ -20,6 +21,18 @@ use crate::matrix::Matrix;
 #[allow(dead_code)]
 struct Solution;
 
+#[derive(PartialEq, Eq, Hash, Clone)]
+struct Node {
+    row: usize,
+    col: usize,
+}
+
+impl Node {
+    pub fn new(row: usize, col: usize) -> Self {
+        Self { row, col }
+    }
+}
+
 #[allow(dead_code)]
 impl Solution {
     pub fn min_path_sum(grid: Vec<Vec<i32>>) -> i32 {
@@ -28,12 +41,15 @@ impl Solution {
             return 0;
         }
         let grid = Matrix::new(grid);
-        let mut min_sum = std::i32::MAX;
-        Self::recur(&grid, 0, 0, 0, &mut min_sum);
-
-        min_sum
+        let mut queue = VecDeque::new();
+        let node = Node::new(0, 0);
+        queue.push_back(node.clone());
+        let mut visited = HashMap::new();
+        visited.insert(node, *grid.cell(0, 0));
+        Self::bfs(&grid, queue, visited)
     }
 
+    // Too slow for large input
     fn recur(grid: &Matrix<i32>, row: usize, col: usize, current_sum: i32, min_sum: &mut i32) {
         let current_sum = current_sum + grid.cell(row, col);
         // update the max
@@ -52,6 +68,51 @@ impl Solution {
         }
         if grid.valid_cell(down_cell.0, down_cell.1) {
             Self::recur(grid, row + 1, col, current_sum, min_sum);
+        }
+    }
+
+    // breadth first search is a lot faster than depth first search
+    fn bfs(grid: &Matrix<i32>, mut queue: VecDeque<Node>, mut visited: HashMap<Node, i32>) -> i32 {
+        let mut min_sum = std::i32::MAX;
+        let mut iterations: usize = 0;
+
+        while !queue.is_empty() {
+            iterations += 1;
+            let node = queue.pop_front().unwrap();
+            let current_sum = *visited.get(&node).unwrap();
+            if node.row == grid.rows - 1 && node.col == grid.cols - 1 && current_sum < min_sum {
+                min_sum = current_sum;
+            }
+            let row = node.row as i32;
+            let col = node.col as i32;
+            let right_cell = (row, col + 1);
+            let down_cell = (row + 1, col);
+            Self::visit_cell(grid, right_cell, current_sum, &mut queue, &mut visited);
+            Self::visit_cell(grid, down_cell, current_sum, &mut queue, &mut visited);
+        }
+        println!("Number of iterations: {}", iterations);
+
+        min_sum
+    }
+
+    fn visit_cell(
+        grid: &Matrix<i32>,
+        cell: (i32, i32),
+        current_sum: i32,
+        queue: &mut VecDeque<Node>,
+        visited: &mut HashMap<Node, i32>,
+    ) {
+        if grid.valid_cell(cell.0, cell.1) {
+            let right_node = Node::new(cell.0 as usize, cell.1 as usize);
+            // update the current_sum in the hash map
+            let current_sum = current_sum + grid.cell(cell.0 as usize, cell.1 as usize);
+            let old_sum = visited.entry(right_node.clone()).or_insert_with(|| {
+                queue.push_back(right_node);
+                current_sum
+            });
+            if current_sum < *old_sum {
+                *old_sum = current_sum;
+            }
         }
     }
 }
