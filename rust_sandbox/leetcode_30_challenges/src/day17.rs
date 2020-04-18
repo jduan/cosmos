@@ -1,3 +1,6 @@
+use crate::matrix::Matrix;
+use std::collections::HashSet;
+use std::collections::VecDeque;
 /// Number of Islands
 ///
 /// Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island
@@ -23,8 +26,6 @@
 /// 00011
 ///
 /// Output: 3
-use std::collections::HashSet;
-use std::collections::VecDeque;
 
 #[allow(dead_code)]
 struct Solution;
@@ -32,25 +33,25 @@ struct Solution;
 #[allow(dead_code)]
 impl Solution {
     pub fn num_islands(grid: Vec<Vec<char>>) -> i32 {
-        let mut islands = 0;
         let rows = grid.len();
         if rows == 0 {
             return 0;
         }
-        let cols = grid.first().unwrap().len();
+        let grid = Matrix::new(grid);
+        let mut islands = 0;
         let mut visited = HashSet::new();
 
         println!("before loop");
-        for i in 0..rows {
-            for j in 0..cols {
+        for i in 0..grid.rows {
+            for j in 0..grid.cols {
                 let cell = (i, j);
-                let value = Self::get_value(&grid, i, j);
+                let value = grid.cell(i, j);
                 if !visited.contains(&cell) && value == &'1' {
                     println!("Visiting cell {:?}", cell);
                     let mut queue = VecDeque::new();
                     queue.push_back(cell);
                     visited.insert(cell);
-                    Self::visit(&grid, rows, cols, &mut queue, &mut visited);
+                    Self::visit(&grid, &mut queue, &mut visited);
                     islands += 1;
                 }
             }
@@ -59,41 +60,22 @@ impl Solution {
         islands
     }
 
-    fn get_value(grid: &[Vec<char>], i: usize, j: usize) -> &char {
-        grid.get(i).unwrap().get(j).unwrap()
-    }
-
     fn visit(
-        grid: &[Vec<char>],
-        rows: usize,
-        cols: usize,
+        grid: &Matrix<char>,
         queue: &mut VecDeque<(usize, usize)>,
         visited: &mut HashSet<(usize, usize)>,
     ) {
         while !queue.is_empty() {
             let (i, j) = queue.pop_front().unwrap();
             println!("head of queue: ({}:{})", i, j);
-            for neighbor in Self::get_neighbors(i, j, rows, cols) {
-                let value = Self::get_value(&grid, neighbor.0, neighbor.1);
+            for neighbor in grid.get_neighbors(i, j) {
+                let value = grid.cell(neighbor.0, neighbor.1);
                 if !visited.contains(&neighbor) && value == &'1' {
                     visited.insert(neighbor);
                     queue.push_back(neighbor);
                 }
             }
         }
-    }
-
-    fn get_neighbors(i: usize, j: usize, rows: usize, cols: usize) -> Vec<(usize, usize)> {
-        let mut neighbors = vec![];
-        for (dx, dy) in &[(0, 1), (0, -1), (1, 0), (-1, 0)] {
-            let x = i as i32 + dx;
-            let y = j as i32 + dy;
-            if x >= 0 && x < rows as i32 && y >= 0 && y < cols as i32 {
-                neighbors.push((x as usize, y as usize));
-            }
-        }
-
-        neighbors
     }
 }
 
