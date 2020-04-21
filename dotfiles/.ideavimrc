@@ -46,3 +46,8 @@ nmap <leader><leader>l :action KJumpAction.Line<cr>
 " nmap <leader>ns :action GotoSymbol<cr>
 " nmap <leader>nm :action FileStructurePopup<cr>
 " nmap <leader>d :action ShowErrorDescription<cr>
+
+" You need to install this plugin:
+" https://github.com/abrookins/WrapToColumn
+" nmap gq :action com.andrewbrookins.idea.wrap.WrapParagraphAction<CR>
+" vmap gq :action com.andrewbrookins.idea.wrap.WrapParagraphAction<CR>
