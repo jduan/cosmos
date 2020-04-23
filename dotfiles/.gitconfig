@@ -120,6 +120,7 @@
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
     add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
     unmerged = diff --name-only --diff-filter=U
+    root = rev-parse --show-toplevel
 [core]
     editor = vim
 	excludesfile = /Users/jingjing_duan/.gitignore_global
