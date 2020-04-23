@@ -9,6 +9,23 @@ class App {
         get() {
             return "Hello world."
         }
+
+    fun print() {
+        println("""
+            $ANSI_RED
+            +--------------------------------------------------------+
+            |                                                        |
+            |  We've detected potentially risky dependency changes!  |
+            |                                                        |
+            +--------------------------------------------------------+
+            $ANSI_RESET
+            """.trimIndent())
+    }
+
+    companion object {
+        private val ANSI_RESET = "\u001B[0m"
+        private val ANSI_RED = "\u001B[31m";
+    }
 }
 
 fun helloWorld() {
@@ -49,6 +66,7 @@ fun modelObject() {
 }
 
 fun main(args: Array<String>) {
+    App().print()
     helloWorld()
     templateFile()
     groupFile()
