@@ -13,7 +13,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_hello() {
+    fn test_can_jump() {
         assert_eq!(true, Solution::can_jump());
     }
 }
