@@ -1,5 +1,6 @@
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
+use std::time::Duration;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
@@ -18,8 +19,12 @@ fn handle_connection(mut stream: TcpStream) {
     let _bytes_read = stream.read(&mut buffer).unwrap();
 
     let pattern = b"GET / HTTP/1.1\r\n";
+    let sleep_pattern = b"GET /sleep HTTP/1.1\r\n";
 
     let (status_line, filename) = if buffer.starts_with(pattern) {
+        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
+    } else if buffer.starts_with(sleep_pattern) {
+        std::thread::sleep(Duration::from_secs(5));
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
         ("HTTP/1.1 400 NOT FOUND\r\n\r\n", "404.html")
