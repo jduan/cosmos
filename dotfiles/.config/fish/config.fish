@@ -119,6 +119,7 @@ function postcmd --on-event fish_postexec
     case '*'
         set_color red
     end
-    printf "(Exit: %s, Time: %'dms)\n" $old_status $taken
+    set now (date)
+    printf "(Exit: %s, Time: %'dms, %s)\n" $old_status $taken $now
     set_color normal
 end

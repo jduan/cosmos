@@ -26,7 +26,7 @@ nnoremap <Space> :nohlsearch<cr>
 :inoremap <C-h> <Left>
 :inoremap <C-l> <Right>
 " Move to end of line in insert mode
-:inoremap <C-e> <C-o><S-a>
+:inoremap <C-e> <Esc>A
 
 " Emulated Vim Plugins
 set vim-surround
