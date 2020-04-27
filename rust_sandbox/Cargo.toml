@@ -13,5 +13,6 @@ members = [
     "rust_thrift_example",
     "rust_tokio_example",
     "rust_webserver",
+    "simple_http_server",
     "thread_pool_example",
 ]
