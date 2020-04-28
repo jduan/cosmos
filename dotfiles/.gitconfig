@@ -67,8 +67,8 @@
     p   = pull
     # push branch to origin and track it
     po  = "!f(){ branch=$(git rev-parse --abbrev-ref HEAD); git push --set-upstream origin $branch; }; f"
-    # create a new PR from origin/master
-    pr  = !sh -c 'git checkout -b jduan--$1 $(git rev-parse origin/master)' -
+    # create a new PR from origin/master (words after 'git pr' will be used as branch name, with dashes between words)
+    pr  = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/master); }; f"
     pu  = push --set-upstream --verbose
     r   = rebase
     ri  = rebase -i
