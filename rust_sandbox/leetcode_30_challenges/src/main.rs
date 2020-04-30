@@ -17,6 +17,7 @@ mod day25;
 mod day26;
 mod day27;
 mod day28;
+mod day29;
 mod day3;
 mod day4;
 mod day5;
