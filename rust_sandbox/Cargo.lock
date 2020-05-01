@@ -1369,6 +1369,10 @@ name = "leetcode_30_challenges"
 version = "0.1.0"
 
 [[package]]
+name = "leetcode_top_questions"
+version = "0.1.0"
+
+[[package]]
 name = "libc"
 version = "0.2.68"
 source = "registry+https://github.com/rust-lang/crates.io-index"
