@@ -55,19 +55,6 @@ if [ -f '/Users/jingjing_duan/google-cloud-sdk/path.fish.inc' ];
     end;
 end
 
-# Nix
-# if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ];
-#   bass source "$HOME/.nix-profile/etc/profile.d/nix.sh";
-# end
-
-# Nix workaround
-# set paths $HOME/.nix-profile/bin
-# for path in $paths
-#     if not contains "$path" $PATH
-#         set -gx PATH "$path" $PATH
-#     end
-# end
-
 # airbnb
 set -gx DATA_DIR $HOME/repos2/data
 set -gx AFDEV_HOST "i-0a55744d91bc4533a.inst.aws.airbnb.com"
