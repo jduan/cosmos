@@ -2038,6 +2038,7 @@ dependencies = [
  "float-cmp",
  "futures 0.3.4",
  "hyper 0.12.35",
+ "lazy_static 1.4.0",
  "num_cpus",
  "once_cell",
  "pin-utils",
