@@ -34,6 +34,7 @@ pub mod diverging_functions;
 pub mod enums;
 pub mod error_handling;
 pub mod error_handling2;
+pub mod error_handling3;
 pub mod exercise;
 pub mod expressions;
 pub mod foo;
