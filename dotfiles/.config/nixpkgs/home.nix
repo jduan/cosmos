@@ -20,4 +20,26 @@
   home.stateVersion = "20.09";
 
   programs.bat.enable = true;
+
+  programs.neovim = {
+    enable = true;
+    extraConfig = "colorscheme gruvbox";
+    plugins = with pkgs.vimPlugins; [
+      # syntax and language support
+      vim-fish
+      vim-nix
+      vim-toml
+
+      # UI
+      gruvbox # colorscheme
+
+      # Editor features
+      nerdtree
+      supertab
+      tcomment_vim
+      vim-endwise
+      vim-repeat
+      vim-surround
+    ];
+  };
 }
