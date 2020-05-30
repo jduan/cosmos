@@ -60,6 +60,7 @@ pub fn count_words2<R: Read>(input: &mut R) -> Result<u32, WordCountError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
     fn test_count_words() {
