@@ -19,6 +19,14 @@
   # changes in each release.
   home.stateVersion = "20.09";
 
+  home.packages = [
+    pkgs.fzf
+    pkgs.jq
+    pkgs.ripgrep
+    pkgs.tree
+    pkgs.universal-ctags
+  ];
+
   programs.bat.enable = true;
 
   programs.neovim = {
