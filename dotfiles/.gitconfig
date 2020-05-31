@@ -1,6 +1,6 @@
 [user]
-	name = Jingjing Duan
-	useConfigOnly = true
+    name = Jingjing Duan
+    useConfigOnly = true
 [alias]
     wl  = worktree list
     a   = add
@@ -109,38 +109,38 @@
     # $ git track upstream master
     track = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git branch --set-upstream-to ${1:-origin}/${2:-$branch}\"; echo $cmd; $cmd;  }; f"
     untrack = branch --unset-upstream
-	switch = !legit switch \"$@\"
-	branches = !legit branches
-	sprout = !legit sprout \"$@\"
-	unpublish = !legit unpublish \"$@\"
-	harvest = !legit harvest \"$@\"
-	sync = !legit sync \"$@\"
-	publish = !legit publish \"$@\"
-	graft = !legit graft \"$@\"
+    switch = !legit switch \"$@\"
+    branches = !legit branches
+    sprout = !legit sprout \"$@\"
+    unpublish = !legit unpublish \"$@\"
+    harvest = !legit harvest \"$@\"
+    sync = !legit sync \"$@\"
+    publish = !legit publish \"$@\"
+    graft = !legit graft \"$@\"
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
     add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
     unmerged = diff --name-only --diff-filter=U
     root = rev-parse --show-toplevel
 [core]
     editor = vim
-	excludesfile = /Users/jingjing_duan/.gitignore_global
+    excludesfile = /Users/jingjing_duan/.gitignore_global
     usewatchman = true
-	precomposeunicode = true
-	sparseCheckout = true
-	pager = diff-so-fancy | less --tabs=4 -RFX
+    precomposeunicode = true
+    sparseCheckout = true
+    pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
-	ui = true
+    ui = true
 [color "diff"]
-	meta = 11
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+    meta = 11
+    frag = magenta bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
 [github]
     user = jduan
 [push]
-	default = current
+    default = current
 [merge]
     conflictstyle = diff3
     tool = vimdiff
@@ -156,30 +156,30 @@
     renames = true
     renameLimit = 17924
     noprefix = true
-	colorMoved = zebra
+    colorMoved = zebra
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path =
 [mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+    cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
 [http]
     postBuffer = 524288000
 [gc]
     auto = 0
 [rerere]
-	enabled = true
+    enabled = true
 [status]
     submodulesummary = 1
 [log]
-	date = local
+    date = local
 [hub]
-	host = git.musta.ch
+    host = git.musta.ch
 [fetch]
-	prune = true
+    prune = true
 [remote "origin"]
-	tagOpt = --no-tags
+    tagOpt = --no-tags
 [protocol]
-	version = 2
+    version = 2
 [gerrit]
-	account = jingjing-duan
+    account = jingjing-duan
