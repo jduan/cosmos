@@ -47,7 +47,7 @@ Plug 'jlanzarotta/bufexplorer'
 Plug 'jpo/vim-railscasts-theme'
 " You need the following 2 plugins together.
 " Also this assumes 'fzf' is installed via homebrew.
-Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 " Run your favorite search tool from Vim, with an enhanced results list.
 " You can configure a different search tool other than 'ack'.
@@ -371,7 +371,7 @@ filetype plugin on    " Enable filetype-specific plugins
 compiler ruby         " Enable compiler support for ruby
 
 " load cscope
-cscope add cscope.out
+" cscope add cscope.out
 
 " close vim when the only window left is NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif

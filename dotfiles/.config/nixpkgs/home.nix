@@ -20,11 +20,45 @@
   home.stateVersion = "20.09";
 
   home.packages = [
+    pkgs.ascii
+    pkgs.binutils
+    pkgs.black
+    pkgs.colordiff
+    pkgs.exa
+    pkgs.fasd
+    pkgs.fd
+    pkgs.fswatch
     pkgs.fzf
+    pkgs.git
+    pkgs.gitAndTools.hub
+    pkgs.go
+    pkgs.groovy
+    pkgs.htop
+    pkgs.hyperfine
     pkgs.jq
+    pkgs.ktlint
+    pkgs.kubectl
+    pkgs.maven
+    pkgs.procs
+    pkgs.pstree
+    pkgs.reattach-to-user-namespace
+    pkgs.redis
+    pkgs.rlwrap
     pkgs.ripgrep
+    pkgs.rustup
+    pkgs.shellcheck
+    pkgs.socat
+    pkgs.terminal-notifier
+    pkgs.tldr
+    pkgs.tmux
+    pkgs.tokei
+    pkgs.vim
     pkgs.tree
+    pkgs.watch
+    pkgs.wdiff
+    pkgs.wget
     pkgs.universal-ctags
+    pkgs.python38Packages.yamllint
   ];
 
   programs.bat.enable = true;
