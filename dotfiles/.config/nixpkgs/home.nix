@@ -30,6 +30,7 @@
     pkgs.fswatch
     pkgs.fzf
     pkgs.git
+    pkgs.gitAndTools.diff-so-fancy
     pkgs.gitAndTools.hub
     pkgs.go
     pkgs.groovy
