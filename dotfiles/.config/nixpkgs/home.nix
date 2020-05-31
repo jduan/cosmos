@@ -19,50 +19,50 @@
   # changes in each release.
   home.stateVersion = "20.09";
 
-  home.packages = [
-    pkgs.ascii
-    pkgs.binutils
-    pkgs.black
-    pkgs.colordiff
-    pkgs.exa
-    pkgs.fasd
-    pkgs.fd
-    pkgs.fswatch
-    pkgs.fzf
-    pkgs.git
-    pkgs.gitAndTools.diff-so-fancy
-    pkgs.gitAndTools.hub
-    pkgs.gnupg
-    pkgs.go
-    pkgs.groovy
-    pkgs.htop
-    pkgs.hyperfine
-    pkgs.jq
-    pkgs.ktlint
-    pkgs.kubectl
-    pkgs.maven
-    pkgs.procs
-    pkgs.pstree
-    pkgs.python38
-    pkgs.python38Packages.yamllint
-    pkgs.reattach-to-user-namespace
-    pkgs.redis
-    pkgs.ripgrep
-    pkgs.rlwrap
-    pkgs.rustup
-    pkgs.shellcheck
-    pkgs.socat
-    pkgs.terminal-notifier
-    pkgs.tldr
-    pkgs.tmux
-    pkgs.tokei
-    pkgs.tree
-    pkgs.universal-ctags
-    pkgs.vim
-    pkgs.watch
-    pkgs.wdiff
-    pkgs.wget
-    pkgs.yq-go
+  home.packages = with pkgs; [
+    ascii
+    binutils
+    black
+    colordiff
+    exa
+    fasd
+    fd
+    fswatch
+    fzf
+    git
+    gitAndTools.diff-so-fancy
+    gitAndTools.hub
+    gnupg
+    go
+    groovy
+    htop
+    hyperfine
+    jq
+    ktlint
+    kubectl
+    maven
+    procs
+    pstree
+    python38
+    python38Packages.yamllint
+    reattach-to-user-namespace
+    redis
+    ripgrep
+    rlwrap
+    rustup
+    shellcheck
+    socat
+    terminal-notifier
+    tldr
+    tmux
+    tokei
+    tree
+    universal-ctags
+    vim
+    watch
+    wdiff
+    wget
+    yq-go
   ];
 
   programs.bat.enable = true;
