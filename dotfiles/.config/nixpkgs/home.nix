@@ -32,6 +32,7 @@
     pkgs.git
     pkgs.gitAndTools.diff-so-fancy
     pkgs.gitAndTools.hub
+    pkgs.gnupg
     pkgs.go
     pkgs.groovy
     pkgs.htop
@@ -42,6 +43,7 @@
     pkgs.maven
     pkgs.procs
     pkgs.pstree
+    pkgs.python38
     pkgs.python38Packages.yamllint
     pkgs.reattach-to-user-namespace
     pkgs.redis
@@ -60,6 +62,7 @@
     pkgs.watch
     pkgs.wdiff
     pkgs.wget
+    pkgs.yq-go
   ];
 
   programs.bat.enable = true;
