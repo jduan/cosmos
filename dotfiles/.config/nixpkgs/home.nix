@@ -49,6 +49,7 @@
     redis
     ripgrep
     rlwrap
+    ruby_2_7
     rustup
     shellcheck
     socat
