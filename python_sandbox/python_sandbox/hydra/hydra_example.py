@@ -1,10 +1,11 @@
 import hydra
+from omegaconf import DictConfig
 
 
 # strict mode is on by default
 # You can access keys that don't exist. You can't add keys that aren't in the config file.
-@hydra.main(config_path='conf', strict=True)
-def my_app(cfg):
+@hydra.main(config_path='config.yaml')
+def my_app(cfg: DictConfig):
     print("Hydra config:")
     print(cfg.pretty())
     print()
