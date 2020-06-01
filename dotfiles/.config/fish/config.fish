@@ -24,7 +24,9 @@ set paths \
     # haskell stack
     $HOME/.local/bin \
     # pip installed binaries
-    $HOME/Library/Python/3.7/bin/
+    $HOME/Library/Python/3.7/bin/ \
+    # executables installed by rubygems
+    $HOME/.gem/ruby/2.7.0/bin
 for path in $paths
     if test -d "$path"
         if not contains "$path" $PATH
