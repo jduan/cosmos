@@ -41,6 +41,7 @@
     ktlint
     kubectl
     maven
+    ncdu
     procs
     pstree
     python38
