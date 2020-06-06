@@ -18,13 +18,13 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-      - name: cd rust_sandbox
-        run: cd rust_sandbox
       - uses: actions-rs/cargo@v1
+        working-directory: rust_sandbox
         with:
           command: build
           args: --release --all-features
       - uses: actions-rs/cargo@v1
+        working-directory: rust_sandbox
         with:
           command: test
           args: --verbose
