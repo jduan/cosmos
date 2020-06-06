@@ -1,9 +1,5 @@
 name: Rust
 
-defaults:
-  run:
-    working-directory: rust_sandbox
-
 on:
   push:
     branches: [ master ]
@@ -17,6 +13,7 @@ jobs:
   build_and_test:
     name: Rust project
     runs-on: ubuntu-latest
+    working-directory: rust_sandbox
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
