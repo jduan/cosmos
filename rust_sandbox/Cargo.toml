@@ -16,4 +16,5 @@ members = [
     "rust_webserver",
     "simple_http_server",
     "thread_pool_example",
+    "zero2prod",
 ]
