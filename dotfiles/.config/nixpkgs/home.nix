@@ -21,6 +21,7 @@
 
   home.packages = with pkgs; [
     ascii
+    bash
     binutils
     black
     colordiff
