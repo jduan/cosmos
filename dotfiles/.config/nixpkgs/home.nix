@@ -43,6 +43,7 @@
     kubectl
     maven
     ncdu
+    nixfmt
     procs
     pstree
     python38
