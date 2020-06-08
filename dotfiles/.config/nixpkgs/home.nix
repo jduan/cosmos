@@ -21,6 +21,7 @@
 
   home.packages = with pkgs; [
     ascii
+    bash
     binutils
     black
     colordiff
@@ -42,6 +43,7 @@
     kubectl
     maven
     ncdu
+    nixfmt
     procs
     pstree
     python38

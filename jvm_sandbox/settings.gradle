@@ -1,0 +1,5 @@
+rootProject.name = "jvm_sandbox"
+include "projects:antlr_stringtemplate_example"
+include "projects:graphql_example"
+include "projects:java_sandbox"
+include "projects:kotlin_sandbox"
