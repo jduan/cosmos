@@ -25,6 +25,7 @@
     binutils
     black
     colordiff
+    curlFull
     exa
     fasd
     fd
