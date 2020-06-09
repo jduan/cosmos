@@ -89,6 +89,7 @@ Plug 'vim-scripts/groovy.vim'
 " Close multiple buffers at once.
 Plug 'Asheq/close-buffers.vim'
 Plug 'rust-lang/rust.vim'
+Plug 'LnL7/vim-nix'
 " Initialize plugin system
 call plug#end()
 
