@@ -393,8 +393,6 @@ let NERDTreeIgnore=[
 
 " Press ii to exit insert mode
 :imap ii <Esc>
-" mappings
-imap jj \bi<CR>\item<CR>\ei<Esc>kA
 
 " restore cursor position
 " autocmd BufReadPost *
@@ -570,7 +568,6 @@ map <silent> tw :GhcModTypeInsert<CR>
 map <silent> ts :GhcModSplitFunCase<CR>
 map <silent> tq :GhcModType<CR>
 map <silent> te :GhcModTypeClear<CR>
-imap drv deriving (Show, Eq)
 
 " Haskell indent 2 spaces
 au BufEnter *.hs setl shiftwidth=2"
@@ -600,10 +597,6 @@ let g:hindent_line_length = 80
 " https://github.com/Yggdroot/indentLine
 let g:indentLine_fileTypeExclude = ['haskell']
 
-" YAML
-au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-
 " fzf
 nnoremap <leader>f :Files<CR>
 
@@ -628,12 +621,3 @@ noremap <C-k> :NV<CR>
 
 " save and close a buffer
 :command BWD write|bdelete
-
-" rust plugin
-" Run RustFmt upon save
-let g:rustfmt_autosave = 1
-" make ! part of a word
-autocmd FileType rust setlocal iskeyword+=!
-
-" automatically give executable permissions when saving shell scripts
-autocmd FileType sh autocmd BufWritePost * silent !chmod a+x <afile>
