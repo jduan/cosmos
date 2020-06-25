@@ -90,6 +90,7 @@ Plug 'vim-scripts/groovy.vim'
 Plug 'Asheq/close-buffers.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'LnL7/vim-nix'
+Plug 'christoomey/vim-titlecase' " Titlecase text
 " Initialize plugin system
 call plug#end()
 

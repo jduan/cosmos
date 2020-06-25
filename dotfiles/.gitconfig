@@ -56,7 +56,7 @@
     fo  = fetch origin
     fom = fetch origin master
     # fetch a single branch
-    fetch-branch  = "!f(){ git fetch origin --force $1:refs/remotes/origin/$1; }; f"
+    fetch-branch  = "!f(){ git fetch origin +refs/heads/$1:refs/remotes/origin/$1; }; f"
     lom = log origin/master
     m   = merge
     mf  = merge --ff-only
@@ -96,7 +96,7 @@
     ss  = status -uno
     tags = "log --tags --simplify-by-decoration --pretty='format:%ai %d'"
     # show time of the tip/first/head commit
-    tip = show -s --pretty=medium
+    tip = show --no-patch
     unstage = restore --staged --
     parents = log --pretty=%P -n 1
     up = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git pull origin $branch\"; echo $cmd; $cmd; }; f"
