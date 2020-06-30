@@ -1,9 +1,9 @@
-with (import <nixpkgs> {});
-derivation {
+let
+  pkgs = import <nixpkgs> {};
+  # import the function defined in "autotools.nix" and call it with "pkgs"
+  mkDerivation = import ./autotools.nix pkgs;
+in mkDerivation {
   name = "hello";
-  builder = "${bash}/bin/bash";
-  args = [ ./generic_builder.sh ];
-  buildInputs = [gnutar gzip gnumake coreutils gawk gnused gnugrep clang.bintools.bintools_bin clang];
+  # Note that you can't define src as a string "./hello-2.10.tar.gz"!
   src = ./hello-2.10.tar.gz;
-  system = builtins.currentSystem;
 }

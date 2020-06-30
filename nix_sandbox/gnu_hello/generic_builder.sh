@@ -1,6 +1,13 @@
+# This is a generic builder script that can be used to build projects that use
+# autotools, ie "make install".
 set -e
 # First unset PATH, because it's initially set to a non-existant path.
 unset PATH
+
+for p in $baseInputs; do
+  export PATH=$p/bin/${PATH:+:}$PATH
+done
+
 for p in $buildInputs; do
   export PATH=$p/bin/${PATH:+:}$PATH
 done
