@@ -6,7 +6,17 @@ import java.lang.Exception
 private val logger = LoggerFactory.getLogger("")
 
 enum class Color {
-    RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET
+    RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET;
+    override fun toString(): String =
+        when(this) {
+            Color.RED -> "I'm red"
+            Color.ORANGE -> "orange"
+            Color.YELLOW -> "yellow"
+            Color.GREEN -> "green"
+            Color.BLUE -> "blue"
+            Color.INDIGO -> "indigo"
+            Color.VIOLET -> "violet"
+        }
 }
 
 fun getColorName(color: Color): String =
@@ -30,7 +40,15 @@ fun mixColors(color1: Color, color2: Color): Color =
         else -> throw Exception("Dirty color")
     }
 
+// By default, enums are sorted by their ordinal.
+fun sortColors(colors: List<Color>) {
+    println("color sorted: ${colors.sorted()}")
+}
+
 fun main() {
     logger.info(getColorName(Color.RED))
+    logger.info(getColorName(Color.RED))
     logger.info(mixColors(Color.RED, Color.YELLOW).toString())
+    sortColors(listOf(Color.RED, Color.VIOLET, Color.BLUE, Color.YELLOW))
+    println("Red is ${Color.RED}")
 }
