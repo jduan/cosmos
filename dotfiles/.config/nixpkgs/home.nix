@@ -65,6 +65,7 @@
     universal-ctags
     vim
     watch
+    watchman
     wdiff
     wget
     yq-go
