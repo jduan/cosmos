@@ -6,7 +6,6 @@ members = [
     "clap_example",
     "leetcode_30_challenges",
     "leetcode_top_questions",
-    "rust_cli",
     "rust_green_threads",
     "rust_minigrep",
     "rust_mio_example",
