@@ -1,7 +1,7 @@
-name: myapp
+name: Rust CLI Example
 version: "1.0"
 author: Jingjing Duan <duanjingjing@gmail.com>
-about: Clap Example
+about: Rust CLI Example
 args:
   - config:
       short: c

@@ -623,13 +623,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "clap_example"
-version = "0.1.0"
-dependencies = [
- "clap",
-]
-
-[[package]]
 name = "cloudabi"
 version = "0.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1937,6 +1930,13 @@ dependencies = [
  "iron",
  "route-recognizer",
  "url 1.7.2",
+]
+
+[[package]]
+name = "rust_cli"
+version = "0.1.0"
+dependencies = [
+ "clap",
 ]
 
 [[package]]

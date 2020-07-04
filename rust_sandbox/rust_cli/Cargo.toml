@@ -1,5 +1,5 @@
 [package]
-name = "clap_example"
+name = "rust_cli"
 version = "0.1.0"
 authors = ["Jingjing Duan <duanjingjing@gmail.com>"]
 edition = "2018"
