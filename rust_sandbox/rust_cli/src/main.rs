@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate clap;
+#[macro_use]
+extern crate dotenv_codegen;
 use clap::App;
 
 fn main() {
@@ -21,4 +23,10 @@ fn main() {
         2 => println!("Tons of verbose info"),
         _ => println!("Don't be crazy"),
     }
+
+    // This shows how to read from a ".env" file
+    println!("Redis address: {}", dotenv!("REDIS_ADDRESS"));
+
+    // Use env vars
+    println!("Home is: {}", env!("HOME"));
 }
