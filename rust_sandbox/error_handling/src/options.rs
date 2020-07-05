@@ -37,7 +37,7 @@ pub fn get_file_extension3(filename: &str) -> &str {
 // Given a filepath, such as "/usr/local/bin/hello.rs", return the extension.
 // Use the "and_then" combinator
 pub fn get_filepath_extension(filepath: &str) -> Option<&str> {
-    let parts = filepath.split("/");
+    let parts = filepath.split('/');
 
     // You can't use "map" here because you would return an Option of Option.
     parts.last().and_then(|name| get_file_extension(name))
