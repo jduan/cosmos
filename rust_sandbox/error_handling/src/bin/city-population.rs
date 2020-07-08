@@ -5,9 +5,38 @@ extern crate clap;
 use clap::App;
 use csv::ReaderBuilder;
 use serde::Deserialize;
-use std::error::Error;
+use std::fmt::Display;
 use std::fs;
 use std::io;
+
+#[derive(Debug)]
+enum CliError {
+    Io(io::Error),
+    Csv(csv::Error),
+    NotFound,
+}
+
+impl Display for CliError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CliError::Io(err) => err.fmt(f),
+            CliError::Csv(err) => err.fmt(f),
+            CliError::NotFound => write!(f, "No matching cities with a population were found."),
+        }
+    }
+}
+
+impl From<io::Error> for CliError {
+    fn from(err: io::Error) -> CliError {
+        CliError::Io(err)
+    }
+}
+
+impl From<csv::Error> for CliError {
+    fn from(err: csv::Error) -> CliError {
+        CliError::Csv(err)
+    }
+}
 
 // A row of the CSV file
 #[derive(Debug, Deserialize)]
@@ -31,10 +60,7 @@ struct PopulationCount {
 
 /// Return a vector of PopulationCount for rows that match the city name and have a population
 /// column.
-fn get_population(
-    data_path: Option<&str>,
-    city: &str,
-) -> Result<Vec<PopulationCount>, Box<dyn Error>> {
+fn get_population(data_path: Option<&str>, city: &str) -> Result<Vec<PopulationCount>, CliError> {
     let mut found = vec![];
     let input: Box<dyn io::Read> = match data_path {
         None => Box::new(io::stdin()),
@@ -56,9 +82,7 @@ fn get_population(
     }
 
     if found.is_empty() {
-        Err(From::from(
-            "No matching cities with a population were found.",
-        ))
+        Err(CliError::NotFound)
     } else {
         Ok(found)
     }
