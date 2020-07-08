@@ -7,6 +7,7 @@ use csv::ReaderBuilder;
 use serde::Deserialize;
 use std::error::Error;
 use std::fs;
+use std::io;
 
 // A row of the CSV file
 #[derive(Debug, Deserialize)]
@@ -30,10 +31,16 @@ struct PopulationCount {
 
 /// Return a vector of PopulationCount for rows that match the city name and have a population
 /// column.
-fn get_population(data_path: &str, city: &str) -> Result<Vec<PopulationCount>, Box<dyn Error>> {
+fn get_population(
+    data_path: Option<&str>,
+    city: &str,
+) -> Result<Vec<PopulationCount>, Box<dyn Error>> {
     let mut found = vec![];
-    let file = fs::File::open(data_path)?;
-    let mut reader = ReaderBuilder::new().has_headers(true).from_reader(file);
+    let input: Box<dyn io::Read> = match data_path {
+        None => Box::new(io::stdin()),
+        Some(file_path) => Box::new(fs::File::open(file_path)?),
+    };
+    let mut reader = ReaderBuilder::new().has_headers(true).from_reader(input);
     for (_line, row) in reader.deserialize().enumerate() {
         let row: Row = row?;
 
@@ -63,7 +70,7 @@ fn main() {
     let m = App::from_yaml(yaml).get_matches();
 
     // We can safely call "unwrap" here because these 2 are "required" arguments.
-    let data_path = m.value_of("data_path").unwrap();
+    let data_path = m.value_of("data_path");
     let city = m.value_of("city").unwrap();
 
     match get_population(data_path, city) {
