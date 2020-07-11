@@ -1,6 +1,8 @@
 #![feature(never_type)]
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate bson;
 
 use std::collections::HashMap;
 
@@ -20,6 +22,7 @@ use crate::globals::SAMPLE_STR;
 pub mod arrays;
 pub mod associate_types;
 pub mod async_example;
+pub mod bson_example;
 pub mod casting;
 pub mod channels;
 pub mod clone_trait;
@@ -61,6 +64,7 @@ pub mod phantom_types;
 pub mod print_things;
 pub mod processes;
 pub mod references;
+pub mod ron_example;
 pub mod sandbox;
 pub mod serde_examples;
 pub mod serde_json_example;
