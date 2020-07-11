@@ -63,6 +63,7 @@ pub mod processes;
 pub mod references;
 pub mod sandbox;
 pub mod serde_examples;
+pub mod serde_json_example;
 pub mod slice_type;
 pub mod smart_pointers;
 pub mod strings;
