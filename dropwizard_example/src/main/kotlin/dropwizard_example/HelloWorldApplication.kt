@@ -7,6 +7,7 @@ import io.dropwizard.setup.Environment
 class HelloWorldApplication: Application<HelloWorldConfiguration>() {
     override fun initialize(bootstrap: Bootstrap<HelloWorldConfiguration>) {
         super.initialize(bootstrap)
+        bootstrap.addCommand(GreetCommand())
     }
 
     override fun getName(): String {

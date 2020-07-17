@@ -41,4 +41,5 @@ application {
 
 run {
     args = ["server", "example.yml"]
+    // args = ["greet", "--user", "Jingjing"]
 }
