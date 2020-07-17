@@ -18,5 +18,6 @@ class HelloWorldApplication: Application<HelloWorldConfiguration>() {
         val healthCheck = TemplateHealthCheck(configuration.getTemplate())
         environment.jersey().register(resource)
         environment.healthChecks().register("template", healthCheck)
+        environment.lifecycle().manage(RiakClientManager())
     }
 }
