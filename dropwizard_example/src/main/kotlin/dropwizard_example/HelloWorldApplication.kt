@@ -20,5 +20,6 @@ class HelloWorldApplication: Application<HelloWorldConfiguration>() {
         environment.jersey().register(resource)
         environment.healthChecks().register("template", healthCheck)
         environment.lifecycle().manage(RiakClientManager())
+        environment.admin().addTask(TruncateDatabaseTask("order", "truncate"))
     }
 }
