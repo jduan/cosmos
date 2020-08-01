@@ -56,7 +56,6 @@
     ruby_2_7
     rustup
     shellcheck
-    socat
     terminal-notifier
     tldr
     tmux
