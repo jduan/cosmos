@@ -34,7 +34,7 @@ suspend fun loadContributorsChannels(
             launch {
                 log("start loading for ${repo.name}")
                 // delay here is needed so we have time to cancel the coroutines
-                delay(3000)
+                // delay(3000)
                 val users = service.getRepoContributors(req.org, repo.name)
                     .also { logUsers(repo, it) }
                     .bodyList()
