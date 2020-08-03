@@ -1,26 +1,45 @@
 package contributors
 
-import contributors.Contributors.LoadingStatus.*
-import contributors.Variant.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.swing.Swing
-import tasks.*
+import contributors.Contributors.LoadingStatus.CANCELED
+import contributors.Contributors.LoadingStatus.COMPLETED
+import contributors.Contributors.LoadingStatus.IN_PROGRESS
+import contributors.Variant.BACKGROUND
+import contributors.Variant.BLOCKING
+import contributors.Variant.CALLBACKS
+import contributors.Variant.CHANNELS
+import contributors.Variant.CONCURRENT
+import contributors.Variant.NOT_CANCELLABLE
+import contributors.Variant.PROGRESS
+import contributors.Variant.SUSPEND
 import java.awt.event.ActionListener
 import javax.swing.SwingUtilities
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import tasks.loadContributorsBackground
+import tasks.loadContributorsBlocking
+import tasks.loadContributorsCallbacks
+import tasks.loadContributorsChannels
+import tasks.loadContributorsConcurrent
+import tasks.loadContributorsNotCancellable
+import tasks.loadContributorsProgress
+import tasks.loadContributorsSuspend
 
 enum class Variant {
-    BLOCKING,         // Request1Blocking
-    BACKGROUND,       // Request2Background
-    CALLBACKS,        // Request3Callbacks
-    SUSPEND,          // Request4Coroutine
-    CONCURRENT,       // Request5Concurrent
-    NOT_CANCELLABLE,  // Request6NotCancellable
-    PROGRESS,         // Request6Progress
-    CHANNELS          // Request7Channels
+    BLOCKING, // Request1Blocking
+    BACKGROUND, // Request2Background
+    CALLBACKS, // Request3Callbacks
+    SUSPEND, // Request4Coroutine
+    CONCURRENT, // Request5Concurrent
+    NOT_CANCELLABLE, // Request6NotCancellable
+    PROGRESS, // Request6Progress
+    CHANNELS // Request7Channels
 }
 
-interface Contributors: CoroutineScope {
+interface Contributors : CoroutineScope {
 
     val job: Job
 
@@ -102,7 +121,7 @@ interface Contributors: CoroutineScope {
                     }
                 }.setUpCancellation()
             }
-            CHANNELS -> {  // Performing requests concurrently and showing progress
+            CHANNELS -> { // Performing requests concurrently and showing progress
                 launch(Dispatchers.Default) {
                     loadContributorsChannels(service, req) { users, completed ->
                         withContext(Dispatchers.Main) {
@@ -181,8 +200,7 @@ interface Contributors: CoroutineScope {
         val params = getParams()
         if (params.username.isEmpty() && params.password.isEmpty()) {
             removeStoredParams()
-        }
-        else {
+        } else {
             saveParams(params)
         }
     }

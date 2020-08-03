@@ -1,7 +1,10 @@
 package tasks
 
-import contributors.*
-import kotlinx.coroutines.*
+import contributors.GitHubService
+import contributors.RequestData
+import contributors.User
+import contributors.logRepos
+import contributors.logUsers
 import java.util.concurrent.atomic.AtomicInteger
 
 suspend fun loadContributorsProgress(

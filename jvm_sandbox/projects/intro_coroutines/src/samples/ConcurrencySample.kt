@@ -1,6 +1,10 @@
 package samples
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking {
     val deferred: Deferred<Int> = async(Dispatchers.Default) {

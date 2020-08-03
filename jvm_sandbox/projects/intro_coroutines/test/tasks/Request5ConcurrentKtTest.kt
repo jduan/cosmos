@@ -3,7 +3,6 @@ package tasks
 import contributors.MockGithubService
 import contributors.expectedConcurrentResults
 import contributors.testRequestData
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert
 import org.junit.Test

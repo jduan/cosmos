@@ -1,7 +1,8 @@
 package samples
 
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking<Unit> {
     val channel = Channel<String>()

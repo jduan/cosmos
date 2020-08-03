@@ -1,6 +1,5 @@
 package contributors
 
-import kotlinx.coroutines.Job
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -8,8 +7,22 @@ import java.awt.Insets
 import java.awt.event.ActionListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.*
+import javax.swing.ImageIcon
+import javax.swing.JButton
+import javax.swing.JComboBox
+import javax.swing.JComponent
+import javax.swing.JFrame
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.JPasswordField
+import javax.swing.JScrollPane
+import javax.swing.JSeparator
+import javax.swing.JTable
+import javax.swing.JTextField
+import javax.swing.SwingConstants
+import javax.swing.UIManager
 import javax.swing.table.DefaultTableModel
+import kotlinx.coroutines.Job
 
 private val INSETS = Insets(3, 10, 3, 10)
 private val COLUMNS = arrayOf("Login", "Contributions")
@@ -63,8 +76,7 @@ class ContributorsUI : JFrame("GitHub Contributors"), Contributors {
     override fun updateContributors(users: List<User>) {
         if (users.isNotEmpty()) {
             log.info("Updating result with ${users.size} rows")
-        }
-        else {
+        } else {
             log.info("Clearing result")
         }
         resultsModel.setDataVector(users.map {

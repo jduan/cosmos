@@ -1,8 +1,15 @@
 package tasks
 
-import contributors.*
-import kotlinx.coroutines.*
-import kotlin.coroutines.coroutineContext
+import contributors.GitHubService
+import contributors.RequestData
+import contributors.User
+import contributors.log
+import contributors.logRepos
+import contributors.logUsers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 
 suspend fun loadContributorsNotCancellable(service: GitHubService, req: RequestData): List<User> {
     val repos = service

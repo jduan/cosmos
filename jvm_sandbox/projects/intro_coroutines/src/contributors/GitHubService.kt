@@ -1,11 +1,9 @@
 package contributors
 
+// import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.Observable
-//import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import java.util.Base64
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Response
@@ -14,7 +12,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
-import java.util.*
 
 interface GitHubService {
     @GET("orgs/{org}/repos?per_page=100")

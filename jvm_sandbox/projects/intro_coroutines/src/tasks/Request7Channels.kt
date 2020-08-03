@@ -1,7 +1,11 @@
 package tasks
 
-import contributors.*
-import kotlinx.coroutines.*
+import contributors.GitHubService
+import contributors.RequestData
+import contributors.User
+import contributors.log
+import contributors.logRepos
+import contributors.logUsers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch

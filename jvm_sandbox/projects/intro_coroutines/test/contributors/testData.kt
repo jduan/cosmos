@@ -29,7 +29,6 @@ val testRepos = listOf(
     )
 )
 
-
 val repos = testRepos.mapIndexed { index, testRepo -> Repo(index.toLong(), testRepo.name) }
 
 val reposMap = testRepos.associate { it.name to it }

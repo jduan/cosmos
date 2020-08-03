@@ -1,10 +1,17 @@
 package tasks
 
-import contributors.*
-import kotlinx.coroutines.*
+import contributors.GitHubService
+import contributors.RequestData
+import contributors.User
+import contributors.log
+import contributors.logRepos
+import contributors.logUsers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 
 suspend fun loadContributorsConcurrent(service: GitHubService, req: RequestData): List<User> = coroutineScope {
-     val repos = service
+    val repos = service
         .getOrgRepos(req.org)
         .also { logRepos(req, it) }
         .bodyList()

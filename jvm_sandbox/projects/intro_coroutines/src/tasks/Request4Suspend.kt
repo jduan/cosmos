@@ -1,6 +1,10 @@
 package tasks
 
-import contributors.*
+import contributors.GitHubService
+import contributors.RequestData
+import contributors.User
+import contributors.logRepos
+import contributors.logUsers
 
 // This looks surprisingly similar to the "blocking" version. It's readable and expresses
 // exactly what we're trying to achieve.
