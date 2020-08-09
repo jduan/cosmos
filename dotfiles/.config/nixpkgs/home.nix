@@ -25,6 +25,7 @@
     binutils
     black
     colordiff
+    curlFull
     exa
     fasd
     fd
@@ -55,7 +56,6 @@
     ruby_2_7
     rustup
     shellcheck
-    socat
     terminal-notifier
     tldr
     tmux

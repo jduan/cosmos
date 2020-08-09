@@ -56,7 +56,7 @@
     fo  = fetch origin
     fom = fetch origin master
     # fetch a single branch
-    fetch-branch  = "!f(){ git fetch origin --force $1:refs/remotes/origin/$1; }; f"
+    fetch-branch  = "!f(){ git fetch origin +refs/heads/$1:refs/remotes/origin/$1; }; f"
     lom = log origin/master
     m   = merge
     mf  = merge --ff-only
@@ -69,6 +69,7 @@
     po  = "!f(){ branch=$(git rev-parse --abbrev-ref HEAD); git push --set-upstream origin $branch; }; f"
     # create a new PR from origin/master (words after 'git pr' will be used as branch name, with dashes between words)
     pr  = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/master); }; f"
+    pr2 = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/WARM_MAIN); }; f"
     pu  = push --set-upstream --verbose
     r   = rebase
     ri  = rebase -i
@@ -96,7 +97,7 @@
     ss  = status -uno
     tags = "log --tags --simplify-by-decoration --pretty='format:%ai %d'"
     # show time of the tip/first/head commit
-    tip = show -s --pretty=medium
+    tip = show --no-patch
     unstage = restore --staged --
     parents = log --pretty=%P -n 1
     up = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git pull origin $branch\"; echo $cmd; $cmd; }; f"

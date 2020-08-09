@@ -29,7 +29,7 @@ apply plugin: "com.dorongold.task-tree"
 
 
 // Define the main class for the application
-mainClassName = 'App'
+mainClassName = 'User'
 
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
@@ -42,6 +42,13 @@ dependencies {
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 
 // In this section you declare where to find the dependencies of your project

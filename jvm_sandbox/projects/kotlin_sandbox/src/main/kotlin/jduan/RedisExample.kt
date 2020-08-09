@@ -29,3 +29,12 @@ fun main() {
         t2.exec()
     }
 }
+
+// This shows that you get an exception if the keys are empty.
+// ERR wrong number of arguments for 'mget' command
+internal fun mgetEmtpyKeys(jedisPool: JedisPool) {
+    jedisPool.resource.use { jedis ->
+        val keys = emptyArray<String>()
+        jedis.mget(*keys)
+    }
+}

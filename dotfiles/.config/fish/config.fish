@@ -96,7 +96,7 @@ end
 function postcmd --on-event fish_postexec
     set old_status $status
     set cmdend (/usr/local/bin/gdate '+%s%N')
-    set taken (math "($cmdend - $cmdstart) / 1000000")
+    set duration (math "($cmdend - $cmdstart) / 1000000")
     switch $old_status
     case 0
         set_color magenta
@@ -104,6 +104,6 @@ function postcmd --on-event fish_postexec
         set_color red
     end
     set now (date)
-    printf "(Exit: %s, Time: %'dms, %s)\n" $old_status $taken $now
+    printf "(Exit: %s, Time: %.0fms, %s)\n" $old_status $duration $now
     set_color normal
 end
