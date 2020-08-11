@@ -848,7 +848,7 @@ mod tests {
         // std::iter::Sum and std::iter::Product traits
         let count = (1..100).filter(|n| n % 15 == 0).count();
         assert_eq!(6, count);
-        let sum = (1..100).filter(|n| n % 15 == 0).sum();
+        let sum: i32 = (1..100).filter(|n| n % 15 == 0).sum();
         assert_eq!(315, sum);
 
         // max, min, max_by, min_by, max_by_key, min_by_key

@@ -3,7 +3,9 @@ members = [
     "actix_example",
     "actix_web_example",
     "async_std_example",
+    "error_handling",
     "leetcode_30_challenges",
+    "leetcode_top_questions",
     "rust_cli",
     "rust_green_threads",
     "rust_minigrep",
@@ -13,5 +15,7 @@ members = [
     "rust_thrift_example",
     "rust_tokio_example",
     "rust_webserver",
+    "simple_http_server",
     "thread_pool_example",
+    "zero2prod",
 ]

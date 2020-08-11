@@ -117,3 +117,6 @@ alias v='sf -e vim'
 
 # bazel
 alias b='bazel'
+
+# nix
+alias ne='nix-env'

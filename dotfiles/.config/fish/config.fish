@@ -24,7 +24,9 @@ set paths \
     # haskell stack
     $HOME/.local/bin \
     # pip installed binaries
-    $HOME/Library/Python/3.7/bin/
+    $HOME/Library/Python/3.7/bin/ \
+    # executables installed by rubygems
+    $HOME/.gem/ruby/2.7.0/bin
 for path in $paths
     if test -d "$path"
         if not contains "$path" $PATH
@@ -55,22 +57,9 @@ if [ -f '/Users/jingjing_duan/google-cloud-sdk/path.fish.inc' ];
     end;
 end
 
-# Nix
-# if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ];
-#   bass source "$HOME/.nix-profile/etc/profile.d/nix.sh";
-# end
-
-# Nix workaround
-# set paths $HOME/.nix-profile/bin
-# for path in $paths
-#     if not contains "$path" $PATH
-#         set -gx PATH "$path" $PATH
-#     end
-# end
-
 # airbnb
 set -gx DATA_DIR $HOME/repos2/data
-set -gx AFDEV_HOST "i-0a55744d91bc4533a.inst.aws.airbnb.com"
+set -gx AFDEV_HOST "i-0b911c61132abd2e1.inst.aws.airbnb.com"
 set -gx ONETOUCHGEN_ACCEPT_EULA yep
 # the port you'd like to use to run the local airflow webserver. This should be
 # a number between 49152–65535. Do not use 61903, you should choose a different
@@ -82,11 +71,6 @@ set -gx fullhouse $HOME/repos/fullhouse
 
 # ripgrep
 set -gx RIPGREP_CONFIG_PATH $HOME/.ripgreprc
-
-# set up rbenv
-status --is-interactive; and . (rbenv init -|psub)
-# set up pyenv
-status --is-interactive; and . (pyenv init -|psub)
 
 # fzf
 # Setting fd as the default source for fzf
@@ -112,13 +96,14 @@ end
 function postcmd --on-event fish_postexec
     set old_status $status
     set cmdend (/usr/local/bin/gdate '+%s%N')
-    set taken (math "($cmdend - $cmdstart) / 1000000")
+    set duration (math "($cmdend - $cmdstart) / 1000000")
     switch $old_status
     case 0
         set_color magenta
     case '*'
         set_color red
     end
-    printf "(Exit: %s, Time: %'dms)\n" $old_status $taken
+    set now (date)
+    printf "(Exit: %s, Time: %.0fms, %s)\n" $old_status $duration $now
     set_color normal
 end

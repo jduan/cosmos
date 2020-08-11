@@ -37,9 +37,8 @@ async fn serve_req(_req: Request<Body>) -> Result<Response<Body>, hyper::Error> 
     sleep(Duration::new(5, 0));
     let url_str = "http://www.rust-lang.org";
     let url = url_str.parse::<Uri>().expect("failed to parse URL");
-    let res = Client::new().get(url).compat().await;
     // proxy the result to the client
-    res
+    Client::new().get(url).compat().await
 }
 
 async fn run_server(addr: SocketAddr) {

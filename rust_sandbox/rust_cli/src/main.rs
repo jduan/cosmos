@@ -1,26 +1,32 @@
-use exitfailure::ExitFailure;
-use failure::ResultExt;
-use structopt::StructOpt;
-mod find_match;
+#[macro_use]
+extern crate clap;
+#[macro_use]
+extern crate dotenv_codegen;
+use clap::App;
 
-#[derive(StructOpt)]
-struct Cli {
-    // The pattern to look for
-    #[structopt(short = "p", long = "pattern")]
-    pattern: String,
-    // The path to the file to read
-    #[structopt(parse(from_os_str))]
-    #[structopt(short = "f", long = "file")]
-    path: std::path::PathBuf,
-}
+fn main() {
+    // Relative to the current file
+    let yaml = load_yaml!("cli.yml");
+    let m = App::from_yaml(yaml).get_matches();
 
-fn main() -> Result<(), ExitFailure> {
-    let args = Cli::from_args();
+    match m.value_of("config") {
+        None => println!("not config file passed"),
+        Some(config) => println!("config file: {}", config),
+    }
 
-    let content = std::fs::read_to_string(&args.path)
-        .with_context(|_| format!("could not read file {:?}", &args.path))?;
+    let input = m.value_of("INPUT").unwrap();
+    println!("INPUT file is {}", input);
 
-    find_match::find_matches(&content, &args.pattern, &mut std::io::stdout());
+    match m.occurrences_of("verbose") {
+        0 => println!("No verbose info"),
+        1 => println!("Some verbose info"),
+        2 => println!("Tons of verbose info"),
+        _ => println!("Don't be crazy"),
+    }
 
-    Ok(())
+    // This shows how to read from a ".env" file
+    println!("Redis address: {}", dotenv!("REDIS_ADDRESS"));
+
+    // Use env vars
+    println!("Home is: {}", env!("HOME"));
 }

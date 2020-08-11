@@ -1,4 +1,3 @@
-use std;
 use std::fmt;
 use std::fmt::{Debug, Display, Formatter};
 /// # There are 2 types of error handling in Rust: panic and Results.
