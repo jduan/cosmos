@@ -30,6 +30,7 @@ use thrift::transport::{TFramedReadTransportFactory, TFramedWriteTransportFactor
 use rust_thrift_example::shared::{SharedServiceSyncHandler, SharedStruct};
 use rust_thrift_example::tutorial::{CalculatorSyncHandler, CalculatorSyncProcessor};
 use rust_thrift_example::tutorial::{InvalidOperation, Operation, Work};
+use std::time::Duration;
 
 fn main() {
     match run() {
@@ -73,7 +74,7 @@ fn run() -> thrift::Result<()> {
         o_tran_fact,
         o_prot_fact,
         processor,
-        10,
+        1,
     );
 
     server.listen(&listen_address)
@@ -109,6 +110,8 @@ impl SharedServiceSyncHandler for CalculatorServer {
 // Calculator handler
 impl CalculatorSyncHandler for CalculatorServer {
     fn handle_ping(&self) -> thrift::Result<()> {
+        println!("sleeping in thread: {:?}", std::thread::current().id());
+        std::thread::sleep(Duration::from_secs(10));
         println!("pong!");
         Ok(())
     }
