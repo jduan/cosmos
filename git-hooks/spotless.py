@@ -38,13 +38,14 @@ for file_changed in files_changed:
     project_dir = find_build_gradle(dir)
     # Never run spotless
     if project_dir != Path(git_repo_dir):
-        project_dirs.add(find_build_gradle(dir))
+        project_dirs.add(str(project_dir))
 
 for project_dir in project_dirs:
-    os.chdir(project_dir)
+    gradle_task = project_dir[len(git_repo_dir):].replace("/", ":")
+    gradle_cmd = "%s %s:spotlessCheck" % (gradlew, gradle_task)
     try:
-        print("Running spotlessCheck for %s" % project_dir)
-        subprocess.check_call("%s spotlessCheck" % gradlew, shell=True, stdout=subprocess.DEVNULL,
+        print(gradle_cmd)
+        subprocess.check_call(gradle_cmd, shell=True, stdout=subprocess.DEVNULL,
                               stderr=subprocess.DEVNULL)
     except subprocess.CalledProcessError:
         print("spotlessCheck failed in %s" % project_dir)

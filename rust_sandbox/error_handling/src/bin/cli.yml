@@ -1,0 +1,14 @@
+name: City Population
+version: "1.0"
+author: Jingjing Duan <duanjingjing@gmail.com>
+about: Find population of cities in the US.
+args:
+  - city:
+      help: Name of the city to look up population for
+      required: true
+      index: 1
+  - data_path:
+      help: Path to the data CSV file
+      # If data_path isn't provided, read from stdin
+      required: false
+      index: 2

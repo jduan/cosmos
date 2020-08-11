@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+Color_Off='\033[0m'
+Green='\033[0;32m'
+
+branches=$(git for-each-ref --format='%(refname)' refs/heads/ | sed "s/refs\/heads\///")
+
+for branch in $branches
+do
+  echo -e "${Green}Pushing $branch $Color_Off"
+  git push origin "$branch":"$branch"
+done

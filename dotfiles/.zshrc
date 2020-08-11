@@ -51,7 +51,6 @@ export NODE_PATH=/usr/local/lib/jsctags/
 # .zshrc
 # .zlogin
 export PATH="$HOME/.local/bin:$HOME/bin:$HOME/scripts:$PATH"
-eval "$(rbenv init -)"
 
 # Hit C-z from the shell to trigger 'fg'
 fancy-ctrl-z () {

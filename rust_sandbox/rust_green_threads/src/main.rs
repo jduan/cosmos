@@ -34,15 +34,16 @@ fn hello() -> ! {
 // to the return address located on top of the stack. Since we pushed our address there it returns directly into our
 // function.
 unsafe fn gt_switch(new: *const ThreadContext) {
-    asm!("
-        mov 0x00($0), %rsp
-        ret
-       "
-    :
-    : "r"(new)
-    :
-    : "alignstack" // it will work without this now, but we need it for it to work on windows later
-    );
+    // TODO: fix this
+    // asm!("
+    //     mov 0x00($0), %rsp
+    //     ret
+    //    "
+    // :
+    // : "r"(new)
+    // :
+    // : "alignstack" // it will work without this now, but we need it for it to work on windows later
+    // );
 }
 
 fn main() {

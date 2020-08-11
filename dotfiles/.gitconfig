@@ -1,6 +1,6 @@
 [user]
-	name = Jingjing Duan
-	useConfigOnly = true
+    name = Jingjing Duan
+    useConfigOnly = true
 [alias]
     wl  = worktree list
     a   = add
@@ -56,7 +56,7 @@
     fo  = fetch origin
     fom = fetch origin master
     # fetch a single branch
-    fetch-branch  = "!f(){ git fetch origin --force $1:refs/remotes/origin/$1; }; f"
+    fetch-branch  = "!f(){ git fetch origin +refs/heads/$1:refs/remotes/origin/$1; }; f"
     lom = log origin/master
     m   = merge
     mf  = merge --ff-only
@@ -67,8 +67,9 @@
     p   = pull
     # push branch to origin and track it
     po  = "!f(){ branch=$(git rev-parse --abbrev-ref HEAD); git push --set-upstream origin $branch; }; f"
-    # create a new PR from origin/master
-    pr  = !sh -c 'git checkout -b jduan--$1 $(git rev-parse origin/master)' -
+    # create a new PR from origin/master (words after 'git pr' will be used as branch name, with dashes between words)
+    pr  = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/master); }; f"
+    pr2 = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/WARM_MAIN); }; f"
     pu  = push --set-upstream --verbose
     r   = rebase
     ri  = rebase -i
@@ -96,7 +97,7 @@
     ss  = status -uno
     tags = "log --tags --simplify-by-decoration --pretty='format:%ai %d'"
     # show time of the tip/first/head commit
-    tip = show -s --pretty=medium
+    tip = show --no-patch
     unstage = restore --staged --
     parents = log --pretty=%P -n 1
     up = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git pull origin $branch\"; echo $cmd; $cmd; }; f"
@@ -109,31 +110,38 @@
     # $ git track upstream master
     track = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git branch --set-upstream-to ${1:-origin}/${2:-$branch}\"; echo $cmd; $cmd;  }; f"
     untrack = branch --unset-upstream
-	switch = !legit switch \"$@\"
-	branches = !legit branches
-	sprout = !legit sprout \"$@\"
-	unpublish = !legit unpublish \"$@\"
-	harvest = !legit harvest \"$@\"
-	sync = !legit sync \"$@\"
-	publish = !legit publish \"$@\"
-	graft = !legit graft \"$@\"
+    switch = !legit switch \"$@\"
+    branches = !legit branches
+    sprout = !legit sprout \"$@\"
+    unpublish = !legit unpublish \"$@\"
+    harvest = !legit harvest \"$@\"
+    sync = !legit sync \"$@\"
+    publish = !legit publish \"$@\"
+    graft = !legit graft \"$@\"
     edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
     add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
     unmerged = diff --name-only --diff-filter=U
+    root = rev-parse --show-toplevel
 [core]
     editor = vim
-	excludesfile = /Users/jingjing_duan/.gitignore_global
+    excludesfile = /Users/jingjing_duan/.gitignore_global
     usewatchman = true
-	precomposeunicode = true
-	sparseCheckout = true
+    precomposeunicode = true
+    sparseCheckout = true
+    pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
-    ui = auto
+    ui = true
 [color "diff"]
-    meta = yellow
+    meta = 11
+    frag = magenta bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
 [github]
     user = jduan
 [push]
-	default = current
+    default = current
 [merge]
     conflictstyle = diff3
     tool = vimdiff
@@ -149,40 +157,30 @@
     renames = true
     renameLimit = 17924
     noprefix = true
+    colorMoved = zebra
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path =
 [mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+    cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
 [http]
     postBuffer = 524288000
 [gc]
     auto = 0
-[pager]
-    log = diff-highlight | less
-    show = diff-highlight | less
-    diff = diff-highlight | less
-[interactive]
-    diffFilter = diff-highlight
 [rerere]
-	enabled = true
+    enabled = true
 [status]
     submodulesummary = 1
 [log]
-	date = local
+    date = local
 [hub]
-	host = git.musta.ch
+    host = git.musta.ch
 [fetch]
-	prune = true
+    prune = true
 [remote "origin"]
-	tagOpt = --no-tags
-[color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+    tagOpt = --no-tags
 [protocol]
-	version = 2
+    version = 2
 [gerrit]
-	account = jingjing-duan
+    account = jingjing-duan
