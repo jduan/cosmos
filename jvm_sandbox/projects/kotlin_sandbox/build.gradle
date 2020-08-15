@@ -30,6 +30,7 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.2.0'
     compile 'org.eclipse.jgit:org.eclipse.jgit:5.8.0.202006091008-r'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    implementation 'com.github.javaparser:javaparser-core:3.16.1'
     implementation 'com.jcraft:jsch:0.1.55'
     implementation 'org.apache.commons:commons-csv:1.8'
     implementation 'com.google.guava:guava:29.0-jre'
