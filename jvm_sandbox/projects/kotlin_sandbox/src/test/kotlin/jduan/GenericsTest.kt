@@ -4,7 +4,9 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(TimingExtension::class)
 class GenericsTest {
     @Test
     fun test0() {

@@ -1,9 +1,12 @@
 package jduan
 
+import org.junit.Ignore
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
+import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.migrationsupport.EnableJUnit4MigrationSupport
 
 //@TestMethodOrder(MethodOrderer.Alphanumeric::class)
 @TestMethodOrder(MethodOrderer.Random::class)
@@ -14,8 +17,11 @@ import org.junit.jupiter.api.TestMethodOrder
 // * execute classes sequentially but their methods concurrently
 // * execute classes concurrently but their methods sequentially
 // * execute classes concurrently and their methods concurrently
+@EnableJUnit4MigrationSupport
+@ExtendWith(TimingExtension::class)
 class Junit5ExampleTest {
     @Test
+    @Ignore
     fun testZ() {
         println("running testZ")
         assertEquals(2, 1 + 1)
@@ -25,6 +31,7 @@ class Junit5ExampleTest {
 
     @Test
     fun testA() {
+        println("thread id in testA: ${Thread.currentThread()}")
         println("running testA")
         assertEquals(2, 1 + 1)
         Thread.sleep(1000)
