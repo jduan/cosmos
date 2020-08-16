@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
-import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.migrationsupport.EnableJUnit4MigrationSupport
 
 //@TestMethodOrder(MethodOrderer.Alphanumeric::class)
@@ -18,7 +17,9 @@ import org.junit.jupiter.migrationsupport.EnableJUnit4MigrationSupport
 // * execute classes concurrently but their methods sequentially
 // * execute classes concurrently and their methods concurrently
 @EnableJUnit4MigrationSupport
-@ExtendWith(TimingExtension::class)
+//! We are doing "automatic extension registration", see
+// https://junit.org/junit5/docs/current/user-guide/#extensions-registration-automatic
+// @ExtendWith(TimingExtension::class)
 class Junit5ExampleTest {
     @Test
     @Ignore
