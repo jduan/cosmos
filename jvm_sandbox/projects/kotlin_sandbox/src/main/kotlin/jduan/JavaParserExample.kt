@@ -12,11 +12,26 @@ object ParsingForFirstTime {
     @JvmStatic
     fun main(args: Array<String>) {
         val javaCode = """
+import com.airbnb.common.metrics.TaggedMetricRegistryFactory;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
 public class MyTests {
+    @Before
+    public void setUp() {
+      injector = Guice.createInjector(new AopMetricsModule());
+      testEndpoints = injector.getInstance(TestEndpoints.class);
+    }
+
+    @Before
+    public void setUpMetricRegistry() {
+      TaggedMetricRegistryFactory.initialize(taggedMetricRegistry);
+    }
+
+    @After
+    public void tearDownMetricRegistry() {
+      TaggedMetricRegistryFactory.initialize(new TaggedMetricRegistry());
+    }
 
     @Test
     public void multiplicationOfZeroIntegersShouldReturnZero() {
@@ -65,6 +80,41 @@ public class MyTests {
         classDeclaration.members.forEach {
             it.annotations.forEach {
                 println("annotation: $it")
+            }
+        }
+
+        // Check if a class is imported
+        val hasImport = compilationUnitNode.imports.any { import ->
+            import.nameAsString.contains("com.airbnb.common.metrics.TaggedMetricRegistryFactory")
+        }
+        println("hasImport: $hasImport")
+
+        // Find all classes
+        val classes = compilationUnitNode.types
+            .filter { it.isClassOrInterfaceDeclaration }
+            .map { it.toClassOrInterfaceDeclaration().get() }
+
+        // Find methods that have @Before annotations
+        classes.forEach { klass ->
+            val methods = klass.members.filter {
+                it.annotations.any {
+                    it.nameAsString == "Before" || it.nameAsString == "BeforeClass"
+                }
+            }
+
+            // find if methods have a statement that calls "TaggedMetricRegistryFactory.initialize"
+            methods.forEach {
+                if (it.isMethodDeclaration) {
+                    val method = it.asMethodDeclaration();
+                    if (method.body.isPresent) {
+                        val body = method.body.get()
+                        body.statements.forEach { stmt ->
+                            if (stmt.toString().contains("TaggedMetricRegistryFactory.initialize")) {
+                                println("stmt: $stmt")
+                            }
+                        }
+                    }
+                }
             }
         }
     }
