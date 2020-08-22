@@ -1,0 +1,47 @@
+name: dora
+
+service_dependency:
+  - causes
+  - monami
+  - orca
+  - tips
+  - sundance
+  - moog
+  - pluto
+  - overwatch
+  - coco
+  - ebert
+  - lombard
+  - shibuya
+  - aruba
+  - manatee
+  - dumbledore
+  - griphook
+  - dolores
+  - brocade
+  - satori_coordinator
+  - mindstorm
+  - wabisabi
+  - portunus
+  - athena
+  - mussel_dispatcher
+  - vermeer_ro
+  - neko
+  - bankai
+  - kyoo
+  - grin
+  - kittyhawk
+  - onepiece
+  - moneytree
+  - verity
+  - carson
+  - knight
+  - guiyuan
+  - silla
+
+service_idl:
+  - dora
+
+#oyster_model:
+#  - gradle_build
+#  - gradle_task
