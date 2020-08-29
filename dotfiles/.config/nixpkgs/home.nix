@@ -45,6 +45,7 @@
     maven
     ncdu
     nixfmt
+    pmd
     procs
     pstree
     python38

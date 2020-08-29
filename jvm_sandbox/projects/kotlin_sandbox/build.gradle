@@ -20,7 +20,10 @@ repositories {
 }
 
 dependencies {
+    pmd project(':projects:pmd_rules')
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 //    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.1.1'
     compile 'org.kohsuke:github-api:1.95'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0'
@@ -86,4 +89,8 @@ test {
         // To ignore all the tests in a class, pass "null" as the 2nd param
         // excludeTest 'MyScalaSpec', null
     }
+}
+
+pmd {
+    ruleSetFiles = files("config/pmd/myRuleSet.xml")
 }

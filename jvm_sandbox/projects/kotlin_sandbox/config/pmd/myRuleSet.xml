@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="customruleset">
+    <description>
+        This ruleset checks my code for bad stuff
+    </description>
+
+    <rule name="MyJavaRule"
+          language="java"
+          message="Violation found: don't give your variables offensive names!"
+          class="jduan.pmd_rules.DetectOffensiveVariableNames" >
+        <description>
+            Description
+        </description>
+        <!--    <priority>3</priority>-->
+    </rule>
+</ruleset>

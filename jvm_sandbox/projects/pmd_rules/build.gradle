@@ -1,0 +1,59 @@
+plugins {
+    // run "./gradlew dokka" to generate HTML docs
+    id "org.jetbrains.dokka" version "0.9.17"
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+// Note that the Kotlin compiler will create a class based on the "main" function.
+// So if the filename that contains the "main" func is called HelloWorld.kt,
+// the class will be named "HelloWorldKt".
+// See https://discuss.kotlinlang.org/t/no-class-just-fun-main/5147
+mainClassName = 'jduan.main.MainKt'
+
+defaultTasks 'run'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.4.0'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'net.sourceforge.pmd:pmd-java:6.26.0'
+
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:1.4.0"
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
+}
+
+// Output to build/libs/shadow.jar
+shadowJar {
+    baseName = 'shadow'
+    classifier = null
+    version = null
+}
+
+//task wrapper(type: Wrapper) {
+//    gradleVersion = "4.10.2"
+//}
+
+test {
+    useJUnitPlatform()
+    systemProperties = [
+        // This seed works with "MethodOrderer.Random"
+        'junit.jupiter.execution.order.random.seed': 99
+    ]
+    testLogging {
+        events 'PASSED', 'FAILED', 'SKIPPED'
+    }
+    maxParallelForks 4
+    filter {
+        // To ignore tests that have spaces in their names, just use spaces.
+        excludeTest 'HelloWorldTest', 'hello world'
+        excludeTest 'MyScalaSpec', "Basic logic* Pretty cool"
+        // To ignore all the tests in a class, pass "null" as the 2nd param
+        // excludeTest 'MyScalaSpec', null
+    }
+}
