@@ -70,7 +70,7 @@ delete=`diff --suppress-common-lines $all $keep | grep '^< ' | awk '{print $3}'`
 
 if [ $# -eq 0 ]
 then
-  echo $delete | xargs git branch -d
+  echo $delete | xargs git branch -D
 else
   for branch in $delete
   do
