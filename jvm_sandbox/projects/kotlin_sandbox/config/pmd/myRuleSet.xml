@@ -4,10 +4,20 @@
         This ruleset checks my code for bad stuff
     </description>
 
-    <rule name="MyJavaRule"
+    <rule name="MyJavaRule1"
           language="java"
           message="Violation found: don't give your variables offensive names!"
           class="jduan.pmd_rules.DetectOffensiveVariableNames" >
+        <description>
+            Description
+        </description>
+        <!--    <priority>3</priority>-->
+    </rule>
+
+    <rule name="MyJavaRule2"
+          language="java"
+          message="Violation found: you need to clean up resources in your unit tests!"
+          class="jduan.pmd_rules.EnsureResourceCleanup" >
         <description>
             Description
         </description>
