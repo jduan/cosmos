@@ -13,4 +13,25 @@
         </description>
         <!--    <priority>3</priority>-->
     </rule>
+
+    <rule name="DontCallBossShort"
+          language="java"
+          message="Boss wants to talk to you."
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="version" value="2.0"/>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//VariableDeclaratorId[@Image="bill" and ../../Type/PrimitiveType[@Image="short"]]
+]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
 </ruleset>

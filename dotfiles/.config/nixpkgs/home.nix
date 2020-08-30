@@ -39,6 +39,7 @@
     groovy
     htop
     hyperfine
+    jdk11
     jq
     ktlint
     kubectl
