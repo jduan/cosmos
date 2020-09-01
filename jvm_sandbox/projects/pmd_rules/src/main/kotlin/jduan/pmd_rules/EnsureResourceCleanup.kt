@@ -1,7 +1,10 @@
 package jduan.pmd_rules
 
+import net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceType
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration
 import net.sourceforge.pmd.lang.java.ast.ASTName
+import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule
 
@@ -15,6 +18,7 @@ class EnsureResourceCleanup : AbstractJavaRule() {
 
     override fun visit(node: ASTMethodDeclaration, data: Any): Any {
         if (isBefore(node)) {
+            println("isGetInstanceCalled: ${isGetInstanceCalled(node)}")
             currentTimeMillisCalled = isCurrentTimeMillisCalled(node)
         } else if (isAfter(node)){
             if (currentTimeMillisCalled) {
@@ -27,6 +31,35 @@ class EnsureResourceCleanup : AbstractJavaRule() {
 
         super.visit(node, data)
         return data
+    }
+
+
+    /**
+     * Look for a call like this: Order.getInstance(new String("hello"))
+     */
+    private fun isGetInstanceCalled(node: ASTMethodDeclaration): Boolean {
+        val exps = node.findDescendantsOfType(ASTPrimaryExpression::class.java)
+
+        val primaryExpression = exps.firstOrNull {
+            val prefix = it.getFirstDescendantOfType(ASTPrimaryPrefix::class.java)
+            val name = prefix.getFirstDescendantOfType(ASTName::class.java)
+            if (name != null) {
+                name.image == "Order.getInstance"
+            } else {
+                false
+            }
+        }
+
+        if (primaryExpression != null) {
+            val allocation = primaryExpression.getFirstDescendantOfType(ASTAllocationExpression::class.java)
+            if (allocation != null) {
+                val classType = allocation.getFirstDescendantOfType(ASTClassOrInterfaceType::class.java)
+                println("classType: ${classType.image}")
+                return classType.image == "String"
+            }
+        }
+
+        return false
     }
 
     private fun isCurrentTimeMillisCalled(node: ASTMethodDeclaration): Boolean {
