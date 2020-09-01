@@ -3535,5 +3535,6 @@ dependencies = [
  "actix-rt",
  "actix-web",
  "reqwest",
+ "serde 1.0.114",
  "tokio 0.2.22",
 ]
