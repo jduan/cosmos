@@ -1,5 +1,5 @@
 use std::net::TcpListener;
-use zero2prod::run;
+use zero2prod::startup::run;
 
 // This macro expands into a regular main function that starts an async runtime and
 // drives it to completion.
