@@ -24,9 +24,14 @@ async fn health_check_tests() {
 #[actix_rt::test]
 async fn subscribe_returns_200_for_valid_form_data() {
     let app = spawn_app().await;
+    // Delete the record from the database so it can be inserted again.
+    sqlx::query!("DELETE FROM subscriptions WHERE email = 'johnwick@gmail.com'")
+        .execute(&app.conn_pool)
+        .await
+        .expect("Failed to remove John Wick from the database");
+
     let client = reqwest::Client::new();
     let body = "name=John%20Wick&email=johnwick%40gmail.com";
-
     let response = client
         .post(&format!("{}/subscriptions", &app.address))
         .header("Content-Type", "application/x-www-form-urlencoded")
