@@ -21,5 +21,6 @@ class HelloWorldApplication: Application<HelloWorldConfiguration>() {
         environment.healthChecks().register("template", healthCheck)
         environment.lifecycle().manage(RiakClientManager())
         environment.admin().addTask(TruncateDatabaseTask("order", "truncate"))
+        environment.admin().addTask(EchoTask("echo"))
     }
 }
