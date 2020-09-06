@@ -4,7 +4,7 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 
-class HelloWorldApplication: Application<HelloWorldConfiguration>() {
+class HelloWorldApplication : Application<HelloWorldConfiguration>() {
     override fun initialize(bootstrap: Bootstrap<HelloWorldConfiguration>) {
         super.initialize(bootstrap)
         bootstrap.addCommand(GreetCommand())
@@ -15,9 +15,10 @@ class HelloWorldApplication: Application<HelloWorldConfiguration>() {
     }
 
     override fun run(configuration: HelloWorldConfiguration, environment: Environment) {
-        val resource = HelloWorldResource(configuration.getTemplate(), configuration.getDefaultName())
         val healthCheck = TemplateHealthCheck(configuration.getTemplate())
-        environment.jersey().register(resource)
+        environment.jersey().register(
+            HelloWorldResource(configuration.getTemplate(), configuration.getDefaultName())
+        )
         environment.healthChecks().register("template", healthCheck)
         environment.lifecycle().manage(RiakClientManager())
         environment.admin().addTask(TruncateDatabaseTask("order", "truncate"))

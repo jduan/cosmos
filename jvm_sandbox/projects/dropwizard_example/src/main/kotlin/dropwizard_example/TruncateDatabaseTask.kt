@@ -7,7 +7,7 @@ import io.dropwizard.servlets.tasks.Task
 import java.io.PrintWriter
 
 // This demonstrates how to execute a task via the HTTP admin url
-class TruncateDatabaseTask(val database: String, name: String): Task(name) {
+class TruncateDatabaseTask(val database: String, name: String) : Task(name) {
     @Metered
     @ExceptionMetered
     override fun execute(parameters: ImmutableMultimap<String, String>, output: PrintWriter) {

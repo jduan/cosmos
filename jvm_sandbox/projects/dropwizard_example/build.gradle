@@ -30,6 +30,7 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+    testImplementation 'org.mockito:mockito-core:3.5.10'
 }
 
 application {

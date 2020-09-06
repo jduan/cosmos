@@ -2,7 +2,7 @@ package dropwizard_example
 
 import com.codahale.metrics.health.HealthCheck
 
-class TemplateHealthCheck(private val template: String): HealthCheck() {
+class TemplateHealthCheck(private val template: String) : HealthCheck() {
     override fun check(): Result {
         val saying = String.format(template, "TEST")
         if (!saying.contains("TEST")) {
