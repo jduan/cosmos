@@ -19,6 +19,9 @@ class HelloWorldApplication : Application<HelloWorldConfiguration>() {
         environment.jersey().register(
             HelloWorldResource(configuration.getTemplate(), configuration.getDefaultName())
         )
+        environment.jersey().register(
+            NotificationResource(configuration.getTemplate(), configuration.getDefaultName())
+        )
         environment.healthChecks().register("template", healthCheck)
         environment.lifecycle().manage(RiakClientManager())
         environment.admin().addTask(TruncateDatabaseTask("order", "truncate"))
