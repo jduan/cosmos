@@ -1,5 +1,6 @@
 package dropwizard_example
 
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
@@ -8,6 +9,7 @@ class HelloWorldApplication : Application<HelloWorldConfiguration>() {
     override fun initialize(bootstrap: Bootstrap<HelloWorldConfiguration>) {
         super.initialize(bootstrap)
         bootstrap.addCommand(GreetCommand())
+        bootstrap.objectMapper.registerModule(KotlinModule())
     }
 
     override fun getName(): String {
