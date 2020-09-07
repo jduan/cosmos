@@ -16,6 +16,8 @@ repositories {
 }
 
 dependencies {
+    implementation platform('ru.vyarus:dropwizard-guicey:4.2.2')
+
     // Align versions of all Kotlin components
     implementation platform('org.jetbrains.kotlin:kotlin-bom')
 
@@ -27,6 +29,15 @@ dependencies {
     // This is needed to make jackson work with kotlin data classes
     // You need to register the KotlinModule() when bootstrapping
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.10'
+
+    // no need to specify versions
+    implementation 'ru.vyarus:dropwizard-guicey'
+
+    implementation 'io.dropwizard:dropwizard-auth'
+//    implementation 'com.google.inject:guice-assistedinject'
+
+//    testImplementation 'io.dropwizard:dropwizard-test'
+    testImplementation 'org.spockframework:spock-core'
 
     // Use the Kotlin test library.
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
@@ -42,6 +53,6 @@ application {
 }
 
 run {
-    args = ["server", "example.yml"]
+    // args = ["server", "example.yml"]
     // args = ["greet", "--user", "Jingjing"]
 }
