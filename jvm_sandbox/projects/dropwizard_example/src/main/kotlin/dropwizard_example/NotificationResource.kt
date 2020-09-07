@@ -23,7 +23,9 @@ import javax.ws.rs.core.UriBuilder
 @Path("/{user}/notifications")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-class NotificationResource(private val template: String, private val defaultName: String) {
+class NotificationResource(private val template: String, private val defaultName: String,
+                           private val store: NotificationStore
+) {
     private val counter: AtomicLong = AtomicLong()
 
     @GET
@@ -47,6 +49,8 @@ class NotificationResource(private val template: String, private val defaultName
         return Saying(counter.incrementAndGet(), value)
     }
 
+    // You can send a request to this endpoint like this:
+    // curl -X POST -H "Content-Type: application/json" -d '{"sender": "David", "receiver": "John", "message": "How are you?"}' http://localhost:8080/jack/notifications
     @POST
     fun add(
         @PathParam("user") user: String?,
@@ -54,6 +58,7 @@ class NotificationResource(private val template: String, private val defaultName
         // deserialize the requqest into a Notification object.
         @NotNull @Valid notification: Notification
     ): Response {
+        store.create(notification)
         logger.info("Adding a notification: $notification")
         return Response.created(
             UriBuilder.fromResource(NotificationResource::class.java)

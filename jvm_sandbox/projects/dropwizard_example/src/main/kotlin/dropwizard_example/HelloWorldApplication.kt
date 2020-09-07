@@ -22,8 +22,9 @@ class HelloWorldApplication : Application<HelloWorldConfiguration>() {
         environment.jersey().register(
             HelloWorldResource(configuration.getTemplate(), configuration.getDefaultName())
         )
+        val store = NotificationStore()
         environment.jersey().register(
-            NotificationResource(configuration.getTemplate(), configuration.getDefaultName())
+            NotificationResource(configuration.getTemplate(), configuration.getDefaultName(), store)
         )
         environment.jersey().register(
             IllegalArgumentExceptionMapper(environment.metrics())
