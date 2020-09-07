@@ -3,6 +3,7 @@ package dropwizard_example
 import com.codahale.metrics.annotation.Timed
 import io.dropwizard.jersey.params.IntParam
 import org.slf4j.LoggerFactory
+import java.lang.IllegalArgumentException
 import java.util.concurrent.atomic.AtomicLong
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
@@ -39,6 +40,9 @@ class NotificationResource(private val template: String, private val defaultName
         }.joinToString(separator = " ")
         if (user == "baduser") {
             throw WebApplicationException(Response.Status.NOT_FOUND)
+        }
+        if (user == "badboy") {
+            throw IllegalArgumentException("User can't be badboy")
         }
         return Saying(counter.incrementAndGet(), value)
     }

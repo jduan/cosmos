@@ -1,6 +1,7 @@
 package dropwizard_example
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import dropwizard_example.mappers.IllegalArgumentExceptionMapper
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
@@ -23,6 +24,9 @@ class HelloWorldApplication : Application<HelloWorldConfiguration>() {
         )
         environment.jersey().register(
             NotificationResource(configuration.getTemplate(), configuration.getDefaultName())
+        )
+        environment.jersey().register(
+            IllegalArgumentExceptionMapper(environment.metrics())
         )
         environment.healthChecks().register("template", healthCheck)
         environment.lifecycle().manage(RiakClientManager())
