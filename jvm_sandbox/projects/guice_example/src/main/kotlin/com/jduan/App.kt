@@ -3,6 +3,8 @@
  */
 package com.jduan
 
+import com.google.inject.Guice
+
 class App {
     val greeting: String
         get() {
@@ -11,5 +13,7 @@ class App {
 }
 
 fun main(args: Array<String>) {
-    println(App().greeting)
+    val injector = Guice.createInjector(DemoModule())
+    val greeter = injector.getInstance(Greeter::class.java)
+    greeter.sayHello()
 }

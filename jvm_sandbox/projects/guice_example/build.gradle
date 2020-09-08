@@ -10,6 +10,8 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.google.inject:guice:4.2.3'
+
     // Align versions of all Kotlin components
     implementation platform('org.jetbrains.kotlin:kotlin-bom')
 
