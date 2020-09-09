@@ -33,6 +33,7 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.2.0'
     compile 'org.eclipse.jgit:org.eclipse.jgit:5.8.0.202006091008-r'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    implementation 'org.xerial:sqlite-jdbc:3.32.3.2'
     implementation 'com.github.javaparser:javaparser-core:3.16.1'
     implementation 'com.jcraft:jsch:0.1.55'
     implementation 'org.apache.commons:commons-csv:1.8'
@@ -45,6 +46,7 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
     runtime 'ch.qos.logback:logback-classic:1.2.3'
+
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
     // junit 5
