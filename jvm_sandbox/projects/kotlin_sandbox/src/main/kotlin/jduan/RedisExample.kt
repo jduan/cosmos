@@ -12,8 +12,8 @@ fun main() {
         val key = "pending_actions"
         val t = jedis.multi()
         val response = t.smembers(key)
-        // delete the set entirely
-        t.del(key)
+        // !!! Be careful when deleting things !!!
+        // t.del(key)
         t.exec()
 
         val actions = response.get()

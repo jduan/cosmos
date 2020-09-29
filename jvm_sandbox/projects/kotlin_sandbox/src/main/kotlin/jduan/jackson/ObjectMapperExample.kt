@@ -1,7 +1,10 @@
 package jduan.jackson
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -13,23 +16,24 @@ data class Car(val color: String, val type: String, val engine: Engine)
 data class Engine(val power: Int, val metadata: Map<String, String>)
 
 fun main(args: Array<String>) {
-    objectToJSON()
-    jsonToObject()
-    jsonToObject2()
-    yamlExample()
+//    objectToJSON()
+//    jsonToObject()
+//    jsonToObject2()
+//    yamlExample()
+    jsonToObject3()
 }
 
 private fun yamlExample() {
     val yamlObjectMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
     val items = listOf(
-        mapOf(
-            "price" to 99,
-            "name" to "apple"
-        ),
-        mapOf(
-            "price" to 88,
-            "name" to "orange"
-        )
+            mapOf(
+                    "price" to 99,
+                    "name" to "apple"
+            ),
+            mapOf(
+                    "price" to 88,
+                    "name" to "orange"
+            )
     )
     println("items:")
     val comment = """
@@ -42,7 +46,7 @@ private fun yamlExample() {
 private fun objectToJSON() {
     val objectMapper = ObjectMapper()
     val car = Car("yellow", "renault",
-        Engine(300, mapOf("name" to "Forester", "make" to "Subaru")))
+            Engine(300, mapOf("name" to "Forester", "make" to "Subaru")))
     // objectMapper.writeValue(System.out, car)
     // or
     println("json string: ${objectMapper.writeValueAsString(car)}")
@@ -67,15 +71,97 @@ private fun jsonToObject() {
     println(car)
 }
 
+
+@lombok.Getter
+@lombok.ToString
+@lombok.experimental.Accessors(fluent = true)
+@lombok.AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+class AgentRoutingRegionsConfiguration {
+    @javax.validation.constraints.NotNull
+    private val regions: List<AgentRoutingRegion>? = null
+}
+
+
+@lombok.Getter
+@lombok.ToString
+@lombok.experimental.Accessors(fluent = true)
+@lombok.AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy::class)
+class AgentRoutingRegion {
+    @JsonProperty("name")
+    private val name: String? = null
+
+    @JsonProperty("parent")
+    private val parent: String? = null
+
+    @JsonProperty("countryStateCityList")
+    private val countryStateCityList: List<String>? = null
+}
+
+private fun jsonToObject3() {
+//    val objectMapper = jacksonObjectMapper()
+    val jsonString = """
+{
+"regions": 
+[
+  {
+    "name": "R1",
+    "countryStateCityList": [
+      "AG",
+      "MX.Quintana Roo",
+      "MX.Solidaridad, Quintana Roo"
+    ]
+  },
+  {
+    "name": "R1G1",
+    "parent": "R1",
+    "countryStateCityList": [
+      "AG"
+    ]
+  },
+  {
+    "name": "R2",
+    "countryStateCityList": [
+      "MX",
+      "US.Hawaii"
+    ]
+  },
+  {
+    "name": "R4",
+    "countryStateCityList": [
+      "CA",
+      "US"
+    ]
+  },
+  {
+    "name": "R4G1",
+    "parent": "R4",
+    "countryStateCityList": [
+      "CA.QC"
+    ]
+  }
+]
+}
+    """.trimIndent()
+    val objectMapper = ObjectMapper().registerKotlinModule()
+    val config = objectMapper.readValue<AgentRoutingRegionsConfiguration>(jsonString)
+    println(config)
+}
+
+
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class BrokenBuildSummary(
-    val isSuccessful: Boolean,
-    val id: String,
-    val failureReason: String,
-    val failedTasks: String,
-    val taskRootCause: String,
-    val failedTests: String,
-    val testFailureRootCause: String
+        val isSuccessful: Boolean,
+        val id: String,
+        val failureReason: String,
+        val failedTasks: String,
+        val taskRootCause: String,
+        val failedTests: String,
+        val testFailureRootCause: String
 )
 
 // handles deserialization of Date object
