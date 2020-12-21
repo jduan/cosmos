@@ -41,6 +41,7 @@
     groovy
     htop
     hyperfine
+    iterm2
     jq
     ktlint
     kubectl
