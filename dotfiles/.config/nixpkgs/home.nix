@@ -25,10 +25,12 @@
     binutils
     black
     colordiff
+    coreutils
     curlFull
     exa
     fasd
     fd
+    fish
     fswatch
     fzf
     git
