@@ -38,6 +38,7 @@
     gitAndTools.hub
     gnupg
     go
+    graphviz
     groovy
     htop
     hyperfine
