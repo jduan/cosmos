@@ -63,6 +63,7 @@
     terminal-notifier
     tldr
     tmux
+    tmuxinator
     tokei
     tree
     universal-ctags
