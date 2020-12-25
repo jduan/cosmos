@@ -25,10 +25,12 @@
     binutils
     black
     colordiff
+    coreutils
     curlFull
     exa
     fasd
     fd
+    fish
     fswatch
     fzf
     git
@@ -36,9 +38,11 @@
     gitAndTools.hub
     gnupg
     go
+    graphviz
     groovy
     htop
     hyperfine
+    iterm2
     jq
     ktlint
     kubectl
@@ -60,6 +64,7 @@
     terminal-notifier
     tldr
     tmux
+    tmuxinator
     tokei
     tree
     universal-ctags
