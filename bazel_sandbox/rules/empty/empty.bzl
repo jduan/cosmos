@@ -2,6 +2,8 @@
 def _empty_impl(ctx):
     # This function is called when the rule is analyzed.
     # You may use print for debugging.
-    print("This rule does nothing")
+    print("Analzing", ctx.label)
 
 empty = rule(implementation = _empty_impl)
+
+print("bzl file evaluation")
