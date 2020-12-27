@@ -88,7 +88,7 @@ export PYTHONDONTWRITEBYTECODE=1
 # set a global variable to the current epoch time in seconds
 # before executing any comment
 function get_start --on-event fish_preexec
-    set -g cmdstart (/Users/duanjingjing/.nix-profile/bin/date '+%s%N')
+    set -g cmdstart ($HOME/.nix-profile/bin/date '+%s%N')
 end
 
 # show the time consumed and the exit status
@@ -103,7 +103,7 @@ function postcmd --on-event fish_postexec
     end
 
     set now (date)
-    set cmdend (/Users/duanjingjing/.nix-profile/bin/date '+%s%N')
+    set cmdend ($HOME/.nix-profile/bin/date '+%s%N')
     set duration (math "($cmdend - $cmdstart) / 1000000")
     if test "$duration" -lt 1000
         # print in milliseconds
@@ -112,7 +112,7 @@ function postcmd --on-event fish_postexec
         # print in human-readable format: hh:mm:ss
         set duration_seconds (math "$duration / 1000")
         set duration_seconds_rounded (math "round($duration_seconds)")
-        set human_format (/Users/duanjingjing/.nix-profile/bin/date -d@$duration_seconds_rounded -u +%H:%M:%S)
+        set human_format ($HOME/.nix-profile/bin/date -d@$duration_seconds_rounded -u +%H:%M:%S)
         printf "(Exit: %s, Time: %s, %s)\n" $old_status $human_format $now
     end
     set_color normal
