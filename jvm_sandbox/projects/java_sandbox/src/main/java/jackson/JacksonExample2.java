@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.sun.tools.javac.util.List;
+import com.google.common.collect.Lists;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +14,7 @@ import org.reflections.Reflections;
 public class JacksonExample2 {
     public static void main(String[] args) throws IOException {
         View v = new View();
-        v.setShapes(new ArrayList<>(List.of(Rectangle.of(3, 6), Circle.of(5))));
+        v.setShapes(Lists.newArrayList(Rectangle.of(3, 6), Circle.of(5)));
 
         System.out.println("-- serializing --");
         ObjectMapper om = new ObjectMapper();
