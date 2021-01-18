@@ -30,11 +30,7 @@ nnoremap <Space> :nohlsearch<cr>
 
 " Emulated Vim Plugins
 set vim-surround
-
-" https://github.com/a690700752/KJump
-nmap <leader><leader>s :action KJumpAction<cr>
-nmap <leader><leader>w :action KJumpAction.Word0<cr>
-nmap <leader><leader>l :action KJumpAction.Line<cr>
+set easymotion
 
 " Try them!
 " nmap <leader>g :action GotoDeclaration<cr>
@@ -49,5 +45,4 @@ nmap <leader><leader>l :action KJumpAction.Line<cr>
 
 " You need to install this plugin:
 " https://github.com/abrookins/WrapToColumn
-" nmap gq :action com.andrewbrookins.idea.wrap.WrapParagraphAction<CR>
-" vmap gq :action com.andrewbrookins.idea.wrap.WrapParagraphAction<CR>
+vmap gq :action com.andrewbrookins.idea.wrap.WrapAction<CR>
