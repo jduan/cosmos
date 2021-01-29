@@ -6,6 +6,6 @@ java_package(
     package = "com.jduan.package1",
     deps = [
         "//module2/src/main/java/com/jduan/package2:package2",
-        "//third_party:guava",
+        "@maven//:com_google_guava_guava",
     ]
 )

@@ -6,7 +6,7 @@ java_test_package(
     package = "com.jduan.package1",
     deps = [
         "//module1/src/main/java/com/jduan/package1:package1",
-        "//third_party:guava",
-        "//third_party:junit",
+        "@maven//:com_google_guava_guava",
+        "@maven//:junit_jhunit",
     ]
 )
