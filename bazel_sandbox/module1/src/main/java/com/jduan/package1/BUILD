@@ -2,13 +2,13 @@ package(default_visibility = ["//visibility:public"])
 load("//bazel:main.bzl", "java_package")
 
 java_binary(
-    name = "runner",
+    name = "package1",
     main_class = "com.jduan.package1.Main",
-    deps = [":package1"],
+    runtime_deps = [":package1_lib"],
 )
 
 java_library(
-    name = "package1",
+    name = "package1_lib",
     srcs = glob(["**/*.java"]),
     deps = [
         "//module2/src/main/java/com/jduan/package2:package2",
