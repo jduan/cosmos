@@ -241,7 +241,7 @@ nnoremap <leader>a :Ack! <cword><CR>
 " bufferexplorer: use relative path
 nnoremap <leader>be :BufExplorer<CR>
 let g:bufExplorerShowRelativePath=1
-let g:bufExplorerSortBy='fullpath'
+let g:bufExplorerSortBy='mru'
 
 
 """"""""""""""" filetype association """""""""""""""
@@ -623,3 +623,6 @@ noremap <C-k> :NV<CR>
 
 " save and close a buffer
 :command BWD write|bdelete
+
+" run "buildifer" when saving bazel files
+autocmd FileType bzl autocmd BufWritePost * !/Users/jingjing_duan/.nix-profile/bin/buildifier <afile>
