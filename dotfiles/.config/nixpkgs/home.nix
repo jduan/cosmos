@@ -25,6 +25,7 @@
     bazelisk
     binutils
     black
+    bazel-buildtools
     colordiff
     coreutils
     curlFull
