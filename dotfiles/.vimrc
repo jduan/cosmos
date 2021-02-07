@@ -32,8 +32,6 @@ Plug 'easymotion/vim-easymotion'
 Plug 'elixir-editors/vim-elixir'
 " Perform all your vim insert mode completions with Tab
 Plug 'ervandew/supertab'
-" implements some of TextMate's snippets features in Vim
-Plug 'garbas/vim-snipmate'
 " Like 'f', but press 's' and two characters
 Plug 'goldfeld/vim-seek'
 " basic vim/terraform integration
@@ -393,6 +391,7 @@ let NERDTreeIgnore=[
       \'node_modules$[[dir]]',
       \'out$[[dir]]',
       \'target$[[dir]]',
+      \'bazel-.*[[dir]]',
       \]
 
 " Press ii to exit insert mode
