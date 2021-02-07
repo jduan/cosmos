@@ -92,6 +92,8 @@ Plug 'Asheq/close-buffers.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'LnL7/vim-nix'
 Plug 'christoomey/vim-titlecase' " Titlecase text
+" Run shell scripts against vim autocmd events
+Plug 'ahw/vim-hooks'
 " Initialize plugin system
 call plug#end()
 
@@ -623,6 +625,3 @@ noremap <C-k> :NV<CR>
 
 " save and close a buffer
 :command BWD write|bdelete
-
-" run "buildifer" when saving bazel files
-autocmd FileType bzl autocmd BufWritePost * !/Users/jingjing_duan/.nix-profile/bin/buildifier <afile>
