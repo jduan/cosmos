@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# This script finds a Gradle build scan link from stdin and opens it in the
+# browser.
+
+sed -n "\:$Publishing build scan: {n;p;}" | xargs open

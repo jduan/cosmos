@@ -45,6 +45,7 @@
     htop
     hyperfine
     iterm2
+    jdk11
     jq
     ktlint
     kubectl
