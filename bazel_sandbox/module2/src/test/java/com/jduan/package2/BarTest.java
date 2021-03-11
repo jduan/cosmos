@@ -7,18 +7,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class FooTest {
+public class BarTest {
   @Test
-  public void test1() throws Exception {
+  public void test3() throws Exception {
     Foo foo = new Foo();
     List<String> foos = foo.getFoos();
     Assert.assertFalse(!foos.isEmpty());
-  }
-
-  @Test
-  public void test2() throws Exception {
-    Foo foo = new Foo();
-    List<String> foos = foo.getFoos();
-    Assert.assertTrue(!foos.isEmpty());
   }
 }

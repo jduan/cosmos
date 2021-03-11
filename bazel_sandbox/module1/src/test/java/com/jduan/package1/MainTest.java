@@ -10,4 +10,9 @@ public class MainTest {
   public void test1() throws Exception {
     Main.main(new String[] {"Foo"});
   }
+
+  @Test
+  public void test2() throws Exception {
+    Main.main(new String[] {"Foo"});
+  }
 }
