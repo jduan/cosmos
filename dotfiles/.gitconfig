@@ -126,7 +126,7 @@
     editor = vim
     excludesfile = /Users/jingjing_duan/.gitignore_global
     usewatchman = true
-    precomposeunicode = true
+	precomposeunicode = true
     sparseCheckout = true
     pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
@@ -141,7 +141,7 @@
 [github]
     user = jduan
 [push]
-    default = current
+	default = current
 [merge]
     conflictstyle = diff3
     tool = vimdiff
@@ -169,7 +169,7 @@
 [gc]
     auto = 0
 [rerere]
-    enabled = true
+	enabled = true
 [status]
     submodulesummary = 1
 [log]

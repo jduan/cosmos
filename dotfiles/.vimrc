@@ -174,7 +174,7 @@ set backupdir-=.         " ...and not in cwd
 set backupdir=/tmp       " put backups in /tmp
 set cindent
 set cinkeys-=0#          " don't unindent cpp stuff (perl comments!)
-set clipboard+=unnamed   " put yanks/etc on the clipboard
+set clipboard=unnamed   " put yanks/etc on the clipboard
 set colorcolumn=80       " show vertical line for column 80
 set com+=s1:/*,mb:*,ex:*/  " ...and also C-style comments
 set comments=b://,b:#    " by default allow C++ (JS) and generic unixy comments
@@ -242,6 +242,7 @@ nnoremap <leader>a :Ack! <cword><CR>
 nnoremap <leader>be :BufExplorer<CR>
 let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSortBy='mru'
+let g:bufExplorerReverseSort=1
 
 
 """"""""""""""" filetype association """""""""""""""
@@ -253,14 +254,6 @@ au BufNewFile,BufRead,BufReadPost *.rkt,*.rktl set filetype=clojure
 au BufNewFile,BufRead,BufReadPost *.pipeline set filetype=groovy
 " scratch files
 au BufNewFile,BufRead,BufReadPost scratch,scratch2 set textwidth=0
-
-if has("win32")
-    let Tlist_Ctags_Cmd='C:\Progra~1\ctags\ctags.exe'
-    map <M-Space> :simalt ~<CR>
-elseif has("macunix")
-    " the Carbon clipboard is screwed up, and messes up newlines
-    set cb=
-endif
 
 " exec'd because ... could it work otherwise?
 exec "set titleold=" . matchstr(hostname(), "^[^.]\\+")

@@ -45,7 +45,7 @@
     htop
     hyperfine
     iterm2
-    jdk11
+    # jdk11
     jq
     ktlint
     kubectl
@@ -53,10 +53,10 @@
     ncdu
     nixfmt
     pmd
-    procs
+    # procs
     pstree
     python38
-    python38Packages.yamllint
+    # python38Packages.yamllint
     reattach-to-user-namespace
     redis
     ripgrep
