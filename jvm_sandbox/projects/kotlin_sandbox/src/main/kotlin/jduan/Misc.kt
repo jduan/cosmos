@@ -37,7 +37,23 @@ class Config {
         }
 }
 
+fun longestCommonPath(path1: String, path2: String): String {
+    val parts1 = path1.split("/")
+    val parts2 = path2.split("/")
+    var idx = 0
+    while (idx < Integer.min(parts1.size, parts2.size)) {
+        if (parts1[idx] != parts2[idx]) {
+            break
+        }
+        idx++
+    }
+    return parts1.subList(0, idx).joinToString(separator = "/")
+}
+
 fun main() {
+    val path1 = "projects/search/common/serviceapi/src/main/java/com/airbnb/search/common/serviceapi/request"
+    val path2 = "projects/search/common/serviceapi/src/main/java/com/airbnb/search/common/serviceapi/response"
+    println("longestCommonPath: ${longestCommonPath(path1, path2)}")
     println("hello")
     val config = Config()
     repeat(5) {

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -23,6 +24,8 @@ public class StaffTest {
 
         // pretty format
         String jsonString2 = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(staff);
+        InputStream stream = this.getClass().getResourceAsStream("jackson/PrettyStaff.txt");
+        System.out.println(stream);
         java.net.URL url = this.getClass().getClassLoader().getResource("jackson/PrettyStaff.txt");
         java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
         String expectedString2 = new String(java.nio.file.Files.readAllBytes(resPath), "UTF8");
