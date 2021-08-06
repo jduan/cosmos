@@ -1,0 +1,5 @@
+*********************************
+Current Weather Conditions:
+Temperature: ${weather.temp}
+Humidity: ${weather.humidity}
+*********************************
