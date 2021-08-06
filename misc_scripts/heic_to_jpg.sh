@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # 1
-set -eu -o pipefail
+set -u -o pipefail
 
 # 2
-count=$(find . -depth 1 -name "*.HEIC" | wc -l | sed 's/[[:space:]]*//')
+count=$(find . -depth 1 -name "*.HEIC" -or -name "*.heic" | wc -l | sed 's/[[:space:]]*//')
 echo "converting $count files .HEIC files to .jpg"
 
 # 3
 magick mogrify -monitor -format jpg *.HEIC
+magick mogrify -monitor -format jpg *.heic
 
 # 4
 echo "Remove .HEIC files? [y/n]"

@@ -51,6 +51,7 @@ fun longestCommonPath(path1: String, path2: String): String {
 }
 
 fun main() {
+    val task = com.sun.tools.jdeps.Analyzer()
     val path1 = "projects/search/common/serviceapi/src/main/java/com/airbnb/search/common/serviceapi/request"
     val path2 = "projects/search/common/serviceapi/src/main/java/com/airbnb/search/common/serviceapi/response"
     println("longestCommonPath: ${longestCommonPath(path1, path2)}")
