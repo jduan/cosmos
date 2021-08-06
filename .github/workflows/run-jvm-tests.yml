@@ -6,4 +6,3 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: ./.github/scripts/run_jvm_tests.sh
-      - run: bats -v
