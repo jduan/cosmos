@@ -1,0 +1,44 @@
+{
+  "coord": {
+    "lon": -122.1728,
+    "lat": 37.8787
+  },
+  "weather": [
+    {
+      "id": 800,
+      "main": "Clear",
+      "description": "clear sky",
+      "icon": "01d"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 300.12,
+    "feels_like": 300.31,
+    "temp_min": 289.49,
+    "temp_max": 308.53,
+    "pressure": 1013,
+    "humidity": 46
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 0.45,
+    "deg": 241,
+    "gust": 2.68
+  },
+  "clouds": {
+    "all": 1
+  },
+  "dt": 1628290710,
+  "sys": {
+    "type": 2,
+    "id": 2004324,
+    "country": "US",
+    "sunrise": 1628255794,
+    "sunset": 1628305951
+  },
+  "timezone": -25200,
+  "id": 0,
+  "name": "Orinda",
+  "cod": 200
+}
