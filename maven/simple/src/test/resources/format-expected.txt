@@ -1,0 +1,5 @@
+*********************************
+Current Weather Conditions:
+Temperature: 300.12
+Humidity: 46
+*********************************
