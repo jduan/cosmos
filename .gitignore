@@ -28,12 +28,13 @@ cscope.out
 .DS_Store
 
 # fish shell and other stuff
-dotfiles/.config/fish/fishd*
-dotfiles/.config/fish/fish_history
-dotfiles/.config/hub
 dotfiles/.config/airbnb/
-dotfiles/.config/gcloud/logs/
 dotfiles/.config/configstore/update-notifier-npm.json
+dotfiles/.config/fish/fish_history
+dotfiles/.config/fish/fishd*
+dotfiles/.config/gcloud/logs/
+dotfiles/.config/gh/hosts.yml
+dotfiles/.config/hub
 dotfiles/.vim/plugged/
 dotfiles/.vim/sessions/
 dotfiles/.vim/view/
