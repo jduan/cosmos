@@ -9,12 +9,15 @@
 # the $PATH env var too. Then the fish shell loads this file again.
 # That's why we don't want to add things to $PATH again.
 #########################################################
-# define a list of paths
+
 if [ -f '/usr/libexec/java_home' ];
     export JAVA_HOME=(/usr/libexec/java_home -v 1.8)
 end
+# export JAVA_HOME=/nix/store/84kssxbjlfbjkah4hd8hpylkjnq5isb3-zulu8.54.0.21-ca-jdk-8.0.292/
+#
 export CARGO_HOME=$HOME/.cargo
 export RUSTUP_HOME=$HOME/.rustup
+# define a list of paths
 set paths \
     $CARGO_HOME/bin \
     $JAVA_HOME \
