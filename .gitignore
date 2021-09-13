@@ -38,9 +38,12 @@ dotfiles/.config/hub
 dotfiles/.vim/plugged/
 dotfiles/.vim/sessions/
 dotfiles/.vim/view/
+dotfiles/.vim/swap/
 dotfiles/.config/wireshark/
 dotfiles/.config/pgcli/history
 dotfiles/.config/pgcli/log
+dotfiles/.config/gcloud
+dotfiles/.config/configstore
 
 # rubocop
 rubocop_cache/
