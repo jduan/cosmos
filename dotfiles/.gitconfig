@@ -14,7 +14,7 @@
     co  = checkout
     # checkout all files starting from the root of the repo
     # coa = "!f(){ root=$(git rev-parse --show-toplevel); git checkout $root; }; f"
-    com = checkout origin/master
+    com = checkout origin/main
     cb  = rev-parse --abbrev-ref HEAD
     cp  = cherry-pick
     b   = branch
@@ -43,9 +43,9 @@
     d6n = diff HEAD~6 --name-only
     # diff remote branch
     dr  = "!f(){ remote_branch=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)); git diff $remote_branch; }; f"
-    dm  = "!f(){ mb=$(git merge-base HEAD origin/master); git diff $mb; }; f"
-    dmn = "!f(){ mb=$(git merge-base HEAD origin/master); git diff $mb --name-only; }; f"
-    dmw = "!f(){ mb=$(git merge-base HEAD origin/master); git diff $mb -w; }; f"
+    dm  = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb; }; f"
+    dmn = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb --name-only; }; f"
+    dmw = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb -w; }; f"
     # diff origin/master from user branch without changing out the user branch
     dmb = !sh -c 'git diff origin/master...$1' -
     ds  = diff --staged
@@ -57,18 +57,18 @@
     fom = fetch origin master
     # fetch a single branch
     fetch-branch  = "!f(){ git fetch origin +refs/heads/$1:refs/remotes/origin/$1; }; f"
-    lom = log origin/master
+    lom = log origin/main
     m   = merge
     mf  = merge --ff-only
     mnf = merge --no-ff
     mb  = merge-base
-    mom = merge origin/master
+    mom = merge origin/main
     mos = merge origin/stable
     p   = pull
     # push branch to origin and track it
     po  = "!f(){ branch=$(git rev-parse --abbrev-ref HEAD); git push --set-upstream origin $branch; }; f"
     # create a new PR from origin/master (words after 'git pr' will be used as branch name, with dashes between words)
-    pr  = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/master); }; f"
+    pr  = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/main); }; f"
     pr2 = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/WARM_MAIN); }; f"
     pu  = push --set-upstream --verbose
     r   = rebase

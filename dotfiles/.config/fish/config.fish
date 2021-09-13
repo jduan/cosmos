@@ -47,6 +47,11 @@ case Linux
     end
 end
 
+# homebrew
+if [ -d '/opt/homebrew' ];
+    eval (/opt/homebrew/bin/brew shellenv)
+end
+
 source $HOME/.fish_aliases
 
 fish_vi_key_bindings
@@ -122,3 +127,6 @@ function postcmd --on-event fish_postexec
     end
     set_color normal
 end
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jduan/google-cloud-sdk/path.fish.inc' ]; . '/Users/jduan/google-cloud-sdk/path.fish.inc'; end
