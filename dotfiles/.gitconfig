@@ -185,5 +185,5 @@
     version = 2
 [gerrit]
     account = jingjing-duan
-[commit]
-	gpgsign = true
+# [commit]
+# 	gpgsign = true
