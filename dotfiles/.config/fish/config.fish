@@ -1,3 +1,13 @@
+export EDITOR=vim
+
+if [ -f '/usr/libexec/java_home' ];
+    export JAVA_HOME=(/usr/libexec/java_home -v 1.8)
+end
+# export JAVA_HOME=/nix/store/84kssxbjlfbjkah4hd8hpylkjnq5isb3-zulu8.54.0.21-ca-jdk-8.0.292/
+
+export CARGO_HOME=$HOME/.cargo
+export RUSTUP_HOME=$HOME/.rustup
+
 #########################################################
 # Why do we check if a path has been added to $PATH?
 #
@@ -9,14 +19,6 @@
 # the $PATH env var too. Then the fish shell loads this file again.
 # That's why we don't want to add things to $PATH again.
 #########################################################
-
-if [ -f '/usr/libexec/java_home' ];
-    export JAVA_HOME=(/usr/libexec/java_home -v 1.8)
-end
-# export JAVA_HOME=/nix/store/84kssxbjlfbjkah4hd8hpylkjnq5isb3-zulu8.54.0.21-ca-jdk-8.0.292/
-#
-export CARGO_HOME=$HOME/.cargo
-export RUSTUP_HOME=$HOME/.rustup
 # define a list of paths
 set paths \
     $CARGO_HOME/bin \
@@ -43,6 +45,11 @@ case Linux
     if [ -d '/home/linuxbrew' ];
         eval (/home/linuxbrew/.linuxbrew/bin/brew shellenv)
     end
+end
+
+# homebrew
+if [ -d '/opt/homebrew' ];
+    eval (/opt/homebrew/bin/brew shellenv)
 end
 
 source $HOME/.fish_aliases
@@ -120,3 +127,6 @@ function postcmd --on-event fish_postexec
     end
     set_color normal
 end
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jduan/google-cloud-sdk/path.fish.inc' ]; . '/Users/jduan/google-cloud-sdk/path.fish.inc'; end
