@@ -8,7 +8,8 @@ import sys
 import subprocess
 
 # URL_TEMPLATE = "https://source.fitbit.com/projects/%s/repos/%s/browse/%s"
-URL_TEMPLATE = "https://git.musta.ch/%s/%s/blob/master/%s"
+# URL_TEMPLATE = "https://git.musta.ch/%s/%s/blob/master/%s"
+URL_TEMPLATE = "https://github.com/%s/%s/blob/main/%s"
 
 
 def locate_git_repo(filepath):
@@ -27,7 +28,8 @@ def find_filepath_from_repo_root(repo_dir, filepath):
 
 def find_group_and_repo_name(dirname):
     os.chdir(dirname)
-    output = subprocess.check_output("git config --get remote.origin.url", shell=True)
+    output = subprocess.check_output("git config --get remote.origin.url",
+                                     shell=True).strip()
     # output looks like: ssh://git@source.fitbit.com/group/repo_name.git
     # git@git.musta.ch:airbnb/deployboard.git
     if output.startswith("ssh"):
