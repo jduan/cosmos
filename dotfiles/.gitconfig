@@ -1,6 +1,7 @@
 [user]
     name = Jingjing Duan
     useConfigOnly = true
+	signingkey = 58FCE35EE2E12A48
 [alias]
     wl  = worktree list
     a   = add
@@ -184,3 +185,5 @@
     version = 2
 [gerrit]
     account = jingjing-duan
+[commit]
+	gpgsign = true
