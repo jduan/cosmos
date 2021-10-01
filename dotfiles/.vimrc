@@ -242,7 +242,6 @@ nnoremap <leader>a :Ack! <cword><CR>
 nnoremap <leader>be :BufExplorer<CR>
 let g:bufExplorerShowRelativePath=1
 let g:bufExplorerSortBy='mru'
-let g:bufExplorerReverseSort=1
 
 
 """"""""""""""" filetype association """""""""""""""
