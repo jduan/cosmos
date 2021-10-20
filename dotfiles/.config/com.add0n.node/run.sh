@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-/usr/local/Cellar/node/16.1.0/bin/node host.js
+/Users/jduan/.nvm/versions/node/v14.17.6/bin/node host.js

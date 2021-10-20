@@ -116,6 +116,7 @@ alias findn 'find . -name'
 alias v='sf -e vim'
 
 # bazel
+alias bazel='bazelisk'
 alias b='bazel'
 alias bb="bazel build"
 alias bq="bazel query"
