@@ -5,7 +5,6 @@ archive(
     files=[
         "src/README.md",
     ],
-    out="documentation.zip",
 )
 
 archive(
@@ -13,7 +12,6 @@ archive(
     files=[
         "src/RELEASE.md",
     ],
-    out="release.zip",
 )
 
 archive(
@@ -22,5 +20,4 @@ archive(
         "src/README.md",
         "src/RELEASE.md",
     ],
-    out="all.zip",
 )
