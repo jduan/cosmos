@@ -3,6 +3,8 @@
 load(":bazel/archive.bzl", "archive")
 load(":bazel/count_items.bzl", "count_items")
 load(":bazel/print_count.bzl", "print_count")
+load(":bazel/compile.bzl", "compile")
+load(":bazel/link.bzl", "link")
 
 archive(
     name="documentation",
@@ -38,6 +40,11 @@ print_count(
 
 compile(
     name="compile",
-    srcs=srcs("src/*.c"),
-    hdrs=srcs("src/*.h"),
+    srcs=glob(["src/*.c"]),
+)
+
+link(
+    name="link",
+    objs=[":compile"],
+    out="main",
 )

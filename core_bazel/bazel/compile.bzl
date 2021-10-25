@@ -20,7 +20,7 @@ def _compile(ctx):
         output.append(out)
         ctx.actions.run(
             executable = "gcc",
-            argument = [args],
+            arguments = [args],
             inputs = inputs,
             outputs = [out],
         )
