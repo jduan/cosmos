@@ -1,24 +1,38 @@
 # The general format of load is:
 #   load("@//path/to/package:file.bzl", "rule_name")
 load(":bazel/archive.bzl", "archive")
+load(":bazel/archive2.bzl", "archive2")
 load(":bazel/count_items.bzl", "count_items")
 load(":bazel/print_count.bzl", "print_count")
 load(":bazel/compile.bzl", "compile")
 load(":bazel/link.bzl", "link")
 load(":bazel/application.bzl", "application")
 
-archive(
+# archive(
+#     name="documentation",
+#     files=[
+#         "src/README.md",
+#     ],
+# )
+
+# use genrule (a native rule) to create the target above
+genrule(
     name="documentation",
-    files=[
+    srcs=[
         "src/README.md",
     ],
+    outs=[
+        "documentation.zip",
+    ],
+    cmd="zip $(OUTS) $(SRCS)"
 )
 
-archive(
+archive2(
     name="release",
     files=[
         "src/RELEASE.md",
     ],
+    out="release.zip",
 )
 
 archive(
