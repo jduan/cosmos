@@ -248,6 +248,7 @@ let g:bufExplorerSortBy='mru'
 " python scripts
 au BufNewFile,BufRead,BufReadPost *.mesos,*.aurora set filetype=python
 au BufNewFile,BufRead,BufReadPost BUILD set filetype=python
+au BufNewFile,BufRead,BufReadPost *.bzl set filetype=python
 " use clojure plugin to format Racket files
 au BufNewFile,BufRead,BufReadPost *.rkt,*.rktl set filetype=clojure
 au BufNewFile,BufRead,BufReadPost *.pipeline set filetype=groovy
