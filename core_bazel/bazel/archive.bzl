@@ -9,8 +9,6 @@ def _archive(ctx):
     args.add(out)
     args.add_all(ctx.files.files)
 
-    for arg in args:
-        print("arg: %s" % arg)
     ctx.actions.run(
         executable = "zip",
         arguments = [args],
