@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 1
-set -u -o pipefail
+set -eu -o pipefail
 
 # 2
 count=$(find . -depth 1 -name "*.HEIC" -or -name "*.heic" | wc -l | sed 's/[[:space:]]*//')
