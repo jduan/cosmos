@@ -2,8 +2,10 @@ package com.example.tacos.web;
 
 import com.example.tacos.Ingredient;
 import com.example.tacos.Ingredient.Type;
+import com.example.tacos.Order;
 import com.example.tacos.Taco;
 import com.example.tacos.data.IngredientRepository;
+import com.example.tacos.data.TacoRepository;
 import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.List;
@@ -18,16 +20,31 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes("order")
 public class DesignTacoController {
   private final IngredientRepository ingredientRepository;
+  private TacoRepository designRepo;
 
   @Autowired
-  public DesignTacoController(IngredientRepository ingredientRepository) {
+  public DesignTacoController(IngredientRepository ingredientRepository,
+      TacoRepository designRepo) {
     this.ingredientRepository = ingredientRepository;
+    this.designRepo = designRepo;
+  }
+
+  @ModelAttribute(name = "order")
+  public Order order() {
+    return new Order();
+  }
+
+  @ModelAttribute(name = "design")
+  public Taco taco() {
+    return new Taco();
   }
 
   @GetMapping
@@ -46,11 +63,15 @@ public class DesignTacoController {
   }
 
   @PostMapping
-  public String processDesign(@Valid @ModelAttribute("design") Taco taco, Errors errors) {
+  public String processDesign(@Valid Taco taco, Errors errors,
+      @ModelAttribute Order order) {
     if (errors.hasErrors()) {
       return "design";
     }
     log.info("Processing design: " + taco);
+
+    Taco saved = designRepo.save(taco);
+    order.addDesign(saved);
 
     return "redirect:/orders/current";
   }
