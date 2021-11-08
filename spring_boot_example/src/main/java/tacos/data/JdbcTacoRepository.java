@@ -1,7 +1,7 @@
-package com.example.tacos.data;
+package tacos.data;
 
-import com.example.tacos.Ingredient;
-import com.example.tacos.Taco;
+import tacos.Ingredient;
+import tacos.Taco;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Arrays;

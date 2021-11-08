@@ -1,13 +1,12 @@
-package com.example.tacos.web;
+package tacos.web;
 
-import com.example.tacos.Ingredient;
-import com.example.tacos.Ingredient.Type;
-import com.example.tacos.Order;
-import com.example.tacos.Taco;
-import com.example.tacos.data.IngredientRepository;
-import com.example.tacos.data.TacoRepository;
+import tacos.Ingredient;
+import tacos.Ingredient.Type;
+import tacos.Order;
+import tacos.Taco;
+import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
 import com.google.common.collect.Lists;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;

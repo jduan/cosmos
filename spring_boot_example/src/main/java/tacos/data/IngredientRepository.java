@@ -1,6 +1,6 @@
-package com.example.tacos.data;
+package tacos.data;
 
-import com.example.tacos.Ingredient;
+import tacos.Ingredient;
 
 public interface IngredientRepository {
   Iterable<Ingredient> findAll();

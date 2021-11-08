@@ -1,11 +1,10 @@
-package com.example.tacos.data;
+package tacos.data;
 
-import com.example.tacos.Order;
-import com.example.tacos.Taco;
+import tacos.Order;
+import tacos.Taco;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

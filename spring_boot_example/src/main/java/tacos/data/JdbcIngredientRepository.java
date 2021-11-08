@@ -1,6 +1,6 @@
-package com.example.tacos.data;
+package tacos.data;
 
-import com.example.tacos.Ingredient;
+import tacos.Ingredient;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;

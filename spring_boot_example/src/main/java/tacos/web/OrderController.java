@@ -1,7 +1,7 @@
-package com.example.tacos.web;
+package tacos.web;
 
-import com.example.tacos.Order;
-import com.example.tacos.data.OrderRepository;
+import tacos.Order;
+import tacos.data.OrderRepository;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

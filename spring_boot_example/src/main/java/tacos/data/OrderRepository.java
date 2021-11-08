@@ -1,6 +1,6 @@
-package com.example.tacos.data;
+package tacos.data;
 
-import com.example.tacos.Order;
+import tacos.Order;
 
 public interface OrderRepository {
   Order save(Order order);

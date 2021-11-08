@@ -1,4 +1,4 @@
-package com.example.tacos;
+package tacos;
 
 import static org.hamcrest.Matchers.containsString;
 

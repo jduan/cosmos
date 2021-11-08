@@ -1,4 +1,4 @@
-package com.example.tacos;
+package tacos;
 
 import java.util.ArrayList;
 import java.util.Date;
