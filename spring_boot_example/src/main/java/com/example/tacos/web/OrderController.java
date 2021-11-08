@@ -1,5 +1,6 @@
-package com.example.tacos;
+package com.example.tacos.web;
 
+import com.example.tacos.Order;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
