@@ -9,8 +9,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(HomeController.class)
-public class HomeControllerTest {
+@WebMvcTest
+public class WebConfigTest {
   @Autowired
   private MockMvc mockMvc;
 
@@ -20,6 +20,6 @@ public class HomeControllerTest {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.view().name("home"))
         .andExpect(MockMvcResultMatchers.content().string(
-            containsString("Welcome to...")));
+            containsString("Welcome to Taco Cloud...")));
   }
 }
