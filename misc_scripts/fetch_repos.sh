@@ -8,3 +8,5 @@ for dir in "$repos_dir"/*; do
   cd "$dir"
   git fetch origin
 done
+
+printf "\nSUCCESS\n"
