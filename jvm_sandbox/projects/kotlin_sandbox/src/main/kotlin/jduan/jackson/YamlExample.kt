@@ -14,6 +14,10 @@ fun main() {
     val file2 = File("projects/kotlin_sandbox/src/main/kotlin/jduan/jackson/application-spec.yaml")
     val appSpec = AppSpec.load(file2)
     println(appSpec)
+
+    val file3 = File("projects/kotlin_sandbox/src/main/kotlin/jduan/jackson/key_reference_map.yaml")
+    val yamlObjectMapper = ObjectMapper(YAMLFactory()).registerKotlinModule()
+    val map = yamlObjectMapper.readValue(file3, Map::class.java)
 }
 
 data class AppSpec(
