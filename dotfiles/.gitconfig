@@ -189,3 +189,5 @@
     account = jingjing-duan
 # [commit]
 # 	gpgsign = true
+[init]
+	defaultBranch = main
