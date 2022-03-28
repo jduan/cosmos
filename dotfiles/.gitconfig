@@ -58,7 +58,6 @@
     fom = fetch origin master
     # fetch a single branch
     fetch-branch  = "!f(){ git fetch origin +refs/heads/$1:refs/remotes/origin/$1; }; f"
-    lom = log origin/main
     m   = merge
     mf  = merge --ff-only
     mnf = merge --no-ff
@@ -106,6 +105,7 @@
     up = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git pull origin $branch\"; echo $cmd; $cmd; }; f"
     lp = log -p
     ln = log --name-only
+    lm = log origin/main
     lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
     lga = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all"
     # git track [remote] [branch]

@@ -1,3 +1,13 @@
+# misc
+alias base64 'base64 -w 0'  # no new lines in the output
+
+# kubernetes k8s
+alias k kubectl
+
+# highnote
+alias auth 'gcloud auth login --update-adc'
+alias playground-jumpbox 'gcloud beta compute ssh --zone "us-west1-a" "playground-jumpbox" --project "playground-294619"'
+
 # vi: ft=fish
 # 'screen'
 alias sc 'screen'
