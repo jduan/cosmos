@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 # This script takes in a file like
 # /Users/jduan/workspace/path/to/file/in/git/repo
 # and opens it in remote git server.
@@ -28,8 +28,7 @@ def find_filepath_from_repo_root(repo_dir, filepath):
 
 def find_group_and_repo_name(dirname):
     os.chdir(dirname)
-    output = subprocess.check_output("git config --get remote.origin.url",
-                                     shell=True).strip()
+    output = subprocess.getoutput("git config --get remote.origin.url").strip()
     # output looks like: ssh://git@source.fitbit.com/group/repo_name.git
     # git@git.musta.ch:airbnb/deployboard.git
     if output.startswith("ssh"):
