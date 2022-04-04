@@ -545,7 +545,7 @@ au BufEnter *.js,*.coffee setl shiftwidth=4
 " shell scripts
 au BufEnter *.sh setl shiftwidth=2
 
-" preserver 'no end of line'
+" preserve 'no end of line'
 :let g:PreserveNoEOL = 1
 
 " Pbyank in visual mode

@@ -11,10 +11,13 @@ int main(void) {
     };
     // Doing some work
     for (size_t i = 0; i < 5; ++i) {
-        printf("element %zu is %g, \tits square is %g\n",
-                i,
-                A[i],
-                A[i]*A[i]);
+        // when i is 0, it evaluates to false
+        if (i) {
+            printf("element %zu is %g, \tits square is %g\n",
+                   i,
+                   A[i],
+                   A[i]*A[i]);
+        }
     }
     return EXIT_SUCCESS;
 }
