@@ -8,6 +8,9 @@ end
 export CARGO_HOME=$HOME/.cargo
 export RUSTUP_HOME=$HOME/.rustup
 
+# Gradle Enterprise at highnote
+source $HOME/.fish_config_highnote.fish
+
 #########################################################
 # Why do we check if a path has been added to $PATH?
 #
