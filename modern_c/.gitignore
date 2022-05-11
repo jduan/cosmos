@@ -1,2 +1,4 @@
 cmake-build-debug/
 a.out
+# assembly code
+a.out.dSYM/
