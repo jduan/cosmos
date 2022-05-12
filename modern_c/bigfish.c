@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
     print_array(littlefish,N, "littlefish");
 
     free(bigfish);
+    // this doesn't actually crash on macOS
     free(littlefish);  // program will crash here
     return 0;
 }
