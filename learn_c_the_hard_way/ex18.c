@@ -23,9 +23,12 @@ void die(const char *msg) {
  *
  *  typedef int (*pointer_name)(int a, int b)
  *
+ * Then "pointer_name" can be used as the "type" for function arguments. When
+ * calling such higher-order functions, you can pass in real functions that
+ * comply with this "function pointer" signature.
+ *
  * Pointers to functions can be used/called like the functions they point to
  * but with a different name.
- *
  */
 
 // typedef for function pointers
