@@ -617,3 +617,9 @@ noremap <C-k> :NV<CR>
 
 " save and close a buffer
 :command BWD write|bdelete
+
+" auto make all parent dirs recurisvely if they don't exist yet
+augroup Mkdir
+  autocmd!
+  autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
+augroup END
