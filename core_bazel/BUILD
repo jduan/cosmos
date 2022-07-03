@@ -74,3 +74,8 @@ application(
         "src/RELEASE.md",
     ]
 )
+
+cc_binary(
+    name="main2",
+    srcs=glob(["src/*.h", "src/*.c"]),
+)
