@@ -35,3 +35,46 @@ archive = rule(
         "files": attr.label_list(allow_files = True),
     },
 )
+
+# Use 7zip to archive files
+def _seven_zip(ctx):
+    out = ctx.actions.declare_file("{}.7z".format(ctx.label.name))
+    inputs = [ctx.file.version_data]
+    inputs.extend(ctx.files.archive_files)
+
+    args = ctx.actions.args()
+    args.add(out)
+    args.add(ctx.file.version_data)
+    args.add_all(ctx.files.archive_files)
+
+    ctx.actions.run(
+        executable = ctx.executable._seven_zip_binary,
+        arguments = [args],
+        inputs = inputs,
+        outputs = [out],
+    )
+
+    return [DefaultInfo(files = depset([out]))]
+
+seven_zip = rule(
+    implementation = _seven_zip,
+    attrs = {
+        "_seven_zip_binary": attr.label(
+            # this label points to an executable
+            executable = True,
+            default = ":_seven_zip_binary",
+            # executables must specify the "cfg" attribute: it can be either
+            # host or target
+            cfg = "host",
+        ),
+        "version_data": attr.label(
+            allow_single_file = True,
+            mandatory = True,
+        ),
+        "archive_files": attr.label_list(
+            allow_files = True,
+            mandatory = True,
+            allow_empty = False,
+        ),
+    },
+)

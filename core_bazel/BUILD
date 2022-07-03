@@ -1,6 +1,6 @@
 # The general format of load is:
 #   load("@//path/to/package:file.bzl", "rule_name")
-load(":bazel/archive.bzl", "archive")
+load(":bazel/archive.bzl", "archive", "seven_zip")
 load(":bazel/archive2.bzl", "archive2")
 load(":bazel/count_items.bzl", "count_items")
 load(":bazel/print_count.bzl", "print_count")
@@ -81,7 +81,7 @@ cc_binary(
 )
 
 java_binary(
-    name="ArchiveRule",
+    name="_seven_zip_binary",
     srcs=glob([
         "src/main/java/**/*.java"
     ]),
@@ -91,4 +91,13 @@ java_binary(
         "@maven//:commons_io_commons_io",
         "@maven//:org_tukaani_xz",
     ]
+)
+
+seven_zip(
+    name="7zip",
+    version_data="//version:data.txt",
+    archive_files=[
+        "src/README.md",
+        "src/RELEASE.md",
+    ],
 )
