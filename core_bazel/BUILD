@@ -79,3 +79,16 @@ cc_binary(
     name="main2",
     srcs=glob(["src/*.h", "src/*.c"]),
 )
+
+java_binary(
+    name="ArchiveRule",
+    srcs=glob([
+        "src/main/java/**/*.java"
+    ]),
+    main_class="com.jduan.ArchiveRule",
+    deps=[
+        "@maven//:org_apache_commons_commons_compress",
+        "@maven//:commons_io_commons_io",
+        "@maven//:org_tukaani_xz",
+    ]
+)

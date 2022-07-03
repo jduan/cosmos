@@ -10,6 +10,7 @@ def _archive(ctx):
 
     # why ctx.files.files? "ctx.files.param_name" is used to access the attr
     # in this case, the "param_name" is called "files".
+    # btw, "ctx.attr.files" is the label itself, not the actual resolved files!
     args.add_all(ctx.files.files)
 
     # this adds an action to the action graph
