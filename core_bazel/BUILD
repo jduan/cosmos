@@ -56,6 +56,7 @@ print_count(
 compile(
     name="compile",
     srcs=glob(["src/*.c"]),
+    hdrs=glob(["src/*.h"]),
 )
 
 link(
