@@ -67,9 +67,8 @@ link(
 
 application(
     name="main",
-    srcs=[
-        "src/hello.c",
-    ],
+    srcs=glob(["src/*.c"]),
+    hdrs=glob(["src/*.h"]),
     extra_files=[
         "src/README.md",
         "src/RELEASE.md",

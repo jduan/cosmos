@@ -3,6 +3,7 @@ load(":bazel/compile.bzl", "compile")
 load(":bazel/link.bzl", "link")
 
 # Macros are pure functions that invoke rules to create targets.
+# This macro invokes 3 rules to create 3 targets.
 def application(name, srcs, hdrs = [], extra_files = []):
     # we want to have unique names; otherwise invoking this macro multiple
     # times would lead to the same target name being created multiple times
