@@ -53,16 +53,16 @@ print_count(
     rule_dep=":count",
 )
 
-# compile(
-#     name="compile",
-#     srcs=glob(["src/*.c"]),
-# )
-#
-# link(
-#     name="link",
-#     objs=[":compile"],
-#     out="main",
-# )
+compile(
+    name="compile",
+    srcs=glob(["src/*.c"]),
+)
+
+link(
+    name="link",
+    objs=[":compile"],
+    out="main",
+)
 
 application(
     name="main",

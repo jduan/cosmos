@@ -1,3 +1,4 @@
+# This rule "produces" multiple actions.
 def _compile(ctx):
     output = []
 
@@ -25,7 +26,7 @@ def _compile(ctx):
             outputs = [out],
         )
 
-        return [DefaultInfo(files = depset(output))]
+    return [DefaultInfo(files = depset(output))]
 
 compile = rule(
     implementation = _compile,
