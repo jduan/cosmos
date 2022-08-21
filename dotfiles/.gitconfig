@@ -1,7 +1,7 @@
 [user]
     name = Jingjing Duan
     useConfigOnly = true
-	signingkey = 58FCE35EE2E12A48
+	signingkey = 4A18DEECEEB5908E
 [alias]
     wl  = worktree list
     a   = add
@@ -149,12 +149,6 @@
     conflictstyle = diff3
     tool = vimdiff
     # ff = no
-[mergetool]
-    keepBackup = false
-[mergetool "vimdiff"]
-    trustExitCode = true
-# [init]
-#   templatedir = ~/.git_template
 [diff]
     compactionHeuristic = true
     renames = true
