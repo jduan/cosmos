@@ -81,6 +81,7 @@
     rv  = remote -v
     rh  = reset HEAD^
     rhh = reset HEAD^ --hard
+    rs  = restore :/
     sl  = stash list
     sp  = stash pop
     s0  = stash show -p stash@{0}
