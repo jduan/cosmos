@@ -182,8 +182,6 @@
     version = 2
 [gerrit]
     account = jingjing-duan
-# [commit]
-# 	gpgsign = true
 [init]
 	defaultBranch = main
 [commit]
