@@ -6,7 +6,7 @@ set -exuo pipefail
 repos_dir=$HOME/repos
 for dir in "$repos_dir"/*; do
   cd "$dir"
-  git fetch origin
+  $HOME/.nix-profile/bin/git fetch origin
 done
 
 printf "\nSUCCESS\n"
