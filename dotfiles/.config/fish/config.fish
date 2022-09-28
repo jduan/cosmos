@@ -133,3 +133,6 @@ end
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/jduan/google-cloud-sdk/path.fish.inc' ]; . '/Users/jduan/google-cloud-sdk/path.fish.inc'; end
+
+# Need to run https://asdf-vm.com
+source /opt/homebrew/opt/asdf/libexec/asdf.fish
