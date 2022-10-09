@@ -7,7 +7,7 @@ class Vector:
         self.y = y
 
     def __repr__(self):
-        return 'Vector(%r, %r)' % (self.x, self.y)
+        return "Vector(%r, %r)" % (self.x, self.y)
 
     def __abs__(self):
         return hypot(self.x, self.y)
@@ -26,17 +26,5 @@ class Vector:
     def __mul__(self, scalar):
         return Vector(self.x * scalar, self.y * scalar)
 
-
-def main():
-    v1 = Vector(2, 4)
-    v2 = Vector(2, 1)
-    print('v1 + v2:', v1 + v2)
-
-    v = Vector(3, 4)
-    print('abs(v):', abs(v))
-
-    print('v * 3:', v * 3)
-
-
-if __name__ == '__main__':
-    main()
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
