@@ -34,6 +34,7 @@ dotfiles/.config/fish/fish_history
 dotfiles/.config/fish/fishd*
 dotfiles/.config/gcloud/logs/
 dotfiles/.config/gh/hosts.yml
+dotfiles/.config/github-copilot/hosts.json
 dotfiles/.config/hub
 dotfiles/.vim/plugged/
 dotfiles/.vim/sessions/
