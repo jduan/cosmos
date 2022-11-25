@@ -5,9 +5,11 @@ set -exuo pipefail
 
 repos_dir=$HOME/repos
 for dir in "$repos_dir"/*; do
-  cd "$dir"
-  date
-  git fetch origin
+  if [ -d "$dir" ]; then
+    cd "$dir"
+    date
+    git fetch origin
+  fi
 done
 
 printf "\nSUCCESS\n"
