@@ -92,6 +92,8 @@ Plug 'LnL7/vim-nix'
 Plug 'christoomey/vim-titlecase' " Titlecase text
 " Run shell scripts against vim autocmd events
 Plug 'ahw/vim-hooks'
+" Mozart language
+Plug 'Procrat/oz.vim'
 " Initialize plugin system
 call plug#end()
 
@@ -623,3 +625,7 @@ augroup Mkdir
   autocmd!
   autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
 augroup END
+
+" https://vimtricks.com/p/vim-file-templates/
+" file templates
+autocmd BufNewFile *.sh 0r ~/.vim_skeletons/bash.sh

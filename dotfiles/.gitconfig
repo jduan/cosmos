@@ -50,6 +50,7 @@
     # diff origin/master from user branch without changing out the user branch
     dmb = !sh -c 'git diff origin/master...$1' -
     ds  = diff --staged
+    edit-changed = "!f(){ files=$(git diff origin/main...HEAD --name-only --relative); vim $files; }; f"
     edit-conflict = "!f(){ files=$(git status | grep 'both modified:' | awk '{ print $3  }'); vim $files; }; f"
     empty-commit = "commit --allow-empty -m 'Empty commit'"
     f   = fetch
