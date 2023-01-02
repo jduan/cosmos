@@ -12,4 +12,5 @@ for dir in "$repos_dir"/*; do
   fi
 done
 
+date
 printf "\nSUCCESS\n"
