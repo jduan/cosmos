@@ -1,8 +1,9 @@
 export EDITOR=vim
 
-if [ -f '/usr/libexec/java_home' ];
-    export JAVA_HOME=(/usr/libexec/java_home -v 1.11)
-end
+# if [ -f '/usr/libexec/java_home' ];
+#     export JAVA_HOME=(/usr/libexec/java_home -v 1.11)
+# end
+export JAVA_HOME=$HOME/.asdf/installs/java/zulu-17.38.21/
 # export JAVA_HOME=/nix/store/84kssxbjlfbjkah4hd8hpylkjnq5isb3-zulu8.54.0.21-ca-jdk-8.0.292/
 
 export CARGO_HOME=$HOME/.cargo
