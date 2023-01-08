@@ -101,3 +101,16 @@ seven_zip(
         "src/RELEASE.md",
     ],
 )
+
+java_binary(
+    name="ProjectRunner",
+    srcs=glob(["src/main/java/com/example/ProjectRunner.java"]),
+    main_class="com.example.ProjectRunner",
+    deps=[":greeter"],
+)
+
+java_library(
+    name="greeter",
+    srcs=glob(["src/main/java/com/example/Greeting.java"]),
+    visibility=["//src/main/java/com/example/cmdline:__pkg__"],
+)
