@@ -3,3 +3,6 @@ bazel-bin
 bazel-out
 bazel-python_sandbox
 bazel-testlogs
+
+# pycharm & bazel integration point
+.ijwb/
