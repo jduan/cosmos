@@ -1,5 +1,6 @@
 [user]
     name = Jingjing Duan
+	email = jduan@highnoteplatform.com
     useConfigOnly = true
 	signingkey = 4A18DEECEEB5908E
 [alias]
