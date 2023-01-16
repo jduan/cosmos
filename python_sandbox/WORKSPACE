@@ -28,9 +28,20 @@ python_register_toolchains(
 )
 
 load("@python3_9//:defs.bzl", "interpreter")
-
 load("@rules_python//python:pip.bzl", "pip_parse")
 
+pip_parse(
+    name = "pip_deps",
+    requirements_lock = "//:requirements.txt",
+)
+
+load("@pip_deps//:requirements.bzl", "install_deps")
+
+# Initialize repositories for all packages in requirements.txt.
+install_deps()
+
+# load("@rules_python//python:pip.bzl", "pip_parse")
+#
 # pip_parse(
 #     ...
 #     python_interpreter_target = interpreter,
