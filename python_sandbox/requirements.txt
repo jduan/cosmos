@@ -1,3 +1,3 @@
 hydra-core==0.11.3
-pyyaml==5.3.1
+pyyaml==6.0.0
 pytest==7.1.3

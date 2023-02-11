@@ -1,0 +1,49 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "bazel_skylib",
+    sha256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d",
+    urls = [
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.1.1/bazel-skylib-1.1.1.tar.gz",
+    ],
+)
+
+rules_python_version = "0.16.2"
+
+http_archive(
+    name = "rules_python",
+    sha256 = "48a838a6e1983e4884b26812b2c748a35ad284fd339eb8e2a6f3adf95307fbcd",
+    strip_prefix = "rules_python-{}".format(rules_python_version),
+    url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/{}.tar.gz".format(rules_python_version),
+)
+
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
+
+python_register_toolchains(
+    name = "python3_9",
+    # Available versions are listed in @rules_python//python:versions.bzl.
+    # We recommend using the same version your team is already standardized on.
+    python_version = "3.9",
+)
+
+load("@python3_9//:defs.bzl", "interpreter")
+load("@rules_python//python:pip.bzl", "pip_parse")
+
+pip_parse(
+    name = "pip_deps",
+    requirements_lock = "//:requirements.txt",
+)
+
+load("@pip_deps//:requirements.bzl", "install_deps")
+
+# Initialize repositories for all packages in requirements.txt.
+install_deps()
+
+# load("@rules_python//python:pip.bzl", "pip_parse")
+#
+# pip_parse(
+#     ...
+#     python_interpreter_target = interpreter,
+#     ...
+# )
