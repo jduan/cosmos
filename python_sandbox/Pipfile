@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-redis = "~=3.2.1"
+redis = "~=4.4.4"
 hydra-core = "~=0.9.0"
 
 [requires]
