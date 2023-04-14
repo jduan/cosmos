@@ -46,7 +46,7 @@
     # diff remote branch
     dr  = "!f(){ remote_branch=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)); git diff $remote_branch; }; f"
     dm  = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb; }; f"
-    dmn = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb --name-only --relative --diff-filter=ACMR; }; f"
+    dmn = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb --name-only --relative; }; f"
     dmw = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb -w; }; f"
     # diff origin/master from user branch without changing out the user branch
     dmb = !sh -c 'git diff origin/master...$1' -
