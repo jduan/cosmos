@@ -2,7 +2,7 @@
     name = Jingjing Duan
 	email = jduan@highnoteplatform.com
     useConfigOnly = true
-	signingkey = 4A18DEECEEB5908E
+	signingkey = 34B9B7803306FBC6
 [alias]
     wl  = worktree list
     a   = add
@@ -135,6 +135,7 @@
 	precomposeunicode = true
     sparseCheckout = true
     pager = diff-so-fancy | less --tabs=4 -RFX
+	abbrev = 12
 [color]
     ui = true
 [color "diff"]

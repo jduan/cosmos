@@ -10,6 +10,8 @@ call plug#begin('~/.vim/plugged')
 " Plug 'idris-hackers/idris-vim'
 " Plug 'mrk21/yaml-vim'
 
+Plug 'Einenlum/yaml-revealer'
+Plug '907th/vim-auto-save'
 Plug 'Clavelito/indent-awk.vim'
 " A lib that's used by other plugins
 Plug 'MarcWeber/vim-addon-mw-utils'
@@ -629,3 +631,6 @@ augroup END
 " https://vimtricks.com/p/vim-file-templates/
 " file templates
 autocmd BufNewFile *.sh 0r ~/.vim_skeletons/bash.sh
+
+" Enable vim-auto-save plugin
+let g:auto_save = 1  " enable AutoSave on Vim startup

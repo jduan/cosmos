@@ -1,3 +1,6 @@
 [filesystem "Azul Systems, Inc.|11.0.13|/dev/disk3s5"]
 	timestampResolution = 5000 nanoseconds
 	minRacyThreshold = 0 nanoseconds
+[filesystem "Azul Systems, Inc.|17.0.6|/dev/disk3s5"]
+	timestampResolution = 6000 nanoseconds
+	minRacyThreshold = 0 nanoseconds
