@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# This script searches files by name across all major repos
+# eg: fd setup-java
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+repos=(api-platform bayone devops infra release)
+term=$1
+
+for repo in "${repos[@]}"
+do
+  echo "------------------- $repo ----------------"
+  cd "$SCRIPT_DIR/worktrees/$repo"
+  git checkout origin/main > /dev/null 2>&1
+  fd "$term" "$SCRIPT_DIR/$repo"
+  printf "\n\n\n"
+done
