@@ -5,7 +5,7 @@ set -exuo pipefail
 
 repos_dir=$HOME/repos
 for dir in "$repos_dir"/*; do
-  if [ -d "$dir" ]; then
+  if [[ -d "$dir" && -d "$dir/.git" ]]; then
     cd "$dir"
     date
     git fetch origin
