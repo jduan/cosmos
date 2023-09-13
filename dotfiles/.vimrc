@@ -324,6 +324,7 @@ nnoremap <leader>cc :CtrlPClearAllCaches<CR>
 " Don't limit how many files to scan
 let g:ctrlp_max_files = 0
 let g:ctrlp_cmd = 'CtrlPCurWD'
+let g:ctrlp_show_hidden = 1
 " let g:ctrlp_mruf_exclude = '/tmp/.*\|*build*'
 let g:ctrlp_custom_ignore = {
   \ 'dir':  'build$\|_build$\|node_modules$\|deps$\|coverage$\|\.git$\|\.hg$\|\.svn$\|generated-apps$\|target$',
@@ -375,8 +376,11 @@ compiler ruby         " Enable compiler support for ruby
 
 " close vim when the only window left is NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+" Show hidden files
+let NERDTreeShowHidden=1
 " ignore node_modules/ directory
 let NERDTreeIgnore=[
+      \'\.git$',
       \'\.beam$',
       \'\.pyc$',
       \'_build$[[dir]]',
