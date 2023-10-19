@@ -2,17 +2,15 @@
 # This script searches something across all major repos
 # eg: cs setup-java
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
+repos_root=$HOME/repos/
 repos=(api-platform bayone devops infra release)
-term=$1
-shift
 
 for repo in "${repos[@]}"
 do
   echo "------------------- $repo ----------------"
-  cd "$SCRIPT_DIR/worktrees/$repo"
+  cd "$repos_root/worktrees/$repo"
+  # git fetch > /dev/null 2>&1
   git checkout origin/main > /dev/null 2>&1
-  rg "$term" "$SCRIPT_DIR/worktrees/$repo" "$@"
+  rg "$@" "$repos_root/worktrees/$repo"
   printf "\n\n\n"
 done

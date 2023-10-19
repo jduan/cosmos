@@ -216,7 +216,7 @@ set statusline=%<[%02n]\ %F%(\ %m%h%w%y%r%)\ %{fugitive#statusline()}\ %a%=\ [%l
 set t_Co=256             " 256 colors
 set tabstop=4            " The One True Tab (as of latest revision)
 set terse
-set textwidth=80
+set textwidth=120
 set timeout              " allow keys to timeout
 set timeoutlen=500       " millisecs, time out between 2 keystrokes
 set title                " do set the xterm title (see 'titleold', set below)
