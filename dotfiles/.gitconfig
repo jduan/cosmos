@@ -1,8 +1,8 @@
 [user]
     name = Jingjing Duan
-	email = jduan@highnoteplatform.com
+	email = jduan@highnote.com
     useConfigOnly = true
-	signingkey = 34B9B7803306FBC6
+	signingkey = 1F9BB007AD6EE9E6
 [alias]
     wl  = worktree list
     a   = add

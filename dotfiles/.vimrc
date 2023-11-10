@@ -179,7 +179,7 @@ set backupdir=/tmp       " put backups in /tmp
 set cindent
 set cinkeys-=0#          " don't unindent cpp stuff (perl comments!)
 set clipboard=unnamed   " put yanks/etc on the clipboard
-set colorcolumn=80       " show vertical line for column 80
+set colorcolumn=100       " show vertical line for column 100
 set com+=s1:/*,mb:*,ex:*/  " ...and also C-style comments
 set comments=b://,b:#    " by default allow C++ (JS) and generic unixy comments
 set copyindent           " make autoindent use the same characters to indent
