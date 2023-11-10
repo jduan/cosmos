@@ -46,6 +46,7 @@ coral-generated-src/
 .config/fish/fish_variables
 .config/hub
 .config/airbnb/
+.config/github-copilot/
 
 # rubocop
 rubocop_cache/
