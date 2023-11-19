@@ -1,8 +1,7 @@
-[user]
-    name = Jingjing Duan
-    email = jduan@highnote.com
-    useConfigOnly = true
-    signingkey = 1F9BB007AD6EE9E6
+[includeIf "gitdir:~/repos/"]
+    path = ~/.gitconfig-work
+[includeIf "gitdir:~/github/"]
+    path = ~/.gitconfig-personal
 [alias]
     wl  = worktree list
     a   = add
@@ -187,5 +186,3 @@
     account = jingjing-duan
 [init]
     defaultBranch = main
-[commit]
-    gpgsign = true
