@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # This script searches files by name across all major repos
 # eg: fd setup-java
+set -euo pipefail
 
 repos_root=$HOME/repos/
 repos=(api-platform bayone devops infra release)
@@ -12,7 +13,7 @@ do
   echo "------------------- $repo ----------------"
   cd "$repos_root/worktrees/$repo"
   # git fetch > /dev/null 2>&1
-  git checkout origin/main > /dev/null 2>&1
+  git checkout origin/main
   fd "$term" "$repos_root/worktrees/$repo" "$@"
   printf "\n\n\n"
 done

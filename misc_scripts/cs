@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 # This script searches something across all major repos
 # eg: cs setup-java
+set -euo pipefail
 
 repos_root=$HOME/repos/
 repos=(api-platform bayone devops infra release)
+term=$1
+shift
 
 for repo in "${repos[@]}"
 do
   echo "------------------- $repo ----------------"
   cd "$repos_root/worktrees/$repo"
   # git fetch > /dev/null 2>&1
-  git checkout origin/main > /dev/null 2>&1
-  rg "$@" "$repos_root/worktrees/$repo"
+  git checkout origin/main
+  rg "$term" "$repos_root/worktrees/$repo" "$@" || true
   printf "\n\n\n"
 done

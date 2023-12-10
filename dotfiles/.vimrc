@@ -96,6 +96,7 @@ Plug 'christoomey/vim-titlecase' " Titlecase text
 Plug 'ahw/vim-hooks'
 " Mozart language
 Plug 'Procrat/oz.vim'
+Plug 'godlygeek/tabular'
 " Initialize plugin system
 call plug#end()
 
