@@ -137,3 +137,11 @@ if [ -f '/Users/jduan/google-cloud-sdk/path.fish.inc' ]; . '/Users/jduan/google-
 
 # Need to run https://asdf-vm.com
 source /opt/homebrew/opt/asdf/libexec/asdf.fish
+
+function __auto_activate_virtualenv --on-variable PWD
+    # Check if there is a virtual environment in the directory
+    if test -d .venv/bin
+        echo "Activate python virtual environment in .venv/"
+        source .venv/bin/activate.fish
+    end
+end

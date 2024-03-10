@@ -635,3 +635,6 @@ autocmd BufNewFile *.sh 0r ~/.vim_skeletons/bash.sh
 
 " Enable vim-auto-save plugin
 let g:auto_save = 1  " enable AutoSave on Vim startup
+
+" macro that inserts the current date
+nnoremap <leader>d "=strftime("%Y/%m/%d")<CR>P
