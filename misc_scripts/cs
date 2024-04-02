@@ -5,7 +5,6 @@ set -euo pipefail
 
 repos_root=$HOME/repos/
 repos=(api-platform bayone devops infra release)
-term=$1
 shift
 
 for repo in "${repos[@]}"
@@ -14,6 +13,6 @@ do
   cd "$repos_root/worktrees/$repo"
   # git fetch > /dev/null 2>&1
   git checkout origin/main
-  rg "$term" "$repos_root/worktrees/$repo" "$@" || true
+  rg "$@" "$repos_root/worktrees/$repo" || true
   printf "\n\n\n"
 done
