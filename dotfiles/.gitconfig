@@ -47,8 +47,8 @@
     dm  = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb; }; f"
     dmn = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb --name-only --relative; }; f"
     dmw = "!f(){ mb=$(git merge-base HEAD origin/main); git diff $mb -w; }; f"
-    # diff origin/master from user branch without changing out the user branch
-    dmb = !sh -c 'git diff origin/master...$1' -
+    # diff origin/main from user branch without changing out the user branch
+    dmb = !sh -c 'git diff origin/main...$1' -
     ds  = diff --staged
     edit-changed = "!f(){ files=$(git diff origin/main...HEAD --name-only --relative --diff-filter=ACMR); vim $files; }; f"
     edit-conflict = "!f(){ files=$(git status | grep 'both modified:' | awk '{ print $3  }'); vim $files; }; f"
@@ -56,7 +56,7 @@
     f   = fetch
     fa  = fetch --all
     fo  = fetch origin
-    fom = fetch origin master
+    fom = fetch origin main
     # fetch a single branch
     fetch-branch  = "!f(){ git fetch origin +refs/heads/$1:refs/remotes/origin/$1; }; f"
     m   = merge
@@ -68,7 +68,7 @@
     p   = pull
     # push branch to origin and track it
     po  = "!f(){ branch=$(git rev-parse --abbrev-ref HEAD); git push --set-upstream origin $branch; }; f"
-    # create a new PR from origin/master (words after 'git pr' will be used as branch name, with dashes between words)
+    # create a new PR from origin/main (words after 'git pr' will be used as branch name, with dashes between words)
     pr  = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); msg="$@"; git checkout -b jduan-$branch $(git rev-parse origin/main); git commit --allow-empty -m \"$msg\"; }; f"
     pr2 = "!f(){ branch=$(printf \"%s\" \"${@/#/-}\"); git checkout -b jduan-$branch $(git rev-parse origin/WARM_MAIN); }; f"
     pu  = push --set-upstream --verbose
@@ -111,8 +111,8 @@
     lgm = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative origin/main"
     lga = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all"
     # git track [remote] [branch]
-    # eg: make the current branch track upstream/master
-    # $ git track upstream master
+    # eg: make the current branch track upstream/main
+    # $ git track upstream main
     track = "!f(){ branch=$(git name-rev --name-only HEAD); cmd=\"git branch --set-upstream-to ${1:-origin}/${2:-$branch}\"; echo $cmd; $cmd;  }; f"
     untrack = branch --unset-upstream
     switch = !legit switch \"$@\"
