@@ -5,7 +5,6 @@ set -euo pipefail
 
 repos_root=$HOME/repos/
 repos=(api-platform bayone devops infra release)
-shift
 
 for repo in "${repos[@]}"
 do
