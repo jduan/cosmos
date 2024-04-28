@@ -53,6 +53,7 @@
     edit-changed = "!f(){ files=$(git diff origin/main...HEAD --name-only --relative --diff-filter=ACMR); vim $files; }; f"
     edit-conflict = "!f(){ files=$(git status | grep 'both modified:' | awk '{ print $3  }'); vim $files; }; f"
     empty-commit = "commit --allow-empty -m 'Empty commit'"
+    explode = "!f(){ current_branch=$(git symbolic-ref --short HEAD); git checkout origin/main; git branch -D $current_branch; }; f"
     f   = fetch
     fa  = fetch --all
     fo  = fetch origin
