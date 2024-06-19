@@ -94,14 +94,39 @@ public class Scanner {
         string();
         break;
       default:
-        Lox.error(line, "Unexpected character.");
+        if (isDigit(c)) {
+          number();
+        } else {
+          Lox.error(line, "Unexpected character.");
+        }
         break;
     }
   }
 
+  private boolean isDigit(char c) {
+    return c >= '0' && c <= '9';
+  }
+
+  private void number() {
+    while (isDigit(peek())) advance();
+    // look for a fractional part
+    if (peek() == '.' && isDigit(peekNext())) {
+      // consume the .
+      advance();
+      while (isDigit(peek())) advance();
+    }
+    String value = source.substring(start, current);
+    addToken(NUMBER, Double.parseDouble(value));
+  }
+
+  private char peekNext() {
+    if (current + 1 >= source.length()) return '\0';
+    return source.charAt(current + 1);
+  }
+
   // look for the closing " and add a string token
   private void string() {
-    while (peek() != '"' && isAtEnd()) {
+    while (peek() != '"' && !isAtEnd()) {
       if (peek() == '\n') line++;
       advance();
     }
