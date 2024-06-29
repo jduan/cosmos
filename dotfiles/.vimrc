@@ -11,7 +11,6 @@ call plug#begin('~/.vim/plugged')
 " Plug 'mrk21/yaml-vim'
 
 Plug 'Einenlum/yaml-revealer'
-Plug '907th/vim-auto-save'
 Plug 'Clavelito/indent-awk.vim'
 " A lib that's used by other plugins
 Plug 'MarcWeber/vim-addon-mw-utils'
@@ -213,7 +212,7 @@ set showcmd              " show command-in-progress
 set showmatch            " Automagically show matching brackets
 set showmode             " show the current input mode
 set softtabstop=4        " make four spaces act like tabs
-set statusline=%<[%02n]\ %F%(\ %m%h%w%y%r%)\ %{fugitive#statusline()}\ %a%=\ [%l,%c%V](%P)\ [%08O:%02B]
+" set statusline=%<[%02n]\ %F%(\ %m%h%w%y%r%)\ %{fugitive#statusline()}\ %a%=\ [%l,%c%V](%P)\ [%08O:%02B]
 set t_Co=256             " 256 colors
 set tabstop=4            " The One True Tab (as of latest revision)
 set terse
@@ -581,17 +580,17 @@ let g:haskell_conceal_enumerations = 0
 
 " vim-hindent format haskell file when it's saved!
 " https://github.com/alx741/vim-hindent
-let g:hindent_on_save = 1
-let g:hindent_indent_size = 2 " Number of spaces per indentation
-let g:hindent_line_length = 80
+" let g:hindent_on_save = 1
+" let g:hindent_indent_size = 2 " Number of spaces per indentation
+" let g:hindent_line_length = 80
 
 " Haskell hlint
 " Install "hlint" via stack and the Syntastic plugin will work out of the box.
 
 " Build tags upon buffer save
-:function BuildHaskellTags()
-:echom  system("hasktags -c .")
-:endfunction
+" :function BuildHaskellTags()
+" :echom  system("hasktags -c .")
+" :endfunction
 " uncomment this when working on large projects!
 " autocmd FileType haskell autocmd BufWritePost * call BuildHaskellTags()
 
