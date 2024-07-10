@@ -48,4 +48,127 @@ public class ScannerTest {
             new Token(TokenType.EOF, "", null, 1));
     assertEquals(expectedTokens, tokens);
   }
+
+  @Test
+  public void testComments() {
+    String source =
+        """
+1 + 2 // this is a comment
+3 / 4
+""";
+    Scanner scanner = new Scanner(source);
+    List<Token> tokens = scanner.scanTokens();
+    List<Token> expectedTokens =
+        List.of(
+            new Token(TokenType.NUMBER, "1", Double.valueOf(1.0), 1),
+            new Token(TokenType.PLUS, "+", null, 1),
+            new Token(TokenType.NUMBER, "2", Double.valueOf(2.0), 1),
+            new Token(TokenType.NUMBER, "3", Double.valueOf(3.0), 2),
+            new Token(TokenType.SLASH, "/", null, 2),
+            new Token(TokenType.NUMBER, "4", Double.valueOf(4.0), 2),
+            new Token(TokenType.EOF, "", null, 3));
+    assertEquals(expectedTokens, tokens);
+  }
+
+  @Test
+  public void testWhitespace() {
+    String source =
+        """
+1 +    2 // this is a comment
+
+
+
+3 /       4
+""";
+    Scanner scanner = new Scanner(source);
+    List<Token> tokens = scanner.scanTokens();
+    List<Token> expectedTokens =
+        List.of(
+            new Token(TokenType.NUMBER, "1", Double.valueOf(1.0), 1),
+            new Token(TokenType.PLUS, "+", null, 1),
+            new Token(TokenType.NUMBER, "2", Double.valueOf(2.0), 1),
+            new Token(TokenType.NUMBER, "3", Double.valueOf(3.0), 5),
+            new Token(TokenType.SLASH, "/", null, 5),
+            new Token(TokenType.NUMBER, "4", Double.valueOf(4.0), 5),
+            new Token(TokenType.EOF, "", null, 6));
+    assertEquals(expectedTokens, tokens);
+  }
+
+  @Test
+  public void testStrings() {
+    String source =
+        """
+1 +    "hello 1 3" // this is a comment
+
+
+
+3 /       4
+""";
+    Scanner scanner = new Scanner(source);
+    List<Token> tokens = scanner.scanTokens();
+    List<Token> expectedTokens =
+        List.of(
+            new Token(TokenType.NUMBER, "1", Double.valueOf(1.0), 1),
+            new Token(TokenType.PLUS, "+", null, 1),
+            new Token(TokenType.STRING, "\"hello 1 3\"", "hello 1 3", 1),
+            new Token(TokenType.NUMBER, "3", Double.valueOf(3.0), 5),
+            new Token(TokenType.SLASH, "/", null, 5),
+            new Token(TokenType.NUMBER, "4", Double.valueOf(4.0), 5),
+            new Token(TokenType.EOF, "", null, 6));
+    assertEquals(expectedTokens, tokens);
+  }
+
+  @Test
+  public void testDigits() {
+    String source =
+        """
+1 +    "hello 1 3" // this is a comment
+
+
+
+3.14 /       4.5
+""";
+    Scanner scanner = new Scanner(source);
+    List<Token> tokens = scanner.scanTokens();
+    List<Token> expectedTokens =
+        List.of(
+            new Token(TokenType.NUMBER, "1", Double.valueOf(1.0), 1),
+            new Token(TokenType.PLUS, "+", null, 1),
+            new Token(TokenType.STRING, "\"hello 1 3\"", "hello 1 3", 1),
+            new Token(TokenType.NUMBER, "3.14", Double.valueOf(3.14), 5),
+            new Token(TokenType.SLASH, "/", null, 5),
+            new Token(TokenType.NUMBER, "4.5", Double.valueOf(4.5), 5),
+            new Token(TokenType.EOF, "", null, 6));
+    assertEquals(expectedTokens, tokens);
+  }
+
+  @Test
+  public void testIdentifiers() {
+    String source =
+        """
+1 +    "hello 1 3" // this is a comment
+
+
+
+3.14 /       4.5
+amount + LENGTH + _width
+""";
+    Scanner scanner = new Scanner(source);
+    List<Token> tokens = scanner.scanTokens();
+    List<Token> expectedTokens =
+        List.of(
+            new Token(TokenType.NUMBER, "1", Double.valueOf(1.0), 1),
+            new Token(TokenType.PLUS, "+", null, 1),
+            new Token(TokenType.STRING, "\"hello 1 3\"", "hello 1 3", 1),
+            new Token(TokenType.NUMBER, "3.14", Double.valueOf(3.14), 5),
+            new Token(TokenType.SLASH, "/", null, 5),
+            new Token(TokenType.NUMBER, "4.5", Double.valueOf(4.5), 5),
+            new Token(TokenType.IDENTIFIER, "amount", null, 6),
+            new Token(TokenType.PLUS, "+", null, 6),
+            new Token(TokenType.IDENTIFIER, "LENGTH", null, 6),
+            new Token(TokenType.PLUS, "+", null, 6),
+            new Token(TokenType.IDENTIFIER, "_width", null, 6),
+            new Token(TokenType.EOF, "", null, 7));
+    assertEquals(expectedTokens, tokens);
+  }
 }
