@@ -80,6 +80,7 @@
     rebase-remote  = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git rebase $remote_branch; }; f"
     merge-remote   = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git merge $remote_branch; }; f"
     rr  = "!f(){ remote_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u}); git rebase $remote_branch; }; f"
+    rd  = "!f(){ git rebase origin/main; }; f"
     rv  = remote -v
     rh  = reset HEAD^
     rhh = reset HEAD^ --hard
