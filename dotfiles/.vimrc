@@ -637,3 +637,6 @@ autocmd BufNewFile *.sh 0r ~/.vim_skeletons/bash.sh
 
 " macro that inserts the current date
 nnoremap <leader>d "=strftime("%Y/%m/%d")<CR>P
+
+" execute bash script
+nnoremap <leader>r :!bash %<CR>

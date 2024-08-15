@@ -129,7 +129,7 @@ alias v='sf -e vim'
 alias bazel='bazelisk'
 alias b='bazel'
 alias bb="bazel build"
-# alias bq="bazel query"
+alias bq="bazel query"
 alias br="bazel run"
 alias bt="bazel test"
 
