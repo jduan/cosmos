@@ -10,7 +10,7 @@ source $HOME/.asdf/plugins/java/set-java-home.fish
 export CARGO_HOME=$HOME/.cargo
 export RUSTUP_HOME=$HOME/.rustup
 
-# Gradle Enterprise at highnote
+# Develocity config at highnote (this file contains secrets and it's manually created)
 source $HOME/.fish_config_highnote.fish
 
 #########################################################
@@ -132,7 +132,7 @@ end
 if [ -f '/Users/jduan/google-cloud-sdk/path.fish.inc' ]; . '/Users/jduan/google-cloud-sdk/path.fish.inc'; end
 
 # Need to run https://asdf-vm.com
-source /opt/homebrew/opt/asdf/libexec/asdf.fish
+# source /opt/homebrew/opt/asdf/libexec/asdf.fish
 
 function __auto_activate_virtualenv --on-variable PWD
     # Check if there is a virtual environment in the directory
