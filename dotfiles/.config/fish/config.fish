@@ -5,7 +5,8 @@ export EDITOR=vim
 # end
 # export JAVA_HOME=$HOME/.asdf/installs/java/zulu-17.38.21/
 # export JAVA_HOME=/nix/store/84kssxbjlfbjkah4hd8hpylkjnq5isb3-zulu8.54.0.21-ca-jdk-8.0.292/
-source $HOME/.asdf/plugins/java/set-java-home.fish
+# source $HOME/.asdf/plugins/java/set-java-home.fish
+source /nix/store/zz9nzcklwsigr7s5x5fg955qgr4nwrjh-asdf-vm-0.14.1/share/asdf-vm/asdf.fish
 
 export CARGO_HOME=$HOME/.cargo
 export RUSTUP_HOME=$HOME/.rustup

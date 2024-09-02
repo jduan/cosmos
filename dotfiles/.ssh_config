@@ -12,4 +12,4 @@ Host github.com-personal
 Host github.com-bay1
 	HostName github.com
 	User git
-	IdentityFile ~/.ssh/id_rsa_highnote
+	IdentityFile ~/.ssh/id_ed25519_highnote
