@@ -29,14 +29,9 @@ set paths \
     $CARGO_HOME/bin \
     $JAVA_HOME \
     $HOME/github/jduan/cosmos/misc_scripts \
-    $HOME/repos2/sysops/optica_tools \
-    $HOME/airlab/runtime_gems/tools/bin \
-    # haskell stack
-    $HOME/.local/bin \
-    # pip installed binaries
-    $HOME/Library/Python/3.7/bin/ \
-    # executables installed by rubygems
-    $HOME/.gem/ruby/2.7.0/bin
+    # this is where nix-env is installed
+    /nix/var/nix/profiles/default/bin
+
 for path in $paths
     if test -d "$path"
         if not contains "$path" $PATH
