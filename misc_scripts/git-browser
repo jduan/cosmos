@@ -44,7 +44,7 @@ def find_group_and_repo_name(dirname):
         # remote the ".git" extension
         repo_name = repo_name.split(".")[0]
     else:
-        raise "Unknown git remote: %s" % output
+        raise Exception("Unknown git remote: %s" % output)
     return (group, repo_name)
 
 
