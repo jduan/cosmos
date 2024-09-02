@@ -1,0 +1,15 @@
+Host *
+    ServerAliveInterval 15
+    ServerAliveCountMax 2
+
+# personal account
+Host github.com-personal
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/id_rsa
+
+# highnote account
+Host github.com-bay1
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/id_rsa_highnote
