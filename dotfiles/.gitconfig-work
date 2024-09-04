@@ -2,6 +2,6 @@
     name = Jingjing Duan
     email = jduan@highnote.com
     useConfigOnly = true
-    signingkey = 1F9BB007AD6EE9E6
+    signingkey = 8330DFEFE8CF5205
 [commit]
     gpgsign = true
