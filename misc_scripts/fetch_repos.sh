@@ -7,7 +7,7 @@ function fetch_repos() {
   local repos_dir=$1
 
   for dir in "$repos_dir"/*; do
-    if [[ -d "$dir" && -d "$dir/.git" ]]; then
+    if [[ -d "$dir" && (-d "$dir/.git" || -f "$dir/.git") ]]; then
       cd "$dir"
       date
       git fetch origin
