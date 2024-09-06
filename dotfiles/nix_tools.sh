@@ -7,6 +7,7 @@ packages=(
   asdf-vm
   bat
   bazelisk
+  buildifier
   colordiff
   coreutils
   diff-so-fancy
@@ -17,6 +18,7 @@ packages=(
   fzf
   gh
   git
+  go
   google-cloud-sdk
   htop
   iterm2
