@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # This script fetches all the repos under $HOME/repos
 
-set -exuo pipefail
+set -euo pipefail
 
 function fetch_repos() {
   local repos_dir=$1
@@ -10,6 +10,7 @@ function fetch_repos() {
     if [[ -d "$dir" && (-d "$dir/.git" || -f "$dir/.git") ]]; then
       cd "$dir"
       date
+      echo "fetching repo at $(pwd)"
       git fetch origin
     fi
   done
