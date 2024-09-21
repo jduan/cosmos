@@ -12,6 +12,9 @@
 # --glob=!spec/
 --glob=!tags
 # --glob=!test/
+--glob=!.git/
+
+--hidden
 
 # Because who cares about case!?
 --smart-case
