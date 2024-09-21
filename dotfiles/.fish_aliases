@@ -135,3 +135,6 @@ alias bt="bazel test"
 
 # nix
 alias ne='nix-env'
+
+# jetbrains
+alias pycharm='/Applications/PyCharm\ CE.app/Contents/MacOS/pycharm'
