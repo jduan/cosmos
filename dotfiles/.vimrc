@@ -640,3 +640,16 @@ nnoremap <leader>d "=strftime("%Y/%m/%d")<CR>P
 
 " execute bash script
 nnoremap <leader>r :!bash %<CR>
+
+"""" autosave all buffers periodically """"
+function! AutosaveAllBuffers(timer)
+  " Check if the buffer is modified, and if so, write it
+  silent! wa
+endfunction
+
+" Autosave every 5 minutes (300000 milliseconds)
+let g:autosave_interval = 300 * 1000
+
+" Start the timer to periodically autosave
+autocmd VimEnter * let g:autosave_timer = timer_start(g:autosave_interval, 'AutosaveAllBuffers', {'repeat': -1})
+"""" autosave all buffers periodically """"
