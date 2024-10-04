@@ -42,6 +42,7 @@ packages=(
   tree
   vim
   wget
+  xmlstarlet
   yamllint
   yq-go
 )
