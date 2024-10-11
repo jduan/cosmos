@@ -11,8 +11,9 @@ source /nix/store/zz9nzcklwsigr7s5x5fg955qgr4nwrjh-asdf-vm-0.14.1/share/asdf-vm/
 export CARGO_HOME=$HOME/.cargo
 export RUSTUP_HOME=$HOME/.rustup
 
+# Custom things:
 # Develocity config at highnote (this file contains secrets and it's manually created)
-source $HOME/.fish_config_highnote.fish
+# source $HOME/.fish_config_highnote.fish
 
 #########################################################
 # Why do we check if a path has been added to $PATH?
