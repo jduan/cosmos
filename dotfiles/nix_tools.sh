@@ -11,6 +11,7 @@ packages=(
   colordiff
   coreutils
   diff-so-fancy
+  difftastic
   fasd
   fd
   fish
