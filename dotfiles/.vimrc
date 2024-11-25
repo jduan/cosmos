@@ -647,8 +647,8 @@ function! AutosaveAllBuffers(timer)
   silent! wa
 endfunction
 
-" Autosave every 5 minutes (300000 milliseconds)
-let g:autosave_interval = 300 * 1000
+" Autosave every 1 minutes (in milliseconds)
+let g:autosave_interval = 60 * 1000
 
 " Start the timer to periodically autosave
 autocmd VimEnter * let g:autosave_timer = timer_start(g:autosave_interval, 'AutosaveAllBuffers', {'repeat': -1})
