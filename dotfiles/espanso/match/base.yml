@@ -9,10 +9,30 @@
 # it gets replaced by the "replace" string.
 matches:
   # Simple text replacement
+  - trigger: ";ct"
+    replace: "commit_timestamp"
   - trigger: ";etl"
     replace: "app-search-etl-beam"
-
-  # Simple text replacement
+  - trigger: ";epj"
+    replace: "app-eventsource-poller-job"
+  - trigger: ";email"
+    replace: "jduan@highnote.com"
+  - trigger: ";kmp"
+    replace: "keep me posted"
+  - trigger: ";k8s"
+    replace: "Kubernetes"
+  - trigger: ";pts"
+    replace: "Predictive Test Selection"
+  - trigger: ";sg"
+    replace: "sound good"
+  - trigger: ";ty"
+    replace: "Thank you!"
+  - trigger: ";txn"
+    replace: "transaction"
+  - trigger: ";cte"
+    replace: "tx_card_transaction_event"
+  - trigger: ";wdyt"
+    replace: "What do you think?"
   - trigger: ":espanso"
     replace: "Hi there!"
 
