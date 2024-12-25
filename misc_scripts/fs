@@ -4,7 +4,7 @@
 set -euo pipefail
 
 repos_root=$HOME/repos/
-repos=(api-platform bayone devops infra release)
+repos=(api-platform bayone devops infra release infra_shared)
 
 for repo in "${repos[@]}"
 do
