@@ -29,7 +29,7 @@ matches:
     replace: "Thank you!"
   - trigger: ";txn"
     replace: "transaction"
-  - trigger: ";cte"
+  - trigger: ";card_tran"
     replace: "tx_card_transaction_event"
   - trigger: ";wdyt"
     replace: "What do you think?"
