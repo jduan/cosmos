@@ -234,8 +234,6 @@ function! MapCR()
 endfunction"
 call MapCR()
 
-colorscheme railscasts   " use railscasts color scheme
-
 " Ack the word under cursor
 " Use "rg" as ack
 let g:ackprg = 'rg --vimgrep --no-heading'
@@ -505,6 +503,9 @@ au BufEnter *.scala setl formatprg=java\ -jar\ ~/scripts/scalariform.jar\ --stdi
 "hi link EasyMotionShade  Comment
 hi EasyMotionTarget ctermbg=none ctermfg=red
 hi EasyMotionShade  ctermbg=none ctermfg=blue
+
+" this should be set after EasyMotion above; otherwise the color looks off!
+colorscheme railscasts   " use railscasts color scheme
 
 " vim-session
 " automatically save the current session when quiting vim

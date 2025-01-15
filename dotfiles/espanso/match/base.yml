@@ -9,6 +9,10 @@
 # it gets replaced by the "replace" string.
 matches:
   # Simple text replacement
+  - trigger: ";ap"
+    replace: "application.properties"
+  - trigger: ";le"
+    replace: "tx_ledger_entry"
   - trigger: ";ct"
     replace: "commit_timestamp"
   - trigger: ";etl"
