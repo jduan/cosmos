@@ -9,7 +9,13 @@ function fish_prompt --description 'Write out the prompt'
 
     # original:
     # echo -n -s "$USER" @ (prompt_hostname) ' ' "$__fish_prompt_cwd" (prompt_pwd) (__fish_vcs_prompt) " $__fish_prompt_normal" '> '
-    echo -n -s ' ' "$__fish_prompt_cwd" (prompt_pwd) " $__fish_prompt_normal" '> '
+    echo -n -s ' ' "$__fish_prompt_cwd" (prompt_pwd)
+    # just show the "git branch name" without showing "git status"
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1
+        set_color magenta
+        echo -n ' ('(git rev-parse --abbrev-ref HEAD 2>/dev/null)')'
+    end
+    echo "$__fish_prompt_normal" '> '
 end
 
 set normal (set_color normal)
