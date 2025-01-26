@@ -11,6 +11,8 @@ matches:
   # Simple text replacement
   - trigger: ";ap"
     replace: "application.properties"
+  - trigger: ";ap"
+    replace: "application.properties"
   - trigger: ";le"
     replace: "tx_ledger_entry"
   - trigger: ";ct"
