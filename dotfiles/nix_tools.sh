@@ -12,22 +12,28 @@ packages=(
   coreutils
   diff-so-fancy
   difftastic
+  dive
   fasd
   fd
   fish
   fswatch
   fzf
   gh
+  ghostscript
   git
+  gnupg
   go
   google-cloud-sdk
   htop
+  imagemagick
   iterm2
   jq
   kubectl
   kubectx
   kubernetes-helm
+  meld
   ncdu
+  nodejs
   pkgdiff
   pstree
   python3
@@ -35,6 +41,7 @@ packages=(
   reattach-to-user-namespace
   ripgrep
   shellcheck
+  temporal
   terraform
   tldr
   tmux
@@ -42,9 +49,11 @@ packages=(
   tokei
   tree
   vim
+  watch
   wget
   xmlstarlet
   yamllint
+  yarn
   yq-go
 )
 
@@ -52,5 +61,5 @@ packages=(
 for package in "${packages[@]}"
 do
   echo ">>> Installing package $package"
-  nix-env -iA nixpkgs.$package
+  nix-env -iA "nixpkgs.$package"
 done

@@ -9,6 +9,10 @@
 # it gets replaced by the "replace" string.
 matches:
   # Simple text replacement
+  - trigger: ";authy"
+    replace: "app-auth-grpc"
+  - trigger: ";se"
+    replace: "spanner emulator"
   - trigger: ";ap"
     replace: "application.properties"
   - trigger: ";le"
