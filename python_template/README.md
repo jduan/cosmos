@@ -1,7 +1,5 @@
 # How to run tests?
-python -m pytest
+pytest
 
-Running `pytest` from this directory doesn't work because it doesn't add the
-current directory to python's `sys.path` (which is used for searching for
-packages). Running `python -m pytest` works because python always add the
-current directory to python's search path.
+Note that the `pytest.ini` file is important. Without it, pytest won't add
+the current directory to PYTHONPATH
