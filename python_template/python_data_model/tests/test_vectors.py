@@ -1,3 +1,5 @@
+# This import uses an "absolute path" because "vectors.py" and "test_vectors.py" aren't in the same
+# directory.
 from python_data_model.vectors import Vector
 
 

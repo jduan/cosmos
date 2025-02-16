@@ -1,4 +1,5 @@
-from python_data_model.cards import Card, FrenchDeck, spades_high
+# This import is ok because it imports from cards.py which is in the same directory.
+from cards import Card, FrenchDeck, spades_high
 from random import choice
 import sys
 
