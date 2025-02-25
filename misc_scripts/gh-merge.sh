@@ -15,4 +15,4 @@ if echo "$DIFF" | grep -q "TODO"; then
 fi
 
 # If no issues, proceed with the merge
-gh pr merge "$PR_NUMBER" --merge
+gh pr merge "$PR_NUMBER" --auto
