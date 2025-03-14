@@ -37,6 +37,8 @@ matches:
     replace: "tx_ledger_entry"
   - trigger: ";ct"
     replace: "commit_timestamp"
+  - trigger: ";asg"
+    replace: "app-search-grpc"
   - trigger: ";etl"
     replace: "app-search-etl-beam"
   - trigger: ";epj"
