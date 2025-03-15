@@ -6,11 +6,8 @@ import (
 )
 
 func main() {
-	s, sep := "", ""
-	for _, arg := range os.Args[1:] {
-		s += sep + arg
-		sep = " "
+	// s, sep := "", ""
+	for idx, arg := range os.Args[1:] {
+		fmt.Printf("line %d: %s\n", (idx + 1), arg)
 	}
-
-	fmt.Println(s)
 }
