@@ -70,3 +70,6 @@ export SDKMAN_DIR="/Users/jduan/.sdkman"
 [[ -s "/Users/jduan/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/jduan/.sdkman/bin/sdkman-init.sh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#### BEGIN ANSIBLE MANAGED BLOCK - highnote-dev-env/roles/00-base ####
+source /Users/jduan/repos/highnote-dev-env/.generated/shared-env.sh
+#### END ANSIBLE MANAGED BLOCK - highnote-dev-env/roles/00-base ####

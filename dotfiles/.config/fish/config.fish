@@ -129,9 +129,6 @@ function postcmd --on-event fish_postexec
     set_color normal
 end
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jduan/google-cloud-sdk/path.fish.inc' ]; . '/Users/jduan/google-cloud-sdk/path.fish.inc'; end
-
 # Need to run https://asdf-vm.com
 # source /opt/homebrew/opt/asdf/libexec/asdf.fish
 
@@ -142,3 +139,10 @@ function __auto_activate_virtualenv --on-variable PWD
         source .venv/bin/activate.fish
     end
 end
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/jduan/.gcloud/514.0.0/google-cloud-sdk/path.fish.inc' ]; . '/Users/jduan/.gcloud/514.0.0/google-cloud-sdk/path.fish.inc'; end
+
+#### BEGIN ANSIBLE MANAGED BLOCK - highnote-dev-env/roles/00-base ####
+source /Users/jduan/repos/highnote-dev-env/.generated/shared-env.sh
+#### END ANSIBLE MANAGED BLOCK - highnote-dev-env/roles/00-base ####
