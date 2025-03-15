@@ -7,6 +7,9 @@ export EDITOR=vim
 # source $HOME/.asdf/plugins/java/set-java-home.fish
 # source /nix/store/zz9nzcklwsigr7s5x5fg955qgr4nwrjh-asdf-vm-0.14.1/share/asdf-vm/asdf.fish
 
+source $HOME/.asdf/asdf.fish
+source $HOME/.asdf/plugins/java/set-java-home.fish
+
 export CARGO_HOME=$HOME/.cargo
 export RUSTUP_HOME=$HOME/.rustup
 
