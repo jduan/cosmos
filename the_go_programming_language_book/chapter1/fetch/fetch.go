@@ -16,6 +16,8 @@ func main() {
 		resp, err := http.Get(url)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+		} else {
+			fmt.Printf("Status code: %s\n", resp.Status)
 		}
 		// b, err := io.ReadAll(resp.Body)
 		// resp.Body.Close()
