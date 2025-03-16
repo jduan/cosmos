@@ -1,3 +1,4 @@
+// Given a list of files, find the duplicate lines and count them.
 package main
 
 import (
