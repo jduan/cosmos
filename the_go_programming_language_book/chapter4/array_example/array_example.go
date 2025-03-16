@@ -22,4 +22,20 @@ func main() {
 
 	r := [...]int{9: 9} // create an array of 10 integers, the 10th element is 9
 	fmt.Printf("array r: %v\n", r)
+
+	var twoD [2][3]int
+	for i := 0; i < 2; i++ {
+		for j := 0; j < 2; j++ {
+			twoD[i][j] = i + j
+		}
+	}
+	fmt.Println("2d: ", twoD)
+
+	// 2D array literal
+	twoD2 := [3][3]int{
+		{1, 2, 3},
+		{1, 2, 3},
+		{1, 2, 3},
+	}
+	fmt.Println("2d: ", twoD2)
 }
