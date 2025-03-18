@@ -412,16 +412,6 @@ let g:html_indent_inctags = "html,body,head,tbody"
 let g:html_indent_script1 = "inc"
 let g:html_indent_style1 = "inc"
 
-" 1. highlight trailing whitespace in red
-" 2. have this highlighting not appear whilst you are typing in insert mode
-" 3. have the highlighting of whitespace apply when you open new buffers
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
-
 " easy window navigation
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -506,6 +496,17 @@ hi EasyMotionShade  ctermbg=none ctermfg=blue
 
 " this should be set after EasyMotion above; otherwise the color looks off!
 colorscheme railscasts   " use railscasts color scheme
+
+" This should be after "colorscheme railscast" because that scheme seems to disable these matches!
+" 1. highlight trailing whitespace in red
+" 2. have this highlighting not appear whilst you are typing in insert mode
+" 3. have the highlighting of whitespace apply when you open new buffers
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
 
 " vim-session
 " automatically save the current session when quiting vim
