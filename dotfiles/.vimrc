@@ -655,3 +655,8 @@ let g:autosave_interval = 60 * 1000
 " Start the timer to periodically autosave
 autocmd VimEnter * let g:autosave_timer = timer_start(g:autosave_interval, 'AutosaveAllBuffers', {'repeat': -1})
 """" autosave all buffers periodically """"
+
+" This is a bug in vim itself that was introduced in this commit:
+" https://github.com/vim/vim/commit/cd96075cdee6b606c6e39aa1aed19b7cdc867df8
+" This disables "markdown" support in java files.
+let g:java_ignore_markdown = 1
