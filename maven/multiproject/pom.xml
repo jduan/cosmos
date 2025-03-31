@@ -6,6 +6,10 @@
     <groupId>com.jduan</groupId>
     <artifactId>simple-parent</artifactId>
     <packaging>pom</packaging>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
     <version>1.0</version>
     <name>Multi Chapter Simple Parent Project</name>
     <modules>
@@ -18,10 +22,6 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
