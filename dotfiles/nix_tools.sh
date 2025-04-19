@@ -4,12 +4,14 @@ set -euo pipefail
 # List of packages
 packages=(
   actionlint
+  bash
   asdf-vm
   bat
   bazelisk
   buildifier
   colordiff
   coreutils
+  dialog
   diff-so-fancy
   difftastic
   dive
@@ -21,6 +23,7 @@ packages=(
   gh
   ghostscript
   git
+  ghz
   gnupg
   go
   google-cloud-sdk
@@ -33,7 +36,6 @@ packages=(
   kubernetes-helm
   meld
   ncdu
-  nodejs
   pkgdiff
   pstree
   python3
@@ -42,6 +44,7 @@ packages=(
   ripgrep
   shellcheck
   temporal
+  temporal-cli
   terraform
   tldr
   tmux
