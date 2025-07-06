@@ -1,27 +1,41 @@
-def other():
-    """
-    Show how to slice sequences.
-    somelist[start:end]
-    * start is inclusive and end is exclusive
-    * negative numbers are offsets relative to the end of a list
-    * slicing deals properly with start and end indexes that are beyond the boundaries
-    """
-    a = ["a", "b", "c", "d", "e", "f", "g", "h"]
-    print("First four: ", a[:4])
-    print("Last four: ", a[-4:])
-    print("Middle two", a[3:-3])
-    print("Copy list", a[:])
-    print("Last five", a[-5:])
-    print("Exclude last one", a[:-1])
-    print("5th and the rest", a[4:])
-    print("Last 3", a[-3:])
-    print("3 items", a[2:5])
-    print("3rd to 2nd to the last", a[2:-1])
-    print("2 items", a[-3:-1])
-    # beyond boundaries
-    print("first 20 items", a[:20])
-    print("last 20 items", a[-20:])
+"""
+Prefer multiple-assignment unpacking over indexing.
+Using unpacking wisely will enable you to avoid indexing when possible, resulting in
+clearer and more pythonic code.
+"""
+
+
+def unpacking():
+    favorite_snacks = {
+        "salty": ("pretzels", 100),
+        "sweet": ("cookies", 180),
+        "veggie": ("carrots", 20),
+    }
+
+    ((type1, (name1, cals1)), (type2, (name2, cals2)), (type3, (name3, cals3))) = (
+        favorite_snacks.items()
+    )
+
+    print(f"Favorite {type1} is {name1} with {cals1} calories")
+    print(f"Favorite {type2} is {name1} with {cals2} calories")
+    print(f"Favorite {type3} is {name3} with {cals3} calories")
+
+    snacks = [("bacon", 350), ("donut", 240), ("muffin", 190)]
+    for rank, (name, cals) in enumerate(snacks, 1):
+        print(f"#{rank}: {name} has {cals} calories")
+
+
+def bubble_sort(a):
+    for _ in range(len(a)):
+        for i in range(1, len(a)):
+            if a[i] < a[i - 1]:
+                # unpacking can be used to swap variables!
+                a[i - 1], a[i] = a[i], a[i - 1]
+            # print(f"after {i} iteration, a: {a}")
 
 
 if __name__ == "__main__":
-    other()
+    unpacking()
+    names = ["pretzels", "carrots", "arugula", "bacon"]
+    bubble_sort(names)
+    print(names)

@@ -1,3 +1,8 @@
+"""
+Never expect python to detect errors at compile time.
+"""
+
+
 def bad_reference():
     # this is valid python code even if my_var isn't declared
     print(my_var)

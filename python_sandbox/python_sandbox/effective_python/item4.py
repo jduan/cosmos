@@ -1,3 +1,7 @@
+"""
+Write helper functions instead of complex expressions.
+"""
+
 from urllib.parse import parse_qs
 
 
