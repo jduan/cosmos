@@ -29,7 +29,10 @@ nnoremap <Space> :nohlsearch<cr>
 :inoremap <C-e> <Esc>A
 
 " Emulated Vim Plugins
-set vim-surround
+" To make "easymotion" work, you need to install the "IdeaVim-EasyMotion" and "AceJump" IDE plugins.
+Plugin 'easymotion/vim-easymotion'
+Plugin 'vim-surround'
+set surround
 set easymotion
 
 " Try them!
