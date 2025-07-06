@@ -16,7 +16,7 @@ def log(message, *values):
     # The type of values is a tuple.
     # print(type(values))
     if values:
-        values_str = ', '.join(str(x) for x in values)
+        values_str = ", ".join(str(x) for x in values)
         print("%s: %s" % (message, values_str))
     else:
         print(message)
@@ -30,7 +30,7 @@ def log(message, *values):
 # functions that accept *args
 def log2(sequence, message, *values):
     if values:
-        values_str = ', '.join(str(x) for x in values)
+        values_str = ", ".join(str(x) for x in values)
         print("%s: %s: %s" % (sequence, message, values_str))
     else:
         print("%s: %s" % (sequence, message))
@@ -39,29 +39,29 @@ def log2(sequence, message, *values):
 # arguments after varargs are keyword-only arguments!
 def log3(message, *values, sequence):
     if values:
-        values_str = ', '.join(str(x) for x in values)
+        values_str = ", ".join(str(x) for x in values)
         print("%s: %s: %s" % (sequence, message, values_str))
     else:
         print("%s: %s" % (sequence, message))
 
 
 def main():
-    log('My numbers are', 1, 2)
-    log('Hi there')
+    log("My numbers are", 1, 2)
+    log("Hi there")
     favorites = [7, 33, 99]
     # This is called the * or splat operator which unpacks a list and passes them
     # to the log function as var args.
-    log('Favorite colors', *favorites)
+    log("Favorite colors", *favorites)
 
     # this works
-    log2(1, 'Favorites', 7, 33)
+    log2(1, "Favorites", 7, 33)
     # old usage breaks silently because the sequence will be 'Favorite numbers'
-    log2('Favorite numbers', 7, 33)
+    log2("Favorite numbers", 7, 33)
 
     # leverage keyword-only arguments
-    log3('Favorites', 7, 33, sequence=1)
-    log3('Favorite numbers', 7, 33, sequence=2)
+    log3("Favorites", 7, 33, sequence=1)
+    log3("Favorite numbers", 7, 33, sequence=2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

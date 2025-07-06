@@ -39,7 +39,10 @@ class Bucket:
             self.quota_consumed += delta
 
     def __repr__(self):
-        return 'Bucket(max_quota=%d, quota_consumed=%d)' % (self.max_quota, self.quota_consumed)
+        return "Bucket(max_quota=%d, quota_consumed=%d)" % (
+            self.max_quota,
+            self.quota_consumed,
+        )
 
 
 def fill(bucket, amount):
@@ -62,21 +65,21 @@ def deduct(bucket, amount):
 
 def main():
     bucket = Bucket(60)
-    print('Initial', bucket)
+    print("Initial", bucket)
     fill(bucket, 100)
-    print('Filled', bucket)
+    print("Filled", bucket)
     if deduct(bucket, 99):
-        print('Had 99 quota')
+        print("Had 99 quota")
     else:
-        print('Not enough for 99 quota')
-    print('Now', bucket)
+        print("Not enough for 99 quota")
+    print("Now", bucket)
 
     if deduct(bucket, 3):
-        print('Had 3 quota')
+        print("Had 3 quota")
     else:
-        print('Not enough for 3 quota')
-    print('Still', bucket)
+        print("Not enough for 3 quota")
+    print("Still", bucket)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

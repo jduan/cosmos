@@ -42,9 +42,11 @@ def main():
 
     print("Flow rate per second: %s" % flow_rate(1000, 100))
     print("Flow rate per hour: %s" % flow_rate(1000, 100, period=3600))
-    print("Flow rate per hour different units: %s" %
-          flow_rate(1000, 100, period=3600, units_per_kg=2.2))
+    print(
+        "Flow rate per hour different units: %s"
+        % flow_rate(1000, 100, period=3600, units_per_kg=2.2)
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

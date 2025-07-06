@@ -17,6 +17,7 @@ def sort_priority(values, group):
     """
     Given a list of values, sort them by checking if a number is in the priority group.
     """
+
     def helper(x):
         # Python support closures: function helper can access variables from its scope.
         if x in group:
@@ -24,6 +25,7 @@ def sort_priority(values, group):
             return (0, x)
         else:
             return (1, x)
+
     # Functions are first-class objects. That's why you can assign helper to key.
     values.sort(key=helper)
 
@@ -45,6 +47,7 @@ def sort_priority2(values, group):
             return (0, x)
         else:
             return (1, x)
+
     values.sort(key=helper)
     return found
 

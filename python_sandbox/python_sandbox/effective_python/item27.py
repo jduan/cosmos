@@ -81,5 +81,5 @@ def main():
     pprint(child.__dict__)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

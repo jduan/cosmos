@@ -15,7 +15,7 @@ import json
 # when a program starts up. After the module containing this code is loaded, the datetime.now
 # default argument will never be evaluated again.
 def log(message, when=datetime.now()):
-    print('%s: %s' % (when, message))
+    print("%s: %s" % (when, message))
 
 
 def log2(message, when=None):
@@ -23,7 +23,7 @@ def log2(message, when=None):
     Log a message with a timestamp. 'when' defaults to the present time.
     """
     when = datetime.now() if when is None else when
-    print('%s: %s' % (when, message))
+    print("%s: %s" % (when, message))
 
 
 # Using None for default argument values is especially important when the arguments are mutable.
@@ -49,28 +49,28 @@ def decode2(data, default=None):
 
 
 def main():
-    log('Hi there!')
+    log("Hi there!")
     sleep(1)
-    log('Hi again!')
+    log("Hi again!")
 
-    log2('Hi there!')
+    log2("Hi there!")
     sleep(1)
-    log2('Hi again!')
+    log2("Hi again!")
 
-    foo = decode('bad data')
-    foo['stuff'] = 5
-    bar = decode('also bad')
-    bar['meep'] = 1
-    print('Foo: ', foo)
-    print('Bar: ', bar)
+    foo = decode("bad data")
+    foo["stuff"] = 5
+    bar = decode("also bad")
+    bar["meep"] = 1
+    print("Foo: ", foo)
+    print("Bar: ", bar)
 
-    foo2 = decode2('bad data')
-    foo2['stuff'] = 5
-    bar2 = decode2('also bad')
-    bar2['meep'] = 1
-    print('Foo: ', foo2)
-    print('Bar: ', bar2)
+    foo2 = decode2("bad data")
+    foo2["stuff"] = 5
+    bar2 = decode2("also bad")
+    bar2["meep"] = 1
+    print("Foo: ", foo2)
+    print("Bar: ", bar2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

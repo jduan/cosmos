@@ -21,7 +21,7 @@ def safe_division(number, divisor, ignore_overflow=False, ignore_zero_division=F
             raise
     except ZeroDivisionError:
         if ignore_zero_division:
-            return float('inf')
+            return float("inf")
         else:
             raise
 
@@ -30,7 +30,9 @@ def safe_division(number, divisor, ignore_overflow=False, ignore_zero_division=F
 # supplied by keyword, never by position.
 # The * symbol indicates the end of positional arguments and the beginning of
 # keyword-only arguments.
-def safe_division2(number, divisor, *, ignore_overflow=False, ignore_zero_division=False):
+def safe_division2(
+    number, divisor, *, ignore_overflow=False, ignore_zero_division=False
+):
     try:
         return number / divisor
     except OverflowError:
@@ -40,7 +42,7 @@ def safe_division2(number, divisor, *, ignore_overflow=False, ignore_zero_divisi
             raise
     except ZeroDivisionError:
         if ignore_zero_division:
-            return float('inf')
+            return float("inf")
         else:
             raise
 
@@ -58,6 +60,5 @@ def main():
     print("ignore zero division: %s" % safe_division2(1, 0, ignore_zero_division=True))
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

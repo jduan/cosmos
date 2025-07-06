@@ -12,7 +12,7 @@ class Homework:
     @grade.setter
     def grade(self, value):
         if not (0 <= value <= 100):
-            raise ValueError('Grade must be between 0 and 100')
+            raise ValueError("Grade must be between 0 and 100")
         self._grade = value
 
 
@@ -27,7 +27,7 @@ class Grade:
 
     def __set__(self, instance, value):
         if not (0 <= value <= 100):
-            raise ValueError('Grade must be between 0 and 100')
+            raise ValueError("Grade must be between 0 and 100")
         self._values[instance] = value
 
 
@@ -39,16 +39,16 @@ class Exam:
 
 
 class RevealAccess:
-    def __init__(self, initval=None, name='var'):
+    def __init__(self, initval=None, name="var"):
         self.val = initval
         self.name = name
 
     def __get__(self, instance, owner):
-        print('Retrieving', self.name)
+        print("Retrieving", self.name)
         return self.val
 
     def __set__(self, instance, value):
-        print('Updating', self.name)
+        print("Updating", self.name)
         self.val = value
 
 
@@ -56,14 +56,14 @@ def main():
     first_exam = Exam()
     first_exam.writing_grade = 82
     first_exam.science_grade = 99
-    print('First Writing', first_exam.writing_grade)
-    print('First Science', first_exam.science_grade)
+    print("First Writing", first_exam.writing_grade)
+    print("First Science", first_exam.science_grade)
 
     second_exam = Exam()
     second_exam.writing_grade = 75
-    print('First Writing', first_exam.writing_grade)
-    print('Second Writing', second_exam.writing_grade)
+    print("First Writing", first_exam.writing_grade)
+    print("Second Writing", second_exam.writing_grade)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

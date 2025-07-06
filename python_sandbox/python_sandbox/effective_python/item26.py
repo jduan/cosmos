@@ -43,7 +43,7 @@ class ToDictMixin(object):
             return self._traverse_dict(value)
         elif isinstance(value, list):
             return [self._traverse(key, i) for i in value]
-        elif hasattr(value, '__dict__'):
+        elif hasattr(value, "__dict__"):
             return self._traverse_dict(value.__dict__)
         else:
             return value
@@ -76,7 +76,7 @@ class BinaryTreeWithParent(BinaryTree):
 
     def _traverse(self, key, value):
         # Don't visit parent otherwise you will run into a loop
-        if isinstance(value, BinaryTreeWithParent) and key == 'parent':
+        if isinstance(value, BinaryTreeWithParent) and key == "parent":
             return value.value
         else:
             return super()._traverse(key, value)
@@ -103,9 +103,11 @@ class Machine(ToDictMixin, JsonMixin):
 
 
 def main():
-    tree = BinaryTree(10,
-                      left=BinaryTree(7, right=BinaryTree(9)),
-                      right=BinaryTree(13, left=BinaryTree(11)))
+    tree = BinaryTree(
+        10,
+        left=BinaryTree(7, right=BinaryTree(9)),
+        right=BinaryTree(13, left=BinaryTree(11)),
+    )
     pprint(tree.to_dict())
 
     root = BinaryTreeWithParent(10)
@@ -126,5 +128,5 @@ def main():
     assert json.loads(serialized) == json.loads(roundtrip)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 def log_missing():
-    print('Key added')
+    print("Key added")
     return 0
 
 
@@ -7,6 +7,7 @@ class CountMissing(object):
     """
     A stateful object that tracks the number of missing keys.
     """
+
     def __init__(self):
         self.missing_keys = 0
 
@@ -22,6 +23,7 @@ class BetterCountMissing(object):
     the code to the entry point that’s responsible for the class’s primary behavior. It provides a
     strong hint that the goal of the class is to act as a stateful closure.
     """
+
     def __init__(self):
         self.missing_keys = 0
 

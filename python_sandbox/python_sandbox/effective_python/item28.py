@@ -42,27 +42,25 @@ class IndexableNode(BinaryNode):
     def __getitem__(self, index):
         found = self._search(Count(), index)
         if not found:
-            raise IndexError('Index out of range')
+            raise IndexError("Index out of range")
         return found
 
 
 def main():
-    foo = FrequencyList(['a', 'b', 'a', 'c', 'b', 'a', 'd'])
+    foo = FrequencyList(["a", "b", "a", "c", "b", "a", "d"])
     assert len(foo) == 7
     foo.pop()
-    assert foo.frequency() == {'a': 3, 'b': 2, 'c': 1}
+    assert foo.frequency() == {"a": 3, "b": 2, "c": 1}
 
     tree = IndexableNode(
         10,
         left=IndexableNode(
-            5,
-            left=IndexableNode(2),
-            right=IndexableNode(
-                6, right=IndexableNode(7))),
-        right=IndexableNode(
-            15, left=IndexableNode(11)))
-    print('Index 0: ', tree[0])
+            5, left=IndexableNode(2), right=IndexableNode(6, right=IndexableNode(7))
+        ),
+        right=IndexableNode(15, left=IndexableNode(11)),
+    )
+    print("Index 0: ", tree[0])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

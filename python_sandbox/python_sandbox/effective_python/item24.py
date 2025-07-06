@@ -15,6 +15,7 @@ from threading import Thread
 class InputData(object):
     def read(self):
         raise NotImplementedError
+
     @classmethod
     def generate_inputs(cls, config):
         raise NotImplementedError
@@ -30,7 +31,7 @@ class PathInputData(InputData):
 
     @classmethod
     def generate_inputs(cls, config):
-        data_dir = config['data_dir']
+        data_dir = config["data_dir"]
         for name in os.listdir(data_dir):
             yield cls(os.path.join(data_dir, name))
 
@@ -57,7 +58,7 @@ class Worker(object):
 class LineCountWorker(Worker):
     def map(self):
         data = self.input_data.read()
-        self.result = data.count('\n')
+        self.result = data.count("\n")
 
     def reduce(self, other):
         self.result += other.result
@@ -96,10 +97,10 @@ def map_reduce(worker_class, input_class, config):
 
 def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    config = {'data_dir': current_dir}
+    config = {"data_dir": current_dir}
     result = map_reduce(LineCountWorker, PathInputData, config)
-    print('There are %s lines' % result)
+    print("There are %s lines" % result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

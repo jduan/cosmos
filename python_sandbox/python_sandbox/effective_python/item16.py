@@ -25,7 +25,7 @@ def index_words(text):
     if text:
         result.append(0)
     for index, letter in enumerate(text):
-        if letter == ' ':
+        if letter == " ":
             result.append(index + 1)
     return result
 
@@ -37,5 +37,5 @@ def index_words2(text):
     if text:
         yield 0
     for index, letter in enumerate(text):
-        if letter == ' ':
+        if letter == " ":
             yield index + 1

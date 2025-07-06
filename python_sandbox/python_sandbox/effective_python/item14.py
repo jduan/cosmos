@@ -14,4 +14,4 @@ def divide2(a, b):
     try:
         return a / b
     except ZeroDivisionError as e:
-        raise ValueError('Invalid inputs') from e
+        raise ValueError("Invalid inputs") from e

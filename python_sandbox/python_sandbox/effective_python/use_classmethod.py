@@ -34,7 +34,7 @@ class Worker:
 class LineCountWorker(Worker):
     def map(self):
         data = self.input_data.read()
-        self.result = data.count('\n')
+        self.result = data.count("\n")
 
     def reduce(self, other):
         self.result += other.result
@@ -54,8 +54,10 @@ def create_workers(input_list):
 
 def execute(workers):
     threads = [Thread(target=w.map) for w in workers]
-    for thread in threads: thread.start()
-    for thread in threads: thread.join()
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
 
     first, *rest = workers
     for worker in rest:
@@ -71,8 +73,8 @@ def mapreduce(data_dir):
 
 def write_test_files(tmpdir):
     for i in range(100):
-        with open(os.path.join(tmpdir, str(i)), 'w') as fd:
-            fd.write('\n' * random.randint(0, 100))
+        with open(os.path.join(tmpdir, str(i)), "w") as fd:
+            fd.write("\n" * random.randint(0, 100))
 
 
 with tempfile.TemporaryDirectory() as tmpdir:
@@ -101,7 +103,7 @@ class PathInputData2(GenericInputData):
 
     @classmethod
     def generate_inputs(cls, config):
-        data_dir = config['data_dir']
+        data_dir = config["data_dir"]
         for name in os.listdir(data_dir):
             yield cls(os.path.join(data_dir, name))
 
@@ -128,7 +130,7 @@ class GenericWorker:
 class LineCountWorker2(GenericWorker):
     def map(self):
         data = self.input_data.read()
-        self.result = data.count('\n')
+        self.result = data.count("\n")
 
     def reduce(self, other):
         self.result += other.result
@@ -141,6 +143,6 @@ def mapreduce2(worker_class, input_class, config):
 
 with tempfile.TemporaryDirectory() as tmpdir:
     write_test_files(tmpdir)
-    config = {'data_dir': tmpdir}
+    config = {"data_dir": tmpdir}
     result = mapreduce2(LineCountWorker2, PathInputData2, config)
     print(f"There are {result} lines")

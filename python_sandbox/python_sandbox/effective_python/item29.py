@@ -25,8 +25,11 @@ class Resistor:
         self.current = 0
 
     def __repr__(self):
-        return "Resistor(ohms: %r, voltage: %r, current: %r)" % \
-               (self.ohms, self.voltage, self.current)
+        return "Resistor(ohms: %r, voltage: %r, current: %r)" % (
+            self.ohms,
+            self.voltage,
+            self.current,
+        )
 
 
 class VoltageResistance(Resistor):
@@ -58,7 +61,7 @@ class BoundedResistance(Resistor):
         You can validate input in setters.
         """
         if ohms <= 0:
-            raise ValueError('%f ohms must be > 0' % ohms)
+            raise ValueError("%f ohms must be > 0" % ohms)
         self._ohms = ohms
 
 
@@ -75,7 +78,7 @@ class FixedResistance(Resistor):
         """
         You can validate input in setters.
         """
-        if hasattr(self, '_ohms'):
+        if hasattr(self, "_ohms"):
             raise AttributeError("Can't set attribute because it's set already.")
         self._ohms = ohms
 
@@ -99,5 +102,5 @@ def main():
     # r3.ohms = 2e3
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

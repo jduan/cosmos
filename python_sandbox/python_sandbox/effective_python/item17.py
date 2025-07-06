@@ -44,6 +44,7 @@ class ReadVisit(object):
 
     The only downsize of this approach is that it reads the input data multiple times!
     """
+
     def __init__(self, data_path):
         self.data_path = data_path
 

@@ -30,6 +30,7 @@ class BySubjectGradebook(object):
     """
     self._grades is a map that maps student name to another map, which maps subject to grade.
     """
+
     def __init__(self):
         self._grades = {}
 
@@ -48,7 +49,7 @@ class BySubjectGradebook(object):
         return total / count
 
 
-Grade = namedtuple('Grade', ('score', 'weight'))
+Grade = namedtuple("Grade", ("score", "weight"))
 
 
 class Subject(object):
