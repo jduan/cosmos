@@ -1,20 +1,24 @@
-import json
+"""
+Prefer explicit string concatenation over implicit, especially in lists
+"""
 
+s1 = "helloworld"
+s2 = "hello" + "world"
+assert s1 == s2
 
-def main():
-    data = '{"name": "jingjing", "age": 99}'
-    try:
-        result_dict = json.loads(data)
-    except ValueError as e:
-        raise RuntimeError("Failed to pass json data") from e
-    else:
-        # When the try block doesn't raise an exception, the else block will run.
-        # The else block helps you minimize the amount of code in the try block
-        # and improves readability.
-        print("name is", result_dict["name"])
-    finally:
-        print("The finally block always runs!")
+x = 1
+s3 = (
+    r"first \ part is here with escapes\n, "
+    f"string interpolation {x} in here, "
+    'this has "double quotes" inside'
+)
+print(s3)
 
-
-if __name__ == "__main__":
-    main()
+# implicit concatenation on a single line can be hard to read
+y = 2
+s4 = r"fir\st" f"{y}" '"third"'
+print(s4)
+# the extra comma is hard to see and it makes this a tuple
+s5 = r"fir\st", f'{y}"third"'
+print(s5)
+assert s4 != s5
