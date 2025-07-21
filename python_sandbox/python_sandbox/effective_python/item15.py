@@ -1,6 +1,7 @@
 """
 Avoid striding and slicing in a single expression
 """
+
 # some_list[start:end:stride]
 
 x = ["red", "orange", "yellow", "green", "blue", "purple"]

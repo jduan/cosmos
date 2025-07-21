@@ -1,52 +1,58 @@
-# Things to Remember
-#
-# Function arguments can be specified by position or by keyword.
-#
-# Keywords make it clear what the purpose of each argument is when it would be confusing with
-# only positional arguments.
-#
-# Keyword arguments with default values make it easy to add new behaviors to a function,
-# especially when the function has existing callers.
-#
-# Optional keyword arguments should always be passed by keyword instead of by position.
+"""
+Avoid else blocks after for and while loops
+
+The expressivity you gain from the else block doesn't outweigh the burden you
+put on people (including yourself) who want to understand your code in the
+future. Simple constructs like loops should be self-evident in Python. You
+should avoid using else blocks after loops entirely.
+"""
+
+for i in range(3):
+    print("loop", i)
+else:
+    print("Else block!")
+
+# You may assume the else part means "do this if the loop wasn't complete".
+# But it does exactly the opposite. Using a break statement in a loop actually skips the else block.
+for i in range(3):
+    print("loop", i)
+    if i == 1:
+        break
+else:
+    print("Else block!")
+
+# Another surprise is that the else block runs immediately if you loop over an empty sequence.
+for x in []:
+    print("Never runs")
+else:
+    print("For else block!")
+
+# Else blocks after loops are useful when you're searching for something.
+# Else blocks are skipped if you break out of loops.
+a = 4
+b = 9
+for i in range(2, min(a, b) + 1):
+    print("Testing", i)
+    if a % i == 0 and b % i == 0:
+        print("Not coprime")
+        break
+else:
+    print("Coprime")
 
 
-# All positional arguments to Python functions can also be passed by keyword, where the name of the
-# argument is used in an assignment within the parentheses of a function call. The keyword arguments
-# can be passed in any order as long as all of the required positional arguments are specified. You
-# can mix and match keyword and positional arguments.
+# this is better code
+def coprime(a, b):
+    for i in range(2, min(a, b) + 1):
+        if a % i == 0 and b % i == 0:
+            return False
+    return True
 
 
-def remainder(number, divisor):
-    return number % divisor
-
-
-# Keyword arguments provide a powerful way to extend a function’s parameters while remaining
-# backwards compatible with existing callers. This lets you provide additional functionality without
-# having to migrate a lot of code, reducing the chance of introducing bugs.
-# For example, when you add a 4th argument "units_per_ke" with a default value, you don't need to
-# migrate existing callers.
-def flow_rate(weight_diff, time_diff, period=1, units_per_kg=1):
-    return ((weight_diff / units_per_kg) / time_diff) * period
-
-
-def main():
-    print(remainder(20, 7))
-    print(remainder(20, divisor=7))
-    print(remainder(number=20, divisor=7))
-    print(remainder(divisor=7, number=20))
-
-    # Positional arguments must be specified before keyword arguments.
-    # You can't do this:
-    # print(remainder(number=20, 7))
-
-    print("Flow rate per second: %s" % flow_rate(1000, 100))
-    print("Flow rate per hour: %s" % flow_rate(1000, 100, period=3600))
-    print(
-        "Flow rate per hour different units: %s"
-        % flow_rate(1000, 100, period=3600, units_per_kg=2.2)
-    )
-
-
-if __name__ == "__main__":
-    main()
+# another way
+def coprime2(a, b):
+    is_coprime = True
+    for i in range(2, min(a, b) + 1):
+        if a % i == 0 and b % i == 0:
+            is_coprime = False
+            break
+    return is_coprime
