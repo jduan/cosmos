@@ -1,106 +1,93 @@
-# Things to Remember
-#
-# Python only supports a single constructor per class, the __init__ method.
-#
-# Use @classmethod to define alternative constructors for your classes. They are like
-# "factory methods" in Java.
-#
-# Use class method polymorphism to provide "generic" ways to build and connect concrete subclasses.
+"""
+Consider "itertools" for working with iterators and generators
+"""
+
+import itertools
+
+# 1. linking iterators together
+it = itertools.chain([1, 2, 3], [4, 5, 6])
+print(f"chain: {list(it)}")
+
+it1 = [i * 3 for i in ("a", "b", "c")]
+it2 = [i * 3 for i in ("x", "y", "z")]
+# nested_it is an iterator of iterators
+nested_it = [it1, it2]
+output_it = itertools.chain.from_iterable(nested_it)
+print(f"output_it: {list(output_it)}")
+
+it = itertools.repeat("hello", 3)
+print(list(it))
+
+it = itertools.cycle([1, 2])
+result = [next(it) for _ in range(10)]
+print(result)
+
+# tee splits a single iterator into N parallel iterators
+it1, it2, it3 = itertools.tee(["first", "second"], 3)
+print(list(it1))
+print(list(it2))
+print(list(it3))
+
+# zip_longest
+keys = ["one", "two", "three"]
+values = [1, 2]
+normal = list(zip(keys, values))
+print(f"zip: {normal}")
+longest = list(itertools.zip_longest(keys, values, fillvalue="nope"))
+print(f"zip_longest: {longest}")
+
+# 2. filtering items from an iterator
+
+# islice slices an iterator by numerical indexes without copying, similar to standard slicing
+values = list(i + 1 for i in range(10))
+first_five = itertools.islice(values, 5)
+print(f"first_five: {list(first_five)}")
+middle_odds = itertools.islice(values, 2, 8, 2)
+print(f"middle_odds: {list(middle_odds)}")
+
+values = list(i + 1 for i in range(10))
+less_than_seven = itertools.takewhile(lambda x: x < 7, values)
+print(f"less than seven: {list(less_than_seven)}")
+
+values = list(i + 1 for i in range(10))
+more_than_seven = itertools.dropwhile(lambda x: x < 7, values)
+print(f"more than seven: {list(more_than_seven)}")
+
+odd_nums = itertools.filterfalse(lambda x: x % 2 == 0, values)
+print(f"odd_nums: {list(odd_nums)}")
+
+# 3. produce combinations of items from iterators
+
+it = itertools.batched([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3)
+print(f"batched: {list(it)}")
+
+route = ["Los Angeles", "Bakersfield", "Modesto", "Sacramento"]
+it = itertools.pairwise(route)
+print(f"pairwise: {list(it)}")
+
+values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+sum_reduce = itertools.accumulate(values)
+print(f"sum_reduce: {list(sum_reduce)}")
 
 
-import os
-from threading import Thread
+def sum_modulo_20(first, second):
+    output = first + second
+    return output % 20
 
 
-class InputData(object):
-    def read(self):
-        raise NotImplementedError
+module_reduce = itertools.accumulate(values, sum_modulo_20)
+print(f"modulo_reduce: {list(module_reduce)}")
 
-    @classmethod
-    def generate_inputs(cls, config):
-        raise NotImplementedError
+single = itertools.product([1, 2], repeat=2)
+print(f"single: f{single}")
+multiple = itertools.product([1, 2], ["a", "b"])
+print(f"multiple: {multiple}")
 
+it = itertools.permutations([1, 2, 3, 4], 2)
+print(f"permutations: {list(it)}")
 
-class PathInputData(InputData):
-    def __init__(self, path):
-        super().__init__()
-        self.path = path
+it = itertools.combinations([1, 2, 3, 4], 2)
+print(f"combinations: {list(it)}")
 
-    def read(self):
-        return open(self.path).read()
-
-    @classmethod
-    def generate_inputs(cls, config):
-        data_dir = config["data_dir"]
-        for name in os.listdir(data_dir):
-            yield cls(os.path.join(data_dir, name))
-
-
-class Worker(object):
-    def __init__(self, input_data):
-        self.input_data = input_data
-        self.result = None
-
-    def map(self):
-        raise NotImplementedError
-
-    def reduce(self, other):
-        raise NotImplementedError
-
-    @classmethod
-    def create_workers(cls, input_class, config):
-        workers = []
-        for input_data in input_class.generate_inputs(config):
-            workers.append(cls(input_data))
-        return workers
-
-
-class LineCountWorker(Worker):
-    def map(self):
-        data = self.input_data.read()
-        self.result = data.count("\n")
-
-    def reduce(self, other):
-        self.result += other.result
-
-
-def generate_inputs(data_dir):
-    for name in os.listdir(data_dir):
-        yield PathInputData(os.path.join(data_dir, name))
-
-
-def create_workers(input_list):
-    return [LineCountWorker(input_data) for input_data in input_list]
-
-
-def execute(workers):
-    threads = [Thread(target=w.map) for w in workers]
-    for thread in threads:
-        thread.start()
-    for thread in threads:
-        thread.join()
-
-    first, rest = workers[0], workers[1:]
-    for worker in rest:
-        first.reduce(worker)
-    return first.result
-
-
-def map_reduce(worker_class, input_class, config):
-    """
-    The beauty if map_reduce is that it's generic. You can pass in different
-    worker_class and input_class, and it will glue them together!
-    """
-    workers = worker_class.create_workers(input_class, config)
-    return execute(workers)
-
-
-def main():
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    config = {"data_dir": current_dir}
-    result = map_reduce(LineCountWorker, PathInputData, config)
-    print("There are %s lines" % result)
-
-
-if __name__ == "__main__":
-    main()
+it = itertools.combinations_with_replacement([1, 2, 3, 4], 2)
+print(f"combinations_with_replacement: {list(it)}")
