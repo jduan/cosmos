@@ -1,32 +1,65 @@
-def log_missing():
-    print("Key added")
-    return 0
+"""
+Pass iterators to "any" and "all" for efficient short-circuiting logic
+"""
+
+import random
 
 
-class CountMissing(object):
-    """
-    A stateful object that tracks the number of missing keys.
-    """
-
-    def __init__(self):
-        self.missing_keys = 0
-
-    def missing(self):
-        self.missing_keys += 1
-        return 0
+def flip_coin():
+    if random.randint(0, 1) == 0:
+        return "Heads"
+    else:
+        return "Tails"
 
 
-class BetterCountMissing(object):
-    """
-    This is even cleaner. The __call__ method indicates that a class’s instances will be used
-    somewhere a function argument would also be suitable (like API hooks). It directs new readers of
-    the code to the entry point that’s responsible for the class’s primary behavior. It provides a
-    strong hint that the goal of the class is to act as a stateful closure.
-    """
+def flip_is_heads():
+    return flip_coin == "Heads"
 
-    def __init__(self):
-        self.missing_keys = 0
 
-    def __call__(self, *args, **kwargs):
-        self.missing_keys += 1
-        return 0
+def all_heads(times):
+    flips = [flip_is_heads() for _ in range(times)]
+    return False not in flips
+
+
+def all_heads2(times):
+    """short circuit"""
+    all_heads = True
+    for _ in range(times):
+        if not flip_is_heads():
+            all_heads = False
+            break
+    return all_heads
+
+
+def all_heads3(times):
+    """short circuit using all"""
+    return all(flip_is_heads() for _ in range(times))
+
+
+def repeated_is_heads(times):
+    for _ in range(times):
+        yield flip_is_heads()  # generator
+
+
+# this uses a generator function
+all_heads4 = all(repeated_is_heads(20))
+print(f"all_heads4: {all_heads4}")
+
+print(all_heads(20))
+print(all_heads2(20))
+print(all_heads3(20))
+
+
+def flip_is_tails():
+    return flip_coin() == "Tails"
+
+
+def all_heads5(times):
+    """any is the opposite of all"""
+    return not any(flip_is_tails() for _ in range(times))
+
+
+"""
+If you want to end early with a "True" value, use any.
+If you want to end early with a "False" value, use all.
+"""
