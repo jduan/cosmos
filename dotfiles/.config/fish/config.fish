@@ -149,3 +149,6 @@ function __auto_activate_virtualenv --on-variable PWD
         source .venv/bin/activate.fish
     end
 end
+
+# Created by `pipx` on 2025-07-26 18:09:34
+set PATH $PATH /Users/jduan/.local/bin
