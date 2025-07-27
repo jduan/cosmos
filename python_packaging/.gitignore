@@ -1,1 +1,5 @@
 .venv/
+
+# python packaging
+dist/
+*.egg-info/
