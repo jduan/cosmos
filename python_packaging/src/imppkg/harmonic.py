@@ -2,7 +2,7 @@ import sys
 
 from termcolor import cprint
 
-from imppkg import harmonic_mean
+from imppkg.harmonic_mean import harmonic_mean
 
 
 def main():
@@ -16,3 +16,7 @@ def main():
     except ZeroDivisionError:
         pass
     cprint(result, "red", "on_cyan", attrs=["bold"])
+
+
+if __name__ == "__main__":
+    main()
