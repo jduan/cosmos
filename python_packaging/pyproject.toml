@@ -25,5 +25,16 @@ exclude = ["test*"]
 
 [tool.pytest.ini_options]
 testpaths = ["test"]
-addopts = "--strict-markers"
+addopts = "--cov --strict-markers"
 xfail_strict = true
+
+[tool.coverage.run]
+source = ["imppkg"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.coverage.paths]
+source = ["src/imppkg", "*/site-packages/imppkg"]
