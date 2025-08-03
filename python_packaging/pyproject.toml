@@ -22,3 +22,8 @@ package-dir = { "" = "src" }
 [tool.setuptools.packages.find]
 where = ["src"]
 exclude = ["test*"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+addopts = "--strict-markers"
+xfail_strict = true
